@@ -249,5 +249,4 @@ src/
 
 This project is licensed under the [MIT License](https://www.google.com/search?q=LICENSE).
 
-```
 
