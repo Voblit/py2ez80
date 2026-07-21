@@ -123,11 +123,12 @@ CEdev is a required external dependency and IS NOT bundled with Py2eZ80. You mus
 Clone the repository and build the executable using DMD:
 
 ```powershell
-git clone [https://github.com/your-username/py2ez80.git](https://github.com/your-username/py2ez80.git)
+git clone https://github.com/Voblit/py2ez80.git
 cd py2ez80
 
-Get-ChildItem *.obj | Remove-Item -Force
-dmd src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d -of=py2ez80.exe
+Get-ChildItem *.obj -ErrorAction SilentlyContinue | Remove-Item -Force
+dmd src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d -of=py2ez80
+if (Test-Path .\py2ez80) { Rename-Item .\py2ez80 py2ez80.exe }
 
 ```
 
