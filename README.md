@@ -162,7 +162,24 @@ if (Test-Path .\py2ez80) { Rename-Item .\py2ez80 py2ez80.exe }
 
 ```
 
-### 2. Write a Python Script
+### 2. Add the CEdev Toolchain
+
+Before transpiling your code, make sure the CEdev SDK is placed in the root directory alongside `py2ez80.exe`:
+
+1. Download the [latest CEdev SDK release](https://github.com/CE-Programming/toolchain/releases).
+2. Extract the downloaded archive directly into your `py2ez80` folder so that `py2ez80.exe` and the `CEdev` folder sit in the exact same directory:
+
+```text
+py2ez80/
+├── CEdev/
+│   ├── cedev.bat
+│   └── ...
+├── py2ez80.exe
+└── ...
+
+```
+
+### 3. Write a Python Script
 
 Create a script named `demo.py`:
 
@@ -200,7 +217,7 @@ finally:
 
 ```
 
-### 3. Transpile and Build
+### 4. Transpile and Build
 
 Run `py2ez80.exe` targeting your Python script:
 
@@ -209,7 +226,7 @@ Run `py2ez80.exe` targeting your Python script:
 
 ```
 
-### 4. Build Output
+### 5. Build Output
 
 Py2eZ80 runs the compilation pipeline and outputs status updates directly to your terminal:
 
@@ -229,6 +246,7 @@ Py2eZ80 runs the compilation pipeline and outputs status updates directly to you
 Transfer the resulting `DEMO.8xp` file to your TI-84 Plus CE using **TI Connect CE** or **ArTi314**, press `PRGM`, and launch your application.
 
 ---
+
 
 ## Architecture
 
