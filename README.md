@@ -1,3 +1,4 @@
+```markdown
 <div align="center">
 
 # Py2eZ80
@@ -28,7 +29,7 @@
 
 *Compile standard Python scripts directly into bare-metal binary .8xp executables.*
 
-[Overview](#overview) | [Why Py2eZ80](#why-py2ez80) | [Prerequisites and Dependencies](#prerequisites-and-dependencies) | [Features](#features) | [Language Support](#language-support) | [Quickstart](#quickstart) | [Architecture](#architecture) | [License](#license)
+[Overview](#overview) | [Why Py2eZ80](#why-py2ez80) | [Prerequisites and Setup](#prerequisites-and-setup) | [Features](#features) | [Language Support](#language-support) | [Quickstart](#quickstart) | [Architecture](#architecture) | [License](#license)
 
 </div>
 
@@ -36,82 +37,110 @@
 
 ## Overview
 
-Py2eZ80 is an Ahead-of-Time (AOT) transpiler built in D. It translates a practical subset of Python directly into optimized C code targeting the Zilog eZ80 processor inside the TI-84 Plus CE calculator.
+Py2eZ80 is an Ahead-of-Time (AOT) transpiler built in D. It takes standard Python code and translates it directly into optimized C99 targeting the Zilog eZ80 processor inside the TI-84 Plus CE.
 
-By eliminating the need for an on-device Python interpreter (such as MicroPython or CPython), Py2eZ80 delivers the expressiveness and rapid development workflow of Python with the raw execution speed, low memory footprint, and instant startup times of native C applications.
+Instead of running a heavy interpreter like MicroPython on the calculator, Py2eZ80 compiles your code down to native machine code on your PC before sending it over. You get the readable syntax and convenience of Python with the raw speed, small memory footprint, and instant startup times of native C programs.
 
 ```text
 +-----------------+       +-----------------+       +-----------------+       +-----------------+
 |  Python Source  |  -->  |     Py2eZ80     |  -->  |   eZ80 C Code   |  -->  |  CEdev Toolchain|  --> .8xp Native Binary
-|   (script.py)   |       | (Lex/Parse/Gen) |       |    (main.c)     |       | (External Dep.) |      (Runs directly)
+|   (script.py)   |       | (Lex/Parse/Gen) |       |    (main.c)     |       | (CEdev Folder)  |      (Runs directly)
 +-----------------+       +-----------------+       +-----------------+       +-----------------+
+
 ```
 
 ---
 
-## Why Py2eZ80
+## Why Py2eZ80?
 
-| Metric / Feature | Standard TI Python | Py2eZ80 Transpiler |
+Writing C or C++ for the TI-84 Plus CE gives you peak performance, but it can be tedious for quick scripts or logic-heavy apps. Py2eZ80 bridges the gap: write high-level Python on your PC, then build and run a lightweight `.8xp` file on hardware.
+
+| Feature | Built-in TI Python | Py2eZ80 Transpiler |
 | --- | --- | --- |
-| Execution Engine | On-Calculator Interpreter | Bare-Metal Native Binary |
-| Startup Time | Slow (Loads runtime into RAM) | Instant (Under 1 ms) |
-| Execution Speed | Interpreted / Indirect | Maximum Hardware Capability |
-| Dependencies | Requires Python App on Calc | Zero Dependencies (Standalone .8xp) |
-| Memory Footprint | High Memory Overhead | Minimal RAM Allocation |
-| Hardware Control | Sandboxed API | Direct TI OS and Hardware Access |
+| **Execution Method** | On-device interpreter | Bare-metal native assembly |
+| **Startup Speed** | Noticeable delay loading runtime | Instant startup (<1 ms) |
+| **Performance** | Interpreted (slower execution) | Full native hardware speed |
+| **Dependencies** | Requires TI Python OS app | Standalone `.8xp` binary |
+| **RAM Usage** | High interpreter overhead | Low, lightweight memory footprint |
+| **Hardware Access** | Sandboxed APIs | Direct system and C library access |
 
 ---
 
-## Prerequisites and Dependencies
+## Prerequisites and Setup
 
-Py2eZ80 is an AOT code generator that produces standard C code. It relies on the official CEdev toolchain to perform final C compilation, linking, and packaging into the TI .8xp format.
+Py2eZ80 compiles Python source files down to C and invokes the official **CEdev toolchain** behind the scenes to generate `.8xp` files.
 
-### Important: CEdev Dependency
+### 1. Requirements
 
-CEdev is a required external dependency and IS NOT bundled with Py2eZ80. You must install the CEdev SDK separately on your machine prior to compiling Python projects.
+* **D Compiler:** [DMD](https://dlang.org/) or LDC2 installed and added to your system PATH.
+* **CEdev SDK:** Download the [CEdev toolchain release](https://github.com/CE-Programming/toolchain/releases).
 
-1. D Compiler: DMD or LDC2 installed and added to PATH.
-2. CEdev Toolchain: Download and install the [CEdev C/C++ SDK](https://github.com/CE-Programming/toolchain). Place or link the `CEdev` folder in your project path or install it globally so `cedev.bat` / `cedev-config` is available.
+### 2. Setting Up the `CEdev` Folder
+
+Py2eZ80 expects the CEdev toolchain to exist in a folder named `CEdev` inside the main `py2ez80` directory.
+
+1. Download the latest release archive of CEdev.
+2. Extract the archive contents directly into your project root as a subfolder named `CEdev`.
+3. Verify your folder structure matches this layout:
+
+```text
+py2ez80/
+├── CEdev/
+│   ├── cedev.bat
+│   ├── build_project/
+│   └── ... (CEdev toolchain files)
+├── src/
+│   ├── main.d
+│   ├── lexer.d
+│   └── ...
+├── py2ez80.exe
+└── README.md
+
+```
+
+If `CEdev\cedev.bat` is present in that directory, Py2eZ80 can automatically handle background builds and output binary files without extra configuration.
 
 ---
 
-## Features
+## What Py2eZ80 Provides
 
-* Zero Interpreter Overhead: Emits lightweight C C99 code compiled to machine instructions.
-* Automated Compilation Pipeline: Automatically parses Python, generates custom project Makefiles, invokes the CEdev toolchain, and outputs a standalone .8xp binary in one command.
-* Automated Variable Truncation: Automatically truncates program base names to meet the TI OS limit of 8 characters maximum (e.g., `test_space_invaders.py` translates to `TEST_SPA.8xp`).
-* Dynamic Type Tracking: Tracks primitive integer types, floating-point literals, dynamic character strings, and arrays.
-* Structured OOP Lowering: Translates Python class architectures into C `typedef struct` models.
-* Exception Runtime Engine: Lowers Python `try`, `except`, `finally`, and `raise` structures into native `setjmp` and `longjmp` execution frames.
-* Standard Library Mapping: Translates `import math` directly to optimized hardware routines in `<math.h>`.
+Py2eZ80 handles the entire build process under the hood:
+
+* **Zero-Interpreter Output:** Produces clean C99 code that compiles to bare-metal eZ80 machine instructions.
+* **Automated Pipeline:** Parses Python, creates necessary Makefiles, triggers `CEdev`, and copies the final `.8xp` binary to your directory in a single step.
+* **Name Truncation:** Automatically shortens program variable names to match the 8-character TI OS limit (for example, `space_invaders.py` converts to `SPACE_IN.8xp`).
+* **Data Type Mapping:** Automatically infers primitive types (`int`, `float`, `bool`, `str`), arrays, and dynamic data structures.
+* **OOP Structure Lowering:** Translates Python classes into native C `struct` representations.
+* **Exception Engine:** Lowers Python `try`, `except`, `finally`, and `raise` blocks into standard C `setjmp` and `longjmp` execution frames.
+* **Standard Library Lowering:** Converts module calls like `import math` to standard C system headers like `<math.h>`.
 
 ---
 
 ## Language Support
 
-### Syntax and Control Flow
+### Syntax & Control Flow
 
-* [x] Global and local variable assignments
-* [x] Compound arithmetic assignments (`+=`, `-=`, `*=`, `/=`)
-* [x] Conditional logic (`if`, `elif`, `else`)
-* [x] `while` loops and `for` loops using `range()`
-* [x] Flow control keywords (`break`, `continue`, `pass`)
-* [x] Functions, argument passing, and recursive calls
+* [x] Global and local variable declarations & reassignments
+* [x] Compound arithmetic operations (`+=`, `-=`, `*=`, `/=`)
+* [x] Conditionals (`if`, `elif`, `else`)
+* [x] Loops (`while` loops and `for` loops using `range()`)
+* [x] Loop control statements (`break`, `continue`, `pass`)
+* [x] Custom functions, parameter passing, and recursion
 
-### Types and Data Structures
+### Data Structures & Types
 
-* [x] Primitives: `int`, `float`, `bool`, `str`
-* [x] Lists: Array lowering with method call support (`append()`)
-* [x] Tuples: Fixed-length array structures
-* [x] Dictionaries and Sets: Struct pointer abstractions
-* [x] Classes: Structure definition mapping
+* [x] **Primitives:** `int`, `float`, `bool`, `str`
+* [x] **Lists:** Lowered array structures supporting operations like `.append()`
+* [x] **Tuples:** Fixed-length immutable arrays
+* [x] **Dictionaries & Sets:** Struct-backed pointer abstractions
+* [x] **Classes:** Class definitions lowered to standard C structures
 
-### Built-ins and Modules
+### Built-ins & Standard Library
 
-* [x] `print()`: Mapped to formatted C output (`printf`)
-* [x] `input()`: String buffer capture
-* [x] `len()`: Static array length calculation
-* [x] `import math`: Mapped to standard system header `<math.h>`
+* [x] `print()`: Mapped directly to formatted output routines (`printf`)
+* [x] `input()`: String buffer reading
+* [x] `len()`: Array length evaluation
+* [x] `import math`: Maps math operations directly to native eZ80 `<math.h>` functions
 * [x] Exception handling (`try`, `except`, `finally`, `raise`)
 
 ---
@@ -120,10 +149,10 @@ CEdev is a required external dependency and IS NOT bundled with Py2eZ80. You mus
 
 ### 1. Build the Compiler
 
-Clone the repository and build the executable using DMD:
+Clone the repository, ensure your D compiler is available, and build `py2ez80`:
 
 ```powershell
-git clone https://github.com/Voblit/py2ez80.git
+git clone [https://github.com/Voblit/py2ez80.git](https://github.com/Voblit/py2ez80.git)
 cd py2ez80
 
 Get-ChildItem *.obj -ErrorAction SilentlyContinue | Remove-Item -Force
@@ -132,9 +161,9 @@ if (Test-Path .\py2ez80) { Rename-Item .\py2ez80 py2ez80.exe }
 
 ```
 
-### 2. Create a Python Script
+### 2. Write a Python Script
 
-Create a file named `demo.py`:
+Create a script named `demo.py`:
 
 ```python
 import math
@@ -170,16 +199,18 @@ finally:
 
 ```
 
-### 3. Transpile and Compile
+### 3. Transpile and Build
 
-Run Py2eZ80 against your source file:
+Run `py2ez80.exe` targeting your Python script:
 
 ```powershell
 .\py2ez80.exe demo.py
 
 ```
 
-### 4. Pipeline Execution Output
+### 4. Build Output
+
+Py2eZ80 runs the compilation pipeline and outputs status updates directly to your terminal:
 
 ```text
 [1/4] Transpiling demo.py -> CEdev\build_project\src\main.c...
@@ -194,21 +225,21 @@ Run Py2eZ80 against your source file:
 
 ```
 
-Transfer `DEMO.8xp` to your TI-84 Plus CE using TI Connect CE or ArTi314, press `PRGM`, and launch the binary directly.
+Transfer the resulting `DEMO.8xp` file to your TI-84 Plus CE using **TI Connect CE** or **ArTi314**, press `PRGM`, and launch your application.
 
 ---
 
 ## Architecture
 
-The project is structured into modular D compilation units:
+The compiler codebase is structured into clean, modular D source files:
 
 ```text
 src/
-|-- main.d        # Command-line driver, Makefile generator, process spawner
-|-- lexer.d       # Lexical analyzer converting Python source to token stream
-|-- parser.d      # Recursive descent parser producing AST nodes
-|-- ast.d         # Abstract Syntax Tree node class definitions
-`-- codegen.d     # C code emitter, scope analyzer, and runtime preamble injector
+├── main.d        # CLI interface, project workspace setup, process management
+├── lexer.d       # Lexical analyzer for tokenizing Python source code
+├── parser.d      # Recursive-descent parser producing Abstract Syntax Trees
+├── ast.d         # Strongly-typed AST node structure definitions
+└── codegen.d     # C code generator, type analysis, and runtime preamble injector
 
 ```
 
@@ -216,7 +247,7 @@ src/
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+This project is licensed under the [MIT License](https://www.google.com/search?q=LICENSE).
 
 ```
 
