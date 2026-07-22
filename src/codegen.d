@@ -56,6 +56,12 @@ class CCodegen {
                     trackVar(assign.name, numNode.isFloat ? "float" : "int");
                 } else if (cast(StringNode)assign.expr) {
                     trackVar(assign.name, "const char*");
+                } else if (auto callNode = cast(CallNode)assign.expr) {
+                    if (callNode.name == "input") {
+                        trackVar(assign.name, "const char*");
+                    } else {
+                        trackVar(assign.name, "int");
+                    }
                 } else if (auto mCall = cast(MethodCallNode)assign.expr) {
                     if (compileNode(mCall.obj) == "random" && mCall.method == "random") {
                         trackVar(assign.name, "float");
@@ -215,7 +221,9 @@ class CCodegen {
                         result ~= numArg.isFloat ? "printf(\"%f\\n\", " ~ compileNode(arg) ~ "); " : "printf(\"%d\\n\", " ~ compileNode(arg) ~ "); ";
                     } else if (auto varArg = cast(VarNode)arg) {
                         string* t = varArg.name in variableTypes;
-                        if (t !is null && (*t == "float" || *t == "double")) {
+                        if (t !is null && (*t == "const char*")) {
+                            result ~= "printf(\"%s\\n\", " ~ compileNode(arg) ~ "); ";
+                        } else if (t !is null && (*t == "float" || *t == "double")) {
                             result ~= "printf(\"%f\\n\", " ~ compileNode(arg) ~ "); ";
                         } else {
                             result ~= "printf(\"%d\\n\", " ~ compileNode(arg) ~ "); ";
