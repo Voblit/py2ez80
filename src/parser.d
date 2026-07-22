@@ -1,23 +1,30 @@
 module parser;
+
 import lexer;
 import ast;
 import std.conv;
 import std.string;
+
 class Parser {
     private Token[] tokens;
     private size_t idx = 0;
+
     this(Token[] tokens) { this.tokens = tokens; }
+
     private Token peek() { return tokens[idx]; }
     private Token consume() { return tokens[idx++]; }
+
     private bool match(TokenType type) {
         if (peek().type == type) { idx++; return true; }
         return false;
     }
+
     private void expect(TokenType type, string msg) {
         if (!match(type)) {
             throw new Exception("Parser Error on line " ~ to!string(peek().line) ~ ": " ~ msg ~ " (Got: '" ~ peek().value ~ "')");
         }
     }
+
     ASTNode[] parseProgram() {
         ASTNode[] statements;
         while (peek().type != TokenType.EOF) {
@@ -26,6 +33,7 @@ class Parser {
         }
         return statements;
     }
+
     private ASTNode parseStatement() {
         if (match(TokenType.KwIf)) return parseIf();
         if (match(TokenType.KwWhile)) return parseWhile();
@@ -39,6 +47,7 @@ class Parser {
         if (match(TokenType.KwPass)) return new PassNode();
         if (match(TokenType.KwRaise)) return new RaiseNode(parseExpression());
         if (match(TokenType.KwReturn)) return new ReturnNode(peek().type == TokenType.Newline ? null : parseExpression());
+
         if (peek().type == TokenType.Identifier) {
             size_t save = idx;
             string varName = consume().value;
@@ -61,6 +70,7 @@ class Parser {
         }
         return parseExpression();
     }
+
     private ASTNode parseIf() {
         auto cond = parseExpression();
         expect(TokenType.Colon, "Expected ':'");
@@ -86,6 +96,7 @@ class Parser {
         }
         return new IfNode(cond, thenB, elseB);
     }
+
     private ASTNode parseWhile() {
         auto cond = parseExpression();
         expect(TokenType.Colon, "Expected ':'");
@@ -99,6 +110,7 @@ class Parser {
         expect(TokenType.Dedent, "Expected dedent");
         return new WhileNode(cond, body);
     }
+
     private ASTNode parseFor() {
         string varName = consume().value;
         expect(TokenType.KwIn, "Expected 'in'");
@@ -123,6 +135,7 @@ class Parser {
         expect(TokenType.Dedent, "Expected dedent");
         return new ForNode(varName, startExpr, stopExpr, body);
     }
+
     private ASTNode parseFunctionDef() {
         string name = consume().value;
         expect(TokenType.LParen, "Expected '('");
@@ -142,6 +155,7 @@ class Parser {
         expect(TokenType.Dedent, "Expected dedent");
         return new FunctionDefNode(name, params, body);
     }
+
     private ASTNode parseClassDef() {
         string className = consume().value;
         string parentName = "";
@@ -160,6 +174,7 @@ class Parser {
         expect(TokenType.Dedent, "Expected dedent");
         return new ClassDefNode(className, parentName, body);
     }
+
     private ASTNode parseTryExcept() {
         expect(TokenType.Colon, "Expected ':'");
         expect(TokenType.Newline, "Expected newline");
@@ -194,21 +209,26 @@ class Parser {
         }
         return new TryExceptNode(tryBody, exceptBody, finallyBody);
     }
+
     private ASTNode parseImport() {
         string modName = consume().value;
         return new ImportNode(modName);
     }
+
     private ASTNode parseExpression() { return parseLogicalOr(); }
+
     private ASTNode parseLogicalOr() {
         auto left = parseLogicalAnd();
         while (match(TokenType.KwOr)) left = new BinaryOpNode("||", left, parseLogicalAnd());
         return left;
     }
+
     private ASTNode parseLogicalAnd() {
         auto left = parseEquality();
         while (match(TokenType.KwAnd)) left = new BinaryOpNode("&&", left, parseEquality());
         return left;
     }
+
     private ASTNode parseEquality() {
         auto left = parseRelational();
         while (peek().type == TokenType.EqualEqual || peek().type == TokenType.NotEqual) {
@@ -217,6 +237,7 @@ class Parser {
         }
         return left;
     }
+
     private ASTNode parseRelational() {
         auto left = parseAdditive();
         while (peek().type == TokenType.Less || peek().type == TokenType.Greater ||
@@ -226,6 +247,7 @@ class Parser {
         }
         return left;
     }
+
     private ASTNode parseAdditive() {
         auto left = parseTerm();
         while (peek().type == TokenType.Plus || peek().type == TokenType.Minus) {
@@ -234,6 +256,7 @@ class Parser {
         }
         return left;
     }
+
     private ASTNode parseTerm() {
         auto left = parseUnary();
         while (peek().type == TokenType.Star || peek().type == TokenType.Slash || peek().type == TokenType.Percent) {
@@ -242,11 +265,13 @@ class Parser {
         }
         return left;
     }
+
     private ASTNode parseUnary() {
         if (match(TokenType.KwNot)) return new UnaryOpNode("!", parseUnary());
         if (match(TokenType.Minus)) return new UnaryOpNode("-", parseUnary());
         return parseFactor();
     }
+
     private ASTNode parseFactor() {
         if (peek().type == TokenType.Number) {
             string val = consume().value;
@@ -255,6 +280,7 @@ class Parser {
         if (match(TokenType.KwTrue)) return new BoolNode(true);
         if (match(TokenType.KwFalse)) return new BoolNode(false);
         if (peek().type == TokenType.StringLiteral) return new StringNode(consume().value);
+
         if (match(TokenType.LBracket)) {
             ASTNode[] elems;
             if (peek().type != TokenType.RBracket) {
@@ -275,6 +301,7 @@ class Parser {
             expect(TokenType.RBracket, "Expected ']'");
             return new ListNode(elems);
         }
+
         if (match(TokenType.LParen)) {
             auto first = parseExpression();
             if (match(TokenType.Comma)) {
@@ -289,6 +316,7 @@ class Parser {
             expect(TokenType.RParen, "Expected ')'");
             return first;
         }
+
         if (match(TokenType.LBrace)) {
             ASTNode[] keys, values;
             if (peek().type != TokenType.RBrace) {
@@ -317,6 +345,7 @@ class Parser {
             expect(TokenType.RBrace, "Expected '}'");
             return new DictNode([], []);
         }
+
         if (peek().type == TokenType.Identifier) {
             string name = consume().value;
             ASTNode base = new VarNode(name);
