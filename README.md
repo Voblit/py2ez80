@@ -1,3 +1,4 @@
+
 <p align="center">
 <div align="center">
  
@@ -42,7 +43,7 @@ Instead of running a heavy interpreter like MicroPython on the calculator, Py2eZ
 
 ```text
 +-----------------+       +-----------------+       +-----------------+       +-----------------+
-|  Python Source  |  -->  |     Py2eZ80     |  -->  |   eZ80 C Code   |  -->  |  CEdev Toolchain|  --> .8xp Native Binary
+|  Python Source  |  -->  |     Py2eZ80     |  -->  |    eZ80 C Code  |  -->  | CEdev Toolchain |  --> .8xp Native Binary
 |   (script.py)   |       | (Lex/Parse/Gen) |       |    (main.c)     |       | (CEdev Folder)  |      (Runs directly)
 +-----------------+       +-----------------+       +-----------------+       +-----------------+
 
@@ -69,9 +70,11 @@ Writing C or C++ for the TI-84 Plus CE gives you peak performance, but it can be
 
 Py2eZ80 compiles Python source files down to C and uses the **CEdev toolchain** behind the scenes to generate `.8xp` files.
 
+You do not need to compile the transpiler yourself. For standard use, compiling from source is overkill—just grab the pre-built `py2ez80.exe` directly from the [Releases](https://github.com/Voblit/py2ez80/releases) page. You only need to build it yourself if you plan on modifying the D compiler codebase.
+
 ### 1. Requirements
 
-* **D Compiler:** [DMD](https://dlang.org/) or LDC2 installed and added to your system PATH.
+* **Py2eZ80 Executable:** Download `py2ez80.exe` from [Releases](https://github.com/Voblit/py2ez80/releases) (or install [DMD](https://dlang.org/) if you specifically want to compile from source).
 * **CEdev SDK:** Download the [CEdev toolchain release](https://github.com/CE-Programming/toolchain/releases).
 
 ### 2. Setting Up the `CEdev` Folder
@@ -88,10 +91,6 @@ py2ez80/
 │   ├── cedev.bat
 │   ├── build_project/
 │   └── ... (CEdev toolchain files)
-├── src/
-│   ├── main.d
-│   ├── lexer.d
-│   └── ...
 ├── py2ez80.exe
 └── README.md
 
@@ -107,11 +106,11 @@ Py2eZ80 handles the entire build process under the hood:
 
 * **Zero-Interpreter Output:** Outputs pure C99 code to be further compiled with CEdev.
 * **Automated Pipeline:** Parses Python, creates necessary Makefiles, triggers `CEdev`, and copies the final `.8xp` program all at once.
-* **Name Truncation:** Shrinks names down to the max name length (8 characters) on the CE. (for example, `space_invaders.py` converts to `SPACE_IN.8xp`).
+* **Name Truncation:** Shrinks names down to the max name length (8 characters) on the CE (for example, `space_invaders.py` converts to `SPACE_IN.8xp`).
 * **Data Type Mapping:** Automatically infers primitive types (`int`, `float`, `bool`, `str`), arrays, and dynamic data structures.
 * **OOP Structure Lowering:** Translates Python classes into native C `struct` representations.
 * **Exception Engine:** Lowers Python `try`, `except`, `finally`, and `raise` blocks into standard C `setjmp` and `longjmp` execution commands.
-* **Standard Library Lowering:** Converts module calls like `import math` to standard C system headers like `<math.h>`.
+* **Standard Library Lowering:** Converts module calls like `import math` and `import random` to standard C system headers like `<math.h>` and `<stdlib.h>`.
 
 ---
 
@@ -147,12 +146,12 @@ Py2eZ80 handles the entire build process under the hood:
 
 ## Quickstart
 
-### 1. Build the Compiler
+### 1. Get `py2ez80.exe`
 
-Clone the repository, ensure your D compiler is available, and build `py2ez80`:
+Download `py2ez80.exe` from the [Releases](https://github.com/Voblit/py2ez80/releases) tab. If you prefer to compile from source instead, clone the repo and run:
 
 ```powershell
-git clone https://github.com/Voblit/py2ez80.git
+git clone [https://github.com/Voblit/py2ez80.git](https://github.com/Voblit/py2ez80.git)
 cd py2ez80
 
 dmd src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d -of=py2ez80
@@ -160,11 +159,13 @@ Get-ChildItem *.obj -ErrorAction SilentlyContinue | Remove-Item -Force
 
 ```
 
+*(Note: if there is no `.exe` extension after building, just add the file extension.)*
+
 ### 2. Add the CEdev Toolchain
 
 Before transpiling your code, make sure the CEdev SDK is placed in the root directory alongside `py2ez80.exe`:
 
-*note: if there is no .exe and it is just called py2ez80, just add the .exe extension, it will work!*
+
 1. Download the [latest CEdev SDK release](https://github.com/CE-Programming/toolchain/releases).
 2. Extract the downloaded archive directly into your `py2ez80` folder so that `py2ez80.exe` and the `CEdev` folder sit in the exact same directory:
 
@@ -193,7 +194,6 @@ def calculate_distance(x, y):
     return math.sqrt(x * x + y * y)
 
 print("--- Py2eZ80 Engine ---")
-
 
 random.seed(42)
 
@@ -224,6 +224,7 @@ except:
     print("Energy Depleted!")
 finally:
     print("Execution complete.")
+
 ```
 
 ### 4. Transpile and Build
@@ -248,7 +249,7 @@ Py2eZ80 runs the compilation pipeline and outputs status updates directly to you
 
 
 ================================================================================
-                   MAKE COMPLETED, CHECK FOR ANY ERRORS ABOVE
+                    MAKE COMPLETED, CHECK FOR ANY ERRORS ABOVE
 ================================================================================
 
 
@@ -261,7 +262,6 @@ Press any key to continue . . .
 Transfer the resulting `DEMO.8xp` file to your TI-84 Plus CE using **TI Connect CE** or **TIlp**, press `PRGM`, and launch your application.
 
 ---
-
 
 ## Architecture
 
@@ -283,4 +283,6 @@ src/
 
 This project is licensed under the [MIT License](https://www.google.com/search?q=LICENSE).
 
+```
 
+```
