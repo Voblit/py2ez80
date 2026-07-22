@@ -10,30 +10,33 @@ class CCodegen {
     private string[string] variableTypes;
     private int[string] arraySizes;
 
-    this() {
-        textSection ~= "#include <tice.h>";
-        textSection ~= "#include <stdio.h>";
-        textSection ~= "#include <stdlib.h>";
-        textSection ~= "#include <stdbool.h>";
-        textSection ~= "#include <string.h>";
-        textSection ~= "#include <keypadc.h>";
-        textSection ~= "#include <setjmp.h>";
-        textSection ~= "#include <math.h>";
-        textSection ~= "";
-        textSection ~= "// Prototypes & Helpers";
-        textSection ~= "#ifndef RAND_MAX";
-        textSection ~= "#define RAND_MAX 32767";
-        textSection ~= "#endif";
-        textSection ~= "int scanf(const char *format, ...);";
-        textSection ~= "double sqrt(double x);";
-        textSection ~= "";
-        textSection ~= "// Polyfills & Runtime Support";
-        textSection ~= "jmp_buf py_exception_env;";
-        textSection ~= "void py_raise(int err) { longjmp(py_exception_env, err); }";
-        textSection ~= "void py_list_append(void* list, int val) { (void)list; (void)val; }";
-        textSection ~= "char* py_input(void) { static char buf[64]; scanf(\"%63s\", buf); return buf; }";
-        textSection ~= "";
-    }
+this() {
+    textSection ~= "#include <tice.h>";
+    textSection ~= "#include <stdio.h>";
+    textSection ~= "#include <stdlib.h>";
+    textSection ~= "#include <stdbool.h>";
+    textSection ~= "#include <string.h>";
+    textSection ~= "#include <keypadc.h>";
+    textSection ~= "#include <setjmp.h>";
+    textSection ~= "#include <math.h>";
+    textSection ~= "";
+    textSection ~= "// Prototypes & Helpers";
+    textSection ~= "#ifndef RAND_MAX";
+    textSection ~= "#define RAND_MAX 32767";
+    textSection ~= "#endif";
+    textSection ~= "";
+    textSection ~= "// Polyfills & Runtime Support";
+    textSection ~= "jmp_buf py_exception_env;";
+    textSection ~= "void py_raise(int err) { longjmp(py_exception_env, err); }";
+    textSection ~= "void py_list_append(void* list, int val) { (void)list; (void)val; }";
+    textSection ~= "char* py_input(void) {";
+    textSection ~= "    static char buf[64];";
+    textSection ~= "    memset(buf, 0, sizeof(buf));";
+    textSection ~= "    os_GetString(buf, 0, sizeof(buf) - 1);";
+    textSection ~= "    return buf;";
+    textSection ~= "}";
+    textSection ~= "";
+}
 
     private void trackVar(string varName, string type = "int") {
         if (varName !in variableTypes) {
