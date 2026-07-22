@@ -7,7 +7,6 @@
 ### Ahead-of-Time Python Transpiler and Native SDK for the TI-84 Plus CE
 
   <a href="https://github.com/Voblit/py2ez80/actions">
-    <img src="https://img.shields.io/github/check-runs/Voblit/py2ez80/main?label=build&logo=github&style=for-the-badge" />
   </a>
   <img src="https://img.shields.io/badge/Written%20In-D-BA595E?logo=d" />
   <img src="https://img.shields.io/badge/Source-Python_3-3776AB?logo=python&logoColor=white" />
