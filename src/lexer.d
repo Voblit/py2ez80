@@ -1,7 +1,9 @@
 module lexer;
+
 import std.ascii;
 import std.conv;
 import std.string;
+
 enum TokenType {
     Identifier, Number, StringLiteral, Assign, 
     Plus, Minus, Star, Slash, Percent,
@@ -13,17 +15,21 @@ enum TokenType {
     KwBreak, KwContinue, KwPass, KwClass, KwTry, KwExcept, KwFinally, KwRaise, KwImport, KwFrom,
     LParen, RParen, LBracket, RBracket, LBrace, RBrace, Comma, Dot, EOF
 }
+
 struct Token {
     TokenType type;
     string value;
     size_t line;
 }
+
 class Lexer {
     private string src;
     private size_t pos = 0;
     private size_t line = 1;
     private int[] indentStack = [0];
+
     this(string src) { this.src = src; }
+
     Token[] tokenize() {
         Token[] tokens;
         while (pos < src.length) {
