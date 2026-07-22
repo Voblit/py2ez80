@@ -1,42 +1,51 @@
 module ast;
+
 import std.conv;
 import std.string;
+
 abstract class ASTNode {
     abstract string toC();
 }
+
 class NumberNode : ASTNode {
     double val;
     bool isFloat;
     this(double val, bool isFloat = false) { this.val = val; this.isFloat = isFloat; }
     override string toC() { return isFloat ? to!string(val) : to!string(cast(long)val); }
 }
+
 class StringNode : ASTNode {
     string val;
     this(string val) { this.val = val; }
     override string toC() { return "\"" ~ val ~ "\""; }
 }
+
 class BoolNode : ASTNode {
     bool val;
     this(bool val) { this.val = val; }
     override string toC() { return val ? "true" : "false"; }
 }
+
 class VarNode : ASTNode {
     string name;
     this(string name) { this.name = name; }
     override string toC() { return name; }
 }
+
 class BinaryOpNode : ASTNode {
     string op;
     ASTNode left, right;
     this(string op, ASTNode left, ASTNode right) { this.op = op; this.left = left; this.right = right; }
     override string toC() { return "(" ~ left.toC() ~ " " ~ op ~ " " ~ right.toC() ~ ")"; }
 }
+
 class UnaryOpNode : ASTNode {
     string op;
     ASTNode expr;
     this(string op, ASTNode expr) { this.op = op; this.expr = expr; }
     override string toC() { return "(" ~ op ~ expr.toC() ~ ")"; }
 }
+
 class AssignNode : ASTNode {
     string name;
     ASTNode expr;
@@ -47,12 +56,14 @@ class AssignNode : ASTNode {
         return name ~ " = " ~ expr.toC() ~ ";";
     }
 }
+
 class CompoundAssignNode : ASTNode {
     string name, op;
     ASTNode expr;
     this(string name, string op, ASTNode expr) { this.name = name; this.op = op; this.expr = expr; }
     override string toC() { return name ~ " " ~ op ~ " " ~ expr.toC() ~ ";"; }
 }
+
 class ListNode : ASTNode {
     ASTNode[] elems;
     this(ASTNode[] elems) { this.elems = elems; }
@@ -62,6 +73,7 @@ class ListNode : ASTNode {
         return res ~ "}";
     }
 }
+
 class TupleNode : ASTNode {
     ASTNode[] elems;
     this(ASTNode[] elems) { this.elems = elems; }
@@ -71,16 +83,19 @@ class TupleNode : ASTNode {
         return res ~ "}";
     }
 }
+
 class DictNode : ASTNode {
     ASTNode[] keys, values;
     this(ASTNode[] keys, ASTNode[] values) { this.keys = keys; this.values = values; }
     override string toC() { return "/* PyDict initialization */ NULL"; }
 }
+
 class SetNode : ASTNode {
     ASTNode[] elems;
     this(ASTNode[] elems) { this.elems = elems; }
     override string toC() { return "/* PySet initialization */ NULL"; }
 }
+
 class ListCompNode : ASTNode {
     ASTNode expr;
     string varName;
@@ -90,12 +105,14 @@ class ListCompNode : ASTNode {
     }
     override string toC() { return "/* List Comprehension */ NULL"; }
 }
+
 class IndexNode : ASTNode {
     string name;
     ASTNode index;
     this(string name, ASTNode index) { this.name = name; this.index = index; }
     override string toC() { return name ~ "[" ~ index.toC() ~ "]"; }
 }
+
 class CallNode : ASTNode {
     string name;
     ASTNode[] args;
@@ -113,12 +130,14 @@ class CallNode : ASTNode {
         return res ~ ")";
     }
 }
+
 class MemberAccessNode : ASTNode {
     ASTNode obj;
     string member;
     this(ASTNode obj, string member) { this.obj = obj; this.member = member; }
     override string toC() { return obj.toC() ~ "." ~ member; }
 }
+
 class MethodCallNode : ASTNode {
     ASTNode obj;
     string method;
@@ -133,6 +152,7 @@ class MethodCallNode : ASTNode {
         return res ~ ")";
     }
 }
+
 class IfNode : ASTNode {
     ASTNode cond;
     ASTNode[] thenB, elseB;
@@ -149,6 +169,7 @@ class IfNode : ASTNode {
         return res;
     }
 }
+
 class WhileNode : ASTNode {
     ASTNode cond;
     ASTNode[] body;
@@ -159,6 +180,7 @@ class WhileNode : ASTNode {
         return res ~ "}";
     }
 }
+
 class ForNode : ASTNode {
     string varName;
     ASTNode startExpr, stopExpr;
@@ -172,6 +194,7 @@ class ForNode : ASTNode {
         return res ~ "}";
     }
 }
+
 class FunctionDefNode : ASTNode {
     string name;
     string[] params;
@@ -185,6 +208,7 @@ class FunctionDefNode : ASTNode {
         return res ~ "}";
     }
 }
+
 class ClassDefNode : ASTNode {
     string name, parentName;
     ASTNode[] body;
@@ -199,24 +223,29 @@ class ClassDefNode : ASTNode {
         return res;
     }
 }
+
 class ReturnNode : ASTNode {
     ASTNode expr;
     this(ASTNode expr) { this.expr = expr; }
     override string toC() { return "return " ~ (expr ? expr.toC() : "") ~ ";"; }
 }
+
 class BreakNode : ASTNode { override string toC() { return "break;"; } }
 class ContinueNode : ASTNode { override string toC() { return "continue;"; } }
 class PassNode : ASTNode { override string toC() { return "/* pass */;"; } }
+
 class ImportNode : ASTNode {
     string modName, aliasName;
     this(string modName, string aliasName = "") { this.modName = modName; this.aliasName = aliasName; }
     override string toC() { return "#include \"" ~ modName ~ ".h\""; }
 }
+
 class RaiseNode : ASTNode {
     ASTNode expr;
     this(ASTNode expr) { this.expr = expr; }
     override string toC() { return "py_raise(" ~ expr.toC() ~ ");"; }
 }
+
 class TryExceptNode : ASTNode {
     ASTNode[] tryBody, exceptBody, finallyBody;
     this(ASTNode[] tryBody, ASTNode[] exceptBody, ASTNode[] finallyBody = []) {
