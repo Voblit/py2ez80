@@ -157,7 +157,6 @@ cd py2ez80
 
 Get-ChildItem *.obj -ErrorAction SilentlyContinue | Remove-Item -Force
 dmd src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d -of=py2ez80
-if (Test-Path .\py2ez80) { Rename-Item .\py2ez80 py2ez80.exe }
 
 ```
 
