@@ -1,6 +1,5 @@
 <p align="center">
 <div align="center">
-
 # Py2eZ80
 <img src=image_banner.png />
 
