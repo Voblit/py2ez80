@@ -231,17 +231,38 @@ Run `py2ez80.exe` targeting your Python script:
 Py2eZ80 runs the compilation pipeline and outputs status updates directly to your terminal:
 
 ```text
-[1/4] Transpiling demo.py -> CEdev\build_project\src\main.c...
-[2/4] Invoking CEdev toolchain for DEMO...
-================================================================================
-                    TI-84 PLUS CE DEVELOPER TOOLCHAIN
-================================================================================
-[compiling] src\main.c
+2 warnings generated.
+[lto opt] obj\lto.bc
+[convimg] description
 [linking] bin\DEMO.bin
+[success] bin\DEMO.8xp, 7810 bytes.
+
+
+================================================================================
+                   MAKE COMPLETED, CHECK FOR ANY ERRORS ABOVE
+================================================================================
+
+
+Press any key to continue . . .
 [3/4] Copying DEMO.8xp to root project directory...
 [4/4] Success! Final calculator output: C:\path\to\py2ez80\DEMO.8xp
 
 ```
+## Known Compiler Warnings
+
+When running `py2ez80.exe`, the CEdev toolchain may emit standard implicit function warnings during step `[2/4]`:
+
+```powershell
+src/main.c:13:45: warning: call to undeclared library function 'scanf' with type 'int (const char *restrict, ...)'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+char* py_input(void) { static char buf[64]; scanf("%63s", buf); return buf; }
+                                            ^
+src/main.c:13:45: note: include the header <stdio.h> or explicitly provide a declaration for 'scanf'
+src/main.c:28:12: warning: call to undeclared library function 'sqrt' with type 'double (double)'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    return sqrt(x * x + y * y);
+           ^
+src/main.c:28:12: note: include the header <math.h> or explicitly provide a declaration for 'sqrt'
+```
+Ignore it!
 
 Transfer the resulting `DEMO.8xp` file to your TI-84 Plus CE using **TI Connect CE** or **ArTi314**, press `PRGM`, and launch your application.
 
