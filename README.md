@@ -162,7 +162,7 @@ dmd src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d -of=py2ez80
 ### 2. Add the CEdev Toolchain
 
 Before transpiling your code, make sure the CEdev SDK is placed in the root directory alongside `py2ez80.exe`:
-
+*note: if there is no .exe and it is just called py2ez80, just add the .exe extension, it will work!*
 1. Download the [latest CEdev SDK release](https://github.com/CE-Programming/toolchain/releases).
 2. Extract the downloaded archive directly into your `py2ez80` folder so that `py2ez80.exe` and the `CEdev` folder sit in the exact same directory:
 
