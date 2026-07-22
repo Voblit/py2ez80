@@ -56,18 +56,18 @@ Writing C or C++ for the TI-84 Plus CE gives you peak performance, but it can be
 
 | Feature | Built-in TI Python | Py2eZ80 Transpiler |
 | --- | --- | --- |
-| **Execution Method** | On-device interpreter | Bare-metal native assembly |
-| **Startup Speed** | Noticeable delay loading runtime | Instant startup (<1 ms) |
+| **Execution Method** | Crummy On-Device interpereter | bare-metal assembly |
+| **Startup Speed** | Takes a second | Instant |
 | **Performance** | Interpreted (slower execution) | Full native hardware speed |
-| **Dependencies** | Requires TI Python OS app | Standalone `.8xp` binary |
-| **RAM Usage** | High interpreter overhead | Low, lightweight memory footprint |
-| **Hardware Access** | Sandboxed APIs | Direct system and C library access |
+| **Dependencies** | Requires TI Python OS app and python chip | Standalone `.8xp` |
+| **RAM Usage** | High usage, low given amount (because of the coprocessor for python) | Native processing, much faster |
+| **Hardware Access** | Supposedly None | C libraries able to directly touch the chip |
 
 ---
 
 ## Prerequisites and Setup
 
-Py2eZ80 compiles Python source files down to C and invokes the official **CEdev toolchain** behind the scenes to generate `.8xp` files.
+Py2eZ80 compiles Python source files down to C and uses the **CEdev toolchain** behind the scenes to generate `.8xp` files.
 
 ### 1. Requirements
 
@@ -80,7 +80,7 @@ Py2eZ80 expects the CEdev toolchain to exist in a folder named `CEdev` inside th
 
 1. Download the latest release archive of CEdev.
 2. Extract the archive contents directly into your project root as a subfolder named `CEdev`.
-3. Verify your folder structure matches this layout:
+3. Make sure your folder looks like this:
 
 ```text
 py2ez80/
@@ -105,12 +105,12 @@ If `CEdev\cedev.bat` is present in that directory, Py2eZ80 can automatically han
 
 Py2eZ80 handles the entire build process under the hood:
 
-* **Zero-Interpreter Output:** Produces clean C99 code that compiles to bare-metal eZ80 machine instructions.
-* **Automated Pipeline:** Parses Python, creates necessary Makefiles, triggers `CEdev`, and copies the final `.8xp` binary to your directory in a single step.
-* **Name Truncation:** Automatically shortens program variable names to match the 8-character TI OS limit (for example, `space_invaders.py` converts to `SPACE_IN.8xp`).
+* **Zero-Interpreter Output:** Outputs pure C99 code to be further compiled with CEdev.
+* **Automated Pipeline:** Parses Python, creates necessary Makefiles, triggers `CEdev`, and copies the final `.8xp` program all at once.
+* **Name Truncation:** Shrinks names down to the max name length (8 characters) on the CE. (for example, `space_invaders.py` converts to `SPACE_IN.8xp`).
 * **Data Type Mapping:** Automatically infers primitive types (`int`, `float`, `bool`, `str`), arrays, and dynamic data structures.
 * **OOP Structure Lowering:** Translates Python classes into native C `struct` representations.
-* **Exception Engine:** Lowers Python `try`, `except`, `finally`, and `raise` blocks into standard C `setjmp` and `longjmp` execution frames.
+* **Exception Engine:** Lowers Python `try`, `except`, `finally`, and `raise` blocks into standard C `setjmp` and `longjmp` execution commands.
 * **Standard Library Lowering:** Converts module calls like `import math` to standard C system headers like `<math.h>`.
 
 ---
@@ -261,7 +261,7 @@ src/main.c:28:12: note: include the header <math.h> or explicitly provide a decl
 ```
 Ignore it!
 
-Transfer the resulting `DEMO.8xp` file to your TI-84 Plus CE using **TI Connect CE** or **ArTi314**, press `PRGM`, and launch your application.
+Transfer the resulting `DEMO.8xp` file to your TI-84 Plus CE using **TI Connect CE** or **TIlp**, press `PRGM`, and launch your application.
 
 ---
 
