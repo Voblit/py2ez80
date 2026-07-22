@@ -13,16 +13,16 @@
   <img src="https://img.shields.io/badge/Source-Python_3-3776AB?style=for-the-badge&logo=python&logoColor=white" />
   <img src="https://img.shields.io/badge/Target-eZ80_CPU-FF6F00?style=for-the-badge" />
   <a href="https://github.com/Voblit/py2ez80">
-    <img src="https://img.shields.io/github/languages/code-size/Voblit/py2ez80?style=for-the-badge" />
+    <img src="https://img.shields.io/github/languages/code-size/Voblit/py2ez80" />
   </a>
   <a href="https://github.com/Voblit/py2ez80/releases">
-    <img src="https://img.shields.io/github/downloads/Voblit/py2ez80/total?color=brightgreen&style=for-the-badge" />
+    <img src="https://img.shields.io/github/downloads/Voblit/py2ez80/total?color=brightgreen" />
   </a>
   <a href="https://github.com/Voblit/py2ez80/stargazers">
-    <img src="https://img.shields.io/github/stars/Voblit/py2ez80?style=for-the-badge" />
+    <img src="https://img.shields.io/github/stars/Voblit/py2ez80" />
   </a>
   <a href="https://github.com/Voblit/py2ez80/releases/latest">
-    <img src="https://img.shields.io/github/v/release/Voblit/py2ez80?include_prereleases&style=for-the-badge" />
+    <img src="https://img.shields.io/github/v/release/Voblit/py2ez80?include_prereleases" />
   </a>
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
 </p>
