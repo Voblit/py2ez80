@@ -9,9 +9,9 @@
   <a href="https://github.com/Voblit/py2ez80/actions">
     <img src="https://img.shields.io/github/check-runs/Voblit/py2ez80/main?label=build&logo=github&style=for-the-badge" />
   </a>
-  <img src="https://img.shields.io/badge/Written%20In-D-BA595E?style=for-the-badge&logo=d" />
-  <img src="https://img.shields.io/badge/Source-Python_3-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Target-eZ80_CPU-FF6F00?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Written%20In-D-BA595E?logo=d" />
+  <img src="https://img.shields.io/badge/Source-Python_3-3776AB?logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/Target-eZ80_CPU-FF6F00" />
   <a href="https://github.com/Voblit/py2ez80">
     <img src="https://img.shields.io/github/languages/code-size/Voblit/py2ez80" />
   </a>
@@ -24,7 +24,7 @@
   <a href="https://github.com/Voblit/py2ez80/releases/latest">
     <img src="https://img.shields.io/github/v/release/Voblit/py2ez80?include_prereleases" />
   </a>
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/License-MIT-green" />
 </p>
 
 *Compile standard Python scripts directly into bare-metal binary .8xp executables.*
