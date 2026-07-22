@@ -1,6 +1,6 @@
 <p align="center">
 <div align="center">
-# Py2eZ80
+  # Py2eZ80
 <img src=image_banner.png />
 
 ### Ahead-of-Time Python Transpiler and Native SDK for the TI-84 Plus CE
