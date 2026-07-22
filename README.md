@@ -154,7 +154,7 @@ Clone the repository, ensure your D compiler is available, and build `py2ez80`:
 git clone https://github.com/Voblit/py2ez80.git
 cd py2ez80
 
-dmd src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d -of=py2ez80.exe
+dmd src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d -of=py2ez80
 Get-ChildItem *.obj -ErrorAction SilentlyContinue | Remove-Item -Force
 
 ```
