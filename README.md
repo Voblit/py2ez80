@@ -136,10 +136,11 @@ Py2eZ80 handles the entire build process under the hood:
 
 ### Built-ins & Standard Library
 
-* [x] `print()`: Mapped directly to formatted output routines (`printf`)
-* [x] `input()`: String buffer reading
-* [x] `len()`: Array length evaluation
-* [x] `import math`: Maps math operations directly to native eZ80 `<math.h>` functions
+* [x] `print()`: Prints text to the screen
+* [x] `input()`: Allows for input
+* [x] `len()`: Check array length
+* [x] `import math`: Allows for math functions
+* [x] `import random`: Allows for random functions
 * [x] Exception handling (`try`, `except`, `finally`, `raise`)
 
 ---
