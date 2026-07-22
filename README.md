@@ -183,6 +183,7 @@ Create a script named `demo.py`:
 
 ```python
 import math
+import random
 
 class Particle:
     pass
@@ -192,13 +193,23 @@ def calculate_distance(x, y):
 
 print("--- Py2eZ80 Engine ---")
 
+
+random.seed(42)
+
 scores = [100, 250, 500]
 player_name = "Hero"
 energy = 100.0
 
+crit_chance = random.random()
+bonus_damage = random.randint(15, 50)
+print("Random Crit Chance:")
+print(crit_chance)
+print("Random Bonus Damage:")
+print(bonus_damage)
+
 for i in range(0, 3):
     energy -= 10.5
-    scores.append(i * 50)
+    scores.append(i * 50 + random.randint(1, 10))
 
 dist = calculate_distance(30, 40)
 print("Calculated Distance:")
@@ -212,7 +223,6 @@ except:
     print("Energy Depleted!")
 finally:
     print("Execution complete.")
-
 ```
 
 ### 4. Transpile and Build
