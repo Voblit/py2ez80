@@ -20,7 +20,10 @@ class CCodegen {
         textSection ~= "#include <setjmp.h>";
         textSection ~= "#include <math.h>";
         textSection ~= "";
-        textSection ~= "// Prototypes to eliminate compiler warnings/errors";
+        textSection ~= "// Prototypes & Helpers";
+        textSection ~= "#ifndef RAND_MAX";
+        textSection ~= "#define RAND_MAX 32767";
+        textSection ~= "#endif";
         textSection ~= "int scanf(const char *format, ...);";
         textSection ~= "double sqrt(double x);";
         textSection ~= "";
@@ -53,6 +56,12 @@ class CCodegen {
                     trackVar(assign.name, numNode.isFloat ? "float" : "int");
                 } else if (cast(StringNode)assign.expr) {
                     trackVar(assign.name, "const char*");
+                } else if (auto mCall = cast(MethodCallNode)assign.expr) {
+                    if (compileNode(mCall.obj) == "random" && mCall.method == "random") {
+                        trackVar(assign.name, "float");
+                    } else {
+                        trackVar(assign.name, "int");
+                    }
                 } else {
                     trackVar(assign.name, "int");
                 }
@@ -227,6 +236,30 @@ class CCodegen {
                 }
                 return mCall.method ~ "(" ~ argsList ~ ")";
             }
+            if (objName == "random") {
+                if (mCall.method == "randint") {
+                    string a = compileNode(mCall.args[0]);
+                    string b = compileNode(mCall.args[1]);
+                    return "((rand() % ((" ~ b ~ ") - (" ~ a ~ ") + 1)) + (" ~ a ~ "))";
+                }
+                else if (mCall.method == "randrange") {
+                    if (mCall.args.length == 1) {
+                        string stop = compileNode(mCall.args[0]);
+                        return "(rand() % (" ~ stop ~ "))";
+                    } else if (mCall.args.length >= 2) {
+                        string start = compileNode(mCall.args[0]);
+                        string stop = compileNode(mCall.args[1]);
+                        return "((" ~ start ~ ") + (rand() % ((" ~ stop ~ ") - (" ~ start ~ "))))";
+                    }
+                }
+                else if (mCall.method == "random") {
+                    return "((double)rand() / (double)RAND_MAX)";
+                }
+                else if (mCall.method == "seed") {
+                    string seedVal = compileNode(mCall.args[0]);
+                    return "srand((unsigned int)(" ~ seedVal ~ "))";
+                }
+            }
             if (mCall.method == "append") {
                 return "py_list_append(&" ~ objName ~ ", " ~ compileNode(mCall.args[0]) ~ ");";
             }
@@ -300,6 +333,7 @@ class CCodegen {
         }
         else if (auto imp = cast(ImportNode)node) {
             if (imp.modName == "math") return "#include <math.h>";
+            if (imp.modName == "random") return "#include <stdlib.h>";
             return "#include \"" ~ imp.modName ~ ".h\"";
         }
         else if (auto raise = cast(RaiseNode)node) {
