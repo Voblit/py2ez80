@@ -120,13 +120,11 @@ class CCodegen {
 
         foreach (stmt; mainStmts) {
             if (stmt.length > 0) {
-                string line = compileNode(stmt);
-                if (line.length > 0) {
-                    if (!line.endsWith(";") && !line.endsWith("}")) {
-                        line ~= ";";
-                    }
-                    textSection ~= "    " ~ line;
+                string line = stmt;
+                if (!line.endsWith(";") && !line.endsWith("}")) {
+                    line ~= ";";
                 }
+                textSection ~= "    " ~ line;
             }
         }
 
