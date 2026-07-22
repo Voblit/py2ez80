@@ -12,6 +12,7 @@ class CCodegen {
 
 this() {
     textSection ~= "#include <tice.h>";
+    textSection ~= "#include <ti/screen.h>";
     textSection ~= "#include <stdio.h>";
     textSection ~= "#include <stdlib.h>";
     textSection ~= "#include <stdbool.h>";
@@ -32,12 +33,11 @@ this() {
     textSection ~= "char* py_input(void) {";
     textSection ~= "    static char buf[64];";
     textSection ~= "    memset(buf, 0, sizeof(buf));";
-    textSection ~= "    os_GetString(buf, 0, sizeof(buf) - 1);";
+    textSection ~= "    os_GetStringInput(\":\", buf, sizeof(buf) - 1);";
     textSection ~= "    return buf;";
     textSection ~= "}";
     textSection ~= "";
 }
-
     private void trackVar(string varName, string type = "int") {
         if (varName !in variableTypes) {
             variableTypes[varName] = type;
