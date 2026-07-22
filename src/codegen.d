@@ -1,37 +1,43 @@
 module codegen;
+
 import ast;
 import std.string;
 import std.conv;
 import std.array;
+
 class CCodegen {
     private string[] textSection;
     private string[string] variableTypes;
     private int[string] arraySizes;
+
     this() {
-    textSection ~= "#include <tice.h>";
-    textSection ~= "#include <stdio.h>";
-    textSection ~= "#include <stdlib.h>";
-    textSection ~= "#include <stdbool.h>";
-    textSection ~= "#include <string.h>";
-    textSection ~= "#include <keypadc.h>";
-    textSection ~= "#include <setjmp.h>";
-    textSection ~= "";
-    textSection ~= "// Prototypes to eliminate compiler warnings";
-    textSection ~= "int scanf(const char *format, ...);";
-    textSection ~= "double sqrt(double x);";
-    textSection ~= "";
-    textSection ~= "// Polyfills & Runtime Support";
-    textSection ~= "jmp_buf py_exception_env;";
-    textSection ~= "void py_raise(int err) { longjmp(py_exception_env, err); }";
-    textSection ~= "void py_list_append(void* list, int val) { (void)list; (void)val; }";
-    textSection ~= "char* py_input(void) { static char buf[64]; scanf(\"%63s\", buf); return buf; }";
-    textSection ~= "";
-}
+        textSection ~= "#include <tice.h>";
+        textSection ~= "#include <stdio.h>";
+        textSection ~= "#include <stdlib.h>";
+        textSection ~= "#include <stdbool.h>";
+        textSection ~= "#include <string.h>";
+        textSection ~= "#include <keypadc.h>";
+        textSection ~= "#include <setjmp.h>";
+        textSection ~= "#include <math.h>";
+        textSection ~= "";
+        textSection ~= "// Prototypes to eliminate compiler warnings/errors";
+        textSection ~= "int scanf(const char *format, ...);";
+        textSection ~= "double sqrt(double x);";
+        textSection ~= "";
+        textSection ~= "// Polyfills & Runtime Support";
+        textSection ~= "jmp_buf py_exception_env;";
+        textSection ~= "void py_raise(int err) { longjmp(py_exception_env, err); }";
+        textSection ~= "void py_list_append(void* list, int val) { (void)list; (void)val; }";
+        textSection ~= "char* py_input(void) { static char buf[64]; scanf(\"%63s\", buf); return buf; }";
+        textSection ~= "";
+    }
+
     private void trackVar(string varName, string type = "int") {
         if (varName !in variableTypes) {
             variableTypes[varName] = type;
         }
     }
+
     void generate(ASTNode[] ast) {
         foreach (node; ast) {
             if (auto assign = cast(AssignNode)node) {
@@ -56,9 +62,11 @@ class CCodegen {
                 trackVar(forNode.varName, "int");
             }
         }
+
         string[] includes;
         string[] functionDefs;
         string[] mainStmts;
+
         foreach (node; ast) {
             if (cast(ImportNode)node) {
                 string inc = compileNode(node);
@@ -69,10 +77,13 @@ class CCodegen {
                 mainStmts ~= compileNode(node);
             }
         }
+
         foreach (inc; includes) {
             if (inc.length > 0) textSection ~= inc;
         }
+
         if (includes.length > 0) textSection ~= "";
+
         if (variableTypes.length > 0) {
             textSection ~= "// Global Variables";
             foreach (varName, type; variableTypes) {
@@ -88,24 +99,30 @@ class CCodegen {
             }
             textSection ~= "";
         }
+
         foreach (fn; functionDefs) {
             textSection ~= fn;
             textSection ~= "";
         }
+
         textSection ~= "int main(void) {";
         textSection ~= "    os_ClrHome();";
         textSection ~= "";
+
         foreach (stmt; mainStmts) {
             if (stmt.length > 0) textSection ~= "    " ~ stmt;
         }
+
         textSection ~= "";
         textSection ~= "    // Wait for keypress before exiting";
         textSection ~= "    while (!os_GetCSC());";
         textSection ~= "    return 0;";
         textSection ~= "}";
     }
+
     private string compileNode(ASTNode node) {
         if (node is null) return "";
+
         if (auto num = cast(NumberNode)node) {
             return num.isFloat ? to!string(num.val) : to!string(cast(long)num.val);
         }
@@ -282,7 +299,7 @@ class CCodegen {
             return code;
         }
         else if (auto imp = cast(ImportNode)node) {
-            if (imp.modName == "math") return "";
+            if (imp.modName == "math") return "#include <math.h>";
             return "#include \"" ~ imp.modName ~ ".h\"";
         }
         else if (auto raise = cast(RaiseNode)node) {
@@ -309,6 +326,7 @@ class CCodegen {
         }
         return "";
     }
+
     string getSourceCode() {
         return textSection.join("\n");
     }
