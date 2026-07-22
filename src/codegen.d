@@ -119,7 +119,15 @@ class CCodegen {
         textSection ~= "";
 
         foreach (stmt; mainStmts) {
-            if (stmt.length > 0) textSection ~= "    " ~ stmt;
+            if (stmt.length > 0) {
+                string line = compileNode(stmt);
+                if (line.length > 0) {
+                    if (!line.endsWith(";") && !line.endsWith("}")) {
+                        line ~= ";";
+                    }
+                    textSection ~= "    " ~ line;
+                }
+            }
         }
 
         textSection ~= "";
@@ -207,6 +215,13 @@ class CCodegen {
                         result ~= "printf(\"%s\\n\", " ~ compileNode(arg) ~ "); ";
                     } else if (auto numArg = cast(NumberNode)arg) {
                         result ~= numArg.isFloat ? "printf(\"%f\\n\", " ~ compileNode(arg) ~ "); " : "printf(\"%d\\n\", " ~ compileNode(arg) ~ "); ";
+                    } else if (auto varArg = cast(VarNode)arg) {
+                        string* t = varArg.name in variableTypes;
+                        if (t !is null && (*t == "float" || *t == "double")) {
+                            result ~= "printf(\"%f\\n\", " ~ compileNode(arg) ~ "); ";
+                        } else {
+                            result ~= "printf(\"%d\\n\", " ~ compileNode(arg) ~ "); ";
+                        }
                     } else {
                         result ~= "printf(\"%d\\n\", " ~ compileNode(arg) ~ "); ";
                     }
@@ -221,7 +236,7 @@ class CCodegen {
                 foreach (i, arg; call.args) {
                     argsList ~= compileNode(arg) ~ (i + 1 < call.args.length ? ", " : "");
                 }
-                return call.name ~ "(" ~ argsList ~ ");";
+                return call.name ~ "(" ~ argsList ~ ")";
             }
         }
         else if (auto member = cast(MemberAccessNode)node) {
@@ -261,13 +276,13 @@ class CCodegen {
                 }
             }
             if (mCall.method == "append") {
-                return "py_list_append(&" ~ objName ~ ", " ~ compileNode(mCall.args[0]) ~ ");";
+                return "py_list_append(&" ~ objName ~ ", " ~ compileNode(mCall.args[0]) ~ ")";
             }
             string argsList = "&" ~ objName;
             foreach (arg; mCall.args) {
                 argsList ~= ", " ~ compileNode(arg);
             }
-            return objName ~ "_" ~ mCall.method ~ "(" ~ argsList ~ ");";
+            return objName ~ "_" ~ mCall.method ~ "(" ~ argsList ~ ")";
         }
         else if (auto classDef = cast(ClassDefNode)node) {
             string code = "typedef struct {\n";
@@ -276,20 +291,26 @@ class CCodegen {
             }
             code ~= "} " ~ classDef.name ~ ";\n";
             foreach (stmt; classDef.body) {
-                code ~= compileNode(stmt) ~ "\n";
+                string line = compileNode(stmt);
+                if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
+                code ~= line ~ "\n";
             }
             return code;
         }
         else if (auto ifNode = cast(IfNode)node) {
             string code = "if (" ~ compileNode(ifNode.cond) ~ ") {\n";
             foreach (stmt; ifNode.thenB) {
-                code ~= "        " ~ compileNode(stmt) ~ "\n";
+                string line = compileNode(stmt);
+                if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
+                code ~= "        " ~ line ~ "\n";
             }
             code ~= "    }";
             if (ifNode.elseB.length > 0) {
                 code ~= " else {\n";
                 foreach (stmt; ifNode.elseB) {
-                    code ~= "        " ~ compileNode(stmt) ~ "\n";
+                    string line = compileNode(stmt);
+                    if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
+                    code ~= "        " ~ line ~ "\n";
                 }
                 code ~= "    }";
             }
@@ -298,7 +319,9 @@ class CCodegen {
         else if (auto whileNode = cast(WhileNode)node) {
             string code = "while (" ~ compileNode(whileNode.cond) ~ ") {\n";
             foreach (stmt; whileNode.body) {
-                code ~= "        " ~ compileNode(stmt) ~ "\n";
+                string line = compileNode(stmt);
+                if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
+                code ~= "        " ~ line ~ "\n";
             }
             code ~= "    }";
             return code;
@@ -308,7 +331,9 @@ class CCodegen {
                           forNode.varName ~ " < " ~ compileNode(forNode.stopExpr) ~ "; " ~
                           forNode.varName ~ "++) {\n";
             foreach (stmt; forNode.body) {
-                code ~= "        " ~ compileNode(stmt) ~ "\n";
+                string line = compileNode(stmt);
+                if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
+                code ~= "        " ~ line ~ "\n";
             }
             code ~= "    }";
             return code;
@@ -326,7 +351,9 @@ class CCodegen {
             }
             string code = "int " ~ fn.name ~ "(" ~ params ~ ") {\n";
             foreach (stmt; fn.body) {
-                code ~= "    " ~ compileNode(stmt) ~ "\n";
+                string line = compileNode(stmt);
+                if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
+                code ~= "    " ~ line ~ "\n";
             }
             code ~= "}";
             return code;
@@ -342,17 +369,23 @@ class CCodegen {
         else if (auto tryExcept = cast(TryExceptNode)node) {
             string code = "if (setjmp(py_exception_env) == 0) {\n";
             foreach (stmt; tryExcept.tryBody) {
-                code ~= "        " ~ compileNode(stmt) ~ "\n";
+                string line = compileNode(stmt);
+                if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
+                code ~= "        " ~ line ~ "\n";
             }
             code ~= "    } else {\n";
             foreach (stmt; tryExcept.exceptBody) {
-                code ~= "        " ~ compileNode(stmt) ~ "\n";
+                string line = compileNode(stmt);
+                if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
+                code ~= "        " ~ line ~ "\n";
             }
             code ~= "    }";
             if (tryExcept.finallyBody.length > 0) {
                 code ~= " {\n";
                 foreach (stmt; tryExcept.finallyBody) {
-                    code ~= "        " ~ compileNode(stmt) ~ "\n";
+                    string line = compileNode(stmt);
+                    if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
+                    code ~= "        " ~ line ~ "\n";
                 }
                 code ~= "    }";
             }
