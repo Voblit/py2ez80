@@ -1,4 +1,4 @@
-
+<p align="center">
 <div align="center">
 
 # Py2eZ80
@@ -6,7 +6,6 @@
 
 ### Ahead-of-Time Python Transpiler and Native SDK for the TI-84 Plus CE
 
-<p align="center">
   <a href="https://github.com/Voblit/py2ez80/actions">
     <img src="https://img.shields.io/github/check-runs/Voblit/py2ez80/main?label=build&logo=github&style=for-the-badge" />
   </a>
