@@ -1,16 +1,13 @@
 module codegen;
-
 import ast;
 import std.string;
 import std.conv;
 import std.array;
-
 class CCodegen {
     private string[] textSection;
     private string[string] variableTypes;
     private int[string] arraySizes;
-
-   this() {
+    this() {
     textSection ~= "#include <tice.h>";
     textSection ~= "#include <stdio.h>";
     textSection ~= "#include <stdlib.h>";
@@ -18,7 +15,10 @@ class CCodegen {
     textSection ~= "#include <string.h>";
     textSection ~= "#include <keypadc.h>";
     textSection ~= "#include <setjmp.h>";
-    textSection ~= "#include <math.h>";
+    textSection ~= "";
+    textSection ~= "// Prototypes to eliminate compiler warnings";
+    textSection ~= "int scanf(const char *format, ...);";
+    textSection ~= "double sqrt(double x);";
     textSection ~= "";
     textSection ~= "// Polyfills & Runtime Support";
     textSection ~= "jmp_buf py_exception_env;";
@@ -27,15 +27,12 @@ class CCodegen {
     textSection ~= "char* py_input(void) { static char buf[64]; scanf(\"%63s\", buf); return buf; }";
     textSection ~= "";
 }
-
     private void trackVar(string varName, string type = "int") {
         if (varName !in variableTypes) {
             variableTypes[varName] = type;
         }
     }
-
     void generate(ASTNode[] ast) {
-        // 1. Analyze AST for Global Variables & Types
         foreach (node; ast) {
             if (auto assign = cast(AssignNode)node) {
                 if (auto listNode = cast(ListNode)assign.expr) {
@@ -59,29 +56,23 @@ class CCodegen {
                 trackVar(forNode.varName, "int");
             }
         }
-
-        // 2. Separate Header Includes, Functions, and Main Statements
         string[] includes;
         string[] functionDefs;
         string[] mainStmts;
-
         foreach (node; ast) {
             if (cast(ImportNode)node) {
-                includes ~= compileNode(node);
+                string inc = compileNode(node);
+                if (inc.length > 0) includes ~= inc;
             } else if (cast(FunctionDefNode)node || cast(ClassDefNode)node) {
                 functionDefs ~= compileNode(node);
             } else {
                 mainStmts ~= compileNode(node);
             }
         }
-
-        // Emit Custom Includes
         foreach (inc; includes) {
             if (inc.length > 0) textSection ~= inc;
         }
         if (includes.length > 0) textSection ~= "";
-
-        // Emit Global Variable Declarations
         if (variableTypes.length > 0) {
             textSection ~= "// Global Variables";
             foreach (varName, type; variableTypes) {
@@ -97,33 +88,24 @@ class CCodegen {
             }
             textSection ~= "";
         }
-
-        // Emit Functions & Classes
         foreach (fn; functionDefs) {
             textSection ~= fn;
             textSection ~= "";
         }
-
-        // 3. Construct C main() Routine
         textSection ~= "int main(void) {";
         textSection ~= "    os_ClrHome();";
         textSection ~= "";
-
         foreach (stmt; mainStmts) {
             if (stmt.length > 0) textSection ~= "    " ~ stmt;
         }
-
         textSection ~= "";
         textSection ~= "    // Wait for keypress before exiting";
         textSection ~= "    while (!os_GetCSC());";
         textSection ~= "    return 0;";
         textSection ~= "}";
     }
-
     private string compileNode(ASTNode node) {
         if (node is null) return "";
-
-        // Core Literals
         if (auto num = cast(NumberNode)node) {
             return num.isFloat ? to!string(num.val) : to!string(cast(long)num.val);
         }
@@ -136,16 +118,12 @@ class CCodegen {
         else if (auto var = cast(VarNode)node) {
             return var.name;
         }
-
-        // Operators
         else if (auto unOp = cast(UnaryOpNode)node) {
             return unOp.op ~ compileNode(unOp.expr);
         }
         else if (auto binOp = cast(BinaryOpNode)node) {
             return compileNode(binOp.left) ~ " " ~ binOp.op ~ " " ~ compileNode(binOp.right);
         }
-
-        // Data Structure Literals & Access
         else if (auto listNode = cast(ListNode)node) {
             string res = "{";
             foreach (i, elem; listNode.elems) {
@@ -172,8 +150,6 @@ class CCodegen {
         else if (auto indexNode = cast(IndexNode)node) {
             return indexNode.name ~ "[" ~ compileNode(indexNode.index) ~ "]";
         }
-
-        // Assignments
         else if (auto assign = cast(AssignNode)node) {
             if (auto listNode = cast(ListNode)assign.expr) {
                 string initCode = "";
@@ -197,8 +173,6 @@ class CCodegen {
         else if (auto compAssign = cast(CompoundAssignNode)node) {
             return compAssign.name ~ " " ~ compAssign.op ~ " " ~ compileNode(compAssign.expr) ~ ";";
         }
-
-        // Function Calls & Built-ins
         else if (auto call = cast(CallNode)node) {
             if (call.name == "print") {
                 string result = "";
@@ -224,20 +198,26 @@ class CCodegen {
                 return call.name ~ "(" ~ argsList ~ ");";
             }
         }
-
-        // OOP & Member Access
         else if (auto member = cast(MemberAccessNode)node) {
             return compileNode(member.obj) ~ "." ~ member.member;
         }
         else if (auto mCall = cast(MethodCallNode)node) {
-            if (mCall.method == "append") {
-                return "py_list_append(&" ~ compileNode(mCall.obj) ~ ", " ~ compileNode(mCall.args[0]) ~ ");";
+            string objName = compileNode(mCall.obj);
+            if (objName == "math") {
+                string argsList = "";
+                foreach (i, arg; mCall.args) {
+                    argsList ~= compileNode(arg) ~ (i + 1 < mCall.args.length ? ", " : "");
+                }
+                return mCall.method ~ "(" ~ argsList ~ ")";
             }
-            string argsList = "&" ~ compileNode(mCall.obj);
+            if (mCall.method == "append") {
+                return "py_list_append(&" ~ objName ~ ", " ~ compileNode(mCall.args[0]) ~ ");";
+            }
+            string argsList = "&" ~ objName;
             foreach (arg; mCall.args) {
                 argsList ~= ", " ~ compileNode(arg);
             }
-            return compileNode(mCall.obj) ~ "_" ~ mCall.method ~ "(" ~ argsList ~ ");";
+            return objName ~ "_" ~ mCall.method ~ "(" ~ argsList ~ ");";
         }
         else if (auto classDef = cast(ClassDefNode)node) {
             string code = "typedef struct {\n";
@@ -250,8 +230,6 @@ class CCodegen {
             }
             return code;
         }
-
-        // Control Flow
         else if (auto ifNode = cast(IfNode)node) {
             string code = "if (" ~ compileNode(ifNode.cond) ~ ") {\n";
             foreach (stmt; ifNode.thenB) {
@@ -285,16 +263,12 @@ class CCodegen {
             code ~= "    }";
             return code;
         }
-
-        // Jumps & Statement Flow
         else if (cast(BreakNode)node) return "break;";
         else if (cast(ContinueNode)node) return "continue;";
         else if (cast(PassNode)node) return "/* pass */;";
         else if (auto ret = cast(ReturnNode)node) {
             return "return " ~ (ret.expr ? compileNode(ret.expr) : "") ~ ";";
         }
-
-        // Functions
         else if (auto fn = cast(FunctionDefNode)node) {
             string params = "";
             foreach (i, p; fn.params) {
@@ -307,10 +281,8 @@ class CCodegen {
             code ~= "}";
             return code;
         }
-
-        // Exceptions & Imports
         else if (auto imp = cast(ImportNode)node) {
-            if (imp.modName == "math") return "#include <math.h>";
+            if (imp.modName == "math") return "";
             return "#include \"" ~ imp.modName ~ ".h\"";
         }
         else if (auto raise = cast(RaiseNode)node) {
@@ -335,10 +307,8 @@ class CCodegen {
             }
             return code;
         }
-
         return "";
     }
-
     string getSourceCode() {
         return textSection.join("\n");
     }

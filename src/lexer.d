@@ -1,9 +1,7 @@
 module lexer;
-
 import std.ascii;
 import std.conv;
 import std.string;
-
 enum TokenType {
     Identifier, Number, StringLiteral, Assign, 
     Plus, Minus, Star, Slash, Percent,
@@ -15,27 +13,21 @@ enum TokenType {
     KwBreak, KwContinue, KwPass, KwClass, KwTry, KwExcept, KwFinally, KwRaise, KwImport, KwFrom,
     LParen, RParen, LBracket, RBracket, LBrace, RBrace, Comma, Dot, EOF
 }
-
 struct Token {
     TokenType type;
     string value;
     size_t line;
 }
-
 class Lexer {
     private string src;
     private size_t pos = 0;
     private size_t line = 1;
     private int[] indentStack = [0];
-
     this(string src) { this.src = src; }
-
     Token[] tokenize() {
         Token[] tokens;
-
         while (pos < src.length) {
             char c = src[pos];
-
             if (c == '\n') {
                 tokens ~= Token(TokenType.Newline, "\\n", line);
                 pos++; line++;
@@ -44,7 +36,6 @@ class Lexer {
                     indentLen += (src[pos] == '\t') ? 4 : 1;
                     pos++;
                 }
-
                 if (pos < src.length && src[pos] != '\n' && src[pos] != '#') {
                     int currentIndent = indentStack[$-1];
                     if (cast(int)indentLen > currentIndent) {
@@ -59,14 +50,11 @@ class Lexer {
                 }
                 continue;
             }
-
             if (isWhite(c)) { pos++; continue; }
-
             if (c == '#') {
                 while (pos < src.length && src[pos] != '\n') pos++;
                 continue;
             }
-
             if (c == '"' || c == '\'') {
                 char quote = c; pos++; size_t start = pos;
                 while (pos < src.length && src[pos] != quote) pos++;
@@ -75,13 +63,11 @@ class Lexer {
                 tokens ~= Token(TokenType.StringLiteral, strVal, line);
                 continue;
             }
-
             if (isAlpha(c) || c == '_') {
                 size_t start = pos;
                 while (pos < src.length && (isAlphaNum(src[pos]) || src[pos] == '_')) pos++;
                 string val = src[start .. pos];
                 TokenType t = TokenType.Identifier;
-
                 if (val == "if") t = TokenType.KwIf;
                 else if (val == "elif") t = TokenType.KwElif;
                 else if (val == "else") t = TokenType.KwElse;
@@ -106,18 +92,15 @@ class Lexer {
                 else if (val == "raise") t = TokenType.KwRaise;
                 else if (val == "import") t = TokenType.KwImport;
                 else if (val == "from") t = TokenType.KwFrom;
-
                 tokens ~= Token(t, val, line);
                 continue;
             }
-
             if (isDigit(c)) {
                 size_t start = pos;
                 while (pos < src.length && (isDigit(src[pos]) || src[pos] == '.')) pos++;
                 tokens ~= Token(TokenType.Number, src[start .. pos], line);
                 continue;
             }
-
             if (pos + 1 < src.length) {
                 string pair = src[pos .. pos+2];
                 if (pair == "==") { tokens ~= Token(TokenType.EqualEqual, "==", line); pos += 2; continue; }
@@ -129,7 +112,6 @@ class Lexer {
                 if (pair == "*=") { tokens ~= Token(TokenType.StarAssign, "*=", line); pos += 2; continue; }
                 if (pair == "/=") { tokens ~= Token(TokenType.SlashAssign, "/=", line); pos += 2; continue; }
             }
-
             switch (c) {
                 case '=': tokens ~= Token(TokenType.Assign, "=", line); break;
                 case '+': tokens ~= Token(TokenType.Plus, "+", line); break;
@@ -152,12 +134,10 @@ class Lexer {
             }
             pos++;
         }
-
         while (indentStack.length > 1) {
             indentStack = indentStack[0 .. $-1];
             tokens ~= Token(TokenType.Dedent, "", line);
         }
-
         tokens ~= Token(TokenType.EOF, "", line);
         return tokens;
     }

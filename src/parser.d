@@ -1,30 +1,23 @@
 module parser;
-
 import lexer;
 import ast;
 import std.conv;
 import std.string;
-
 class Parser {
     private Token[] tokens;
     private size_t idx = 0;
-
     this(Token[] tokens) { this.tokens = tokens; }
-
     private Token peek() { return tokens[idx]; }
     private Token consume() { return tokens[idx++]; }
-    
     private bool match(TokenType type) {
         if (peek().type == type) { idx++; return true; }
         return false;
     }
-
     private void expect(TokenType type, string msg) {
         if (!match(type)) {
             throw new Exception("Parser Error on line " ~ to!string(peek().line) ~ ": " ~ msg ~ " (Got: '" ~ peek().value ~ "')");
         }
     }
-
     ASTNode[] parseProgram() {
         ASTNode[] statements;
         while (peek().type != TokenType.EOF) {
@@ -33,7 +26,6 @@ class Parser {
         }
         return statements;
     }
-
     private ASTNode parseStatement() {
         if (match(TokenType.KwIf)) return parseIf();
         if (match(TokenType.KwWhile)) return parseWhile();
@@ -47,51 +39,39 @@ class Parser {
         if (match(TokenType.KwPass)) return new PassNode();
         if (match(TokenType.KwRaise)) return new RaiseNode(parseExpression());
         if (match(TokenType.KwReturn)) return new ReturnNode(peek().type == TokenType.Newline ? null : parseExpression());
-
-        // Variable or Property Assignments
         if (peek().type == TokenType.Identifier) {
             size_t save = idx;
             string varName = consume().value;
-
-            // Compound Assign: x += 1
             if (peek().type == TokenType.PlusAssign || peek().type == TokenType.MinusAssign ||
                 peek().type == TokenType.StarAssign || peek().type == TokenType.SlashAssign) {
                 string op = consume().value;
                 auto expr = parseExpression();
                 return new CompoundAssignNode(varName, op, expr);
             }
-
-            // Indexed Assign: x[i] = y
             ASTNode indexNode = null;
             if (match(TokenType.LBracket)) {
                 indexNode = parseExpression();
                 expect(TokenType.RBracket, "Expected ']'");
             }
-
             if (match(TokenType.Assign)) {
                 auto expr = parseExpression();
                 return new AssignNode(varName, expr, indexNode);
             }
-
-            idx = save; // Restore if standard expression
+            idx = save;
         }
-
         return parseExpression();
     }
-
     private ASTNode parseIf() {
         auto cond = parseExpression();
         expect(TokenType.Colon, "Expected ':'");
         expect(TokenType.Newline, "Expected newline");
         expect(TokenType.Indent, "Expected indented block");
-
         ASTNode[] thenB;
         while (peek().type != TokenType.Dedent && peek().type != TokenType.EOF) {
             if (peek().type == TokenType.Newline) { consume(); continue; }
             thenB ~= parseStatement();
         }
         expect(TokenType.Dedent, "Expected dedent");
-
         ASTNode[] elseB;
         if (match(TokenType.KwElif)) elseB ~= parseIf();
         else if (match(TokenType.KwElse)) {
@@ -106,13 +86,11 @@ class Parser {
         }
         return new IfNode(cond, thenB, elseB);
     }
-
     private ASTNode parseWhile() {
         auto cond = parseExpression();
         expect(TokenType.Colon, "Expected ':'");
         expect(TokenType.Newline, "Expected newline");
         expect(TokenType.Indent, "Expected indented block");
-
         ASTNode[] body;
         while (peek().type != TokenType.Dedent && peek().type != TokenType.EOF) {
             if (peek().type == TokenType.Newline) { consume(); continue; }
@@ -121,27 +99,22 @@ class Parser {
         expect(TokenType.Dedent, "Expected dedent");
         return new WhileNode(cond, body);
     }
-
     private ASTNode parseFor() {
         string varName = consume().value;
         expect(TokenType.KwIn, "Expected 'in'");
         expect(TokenType.KwRange, "Expected 'range'");
         expect(TokenType.LParen, "Expected '('");
-
         auto arg1 = parseExpression();
         ASTNode startExpr = new NumberNode(0);
         ASTNode stopExpr = arg1;
-
         if (match(TokenType.Comma)) {
             startExpr = arg1;
             stopExpr = parseExpression();
         }
-
         expect(TokenType.RParen, "Expected ')'");
         expect(TokenType.Colon, "Expected ':'");
         expect(TokenType.Newline, "Expected newline");
         expect(TokenType.Indent, "Expected indented block");
-
         ASTNode[] body;
         while (peek().type != TokenType.Dedent && peek().type != TokenType.EOF) {
             if (peek().type == TokenType.Newline) { consume(); continue; }
@@ -150,7 +123,6 @@ class Parser {
         expect(TokenType.Dedent, "Expected dedent");
         return new ForNode(varName, startExpr, stopExpr, body);
     }
-
     private ASTNode parseFunctionDef() {
         string name = consume().value;
         expect(TokenType.LParen, "Expected '('");
@@ -162,7 +134,6 @@ class Parser {
         expect(TokenType.Colon, "Expected ':'");
         expect(TokenType.Newline, "Expected newline");
         expect(TokenType.Indent, "Expected indented block");
-
         ASTNode[] body;
         while (peek().type != TokenType.Dedent && peek().type != TokenType.EOF) {
             if (peek().type == TokenType.Newline) { consume(); continue; }
@@ -171,7 +142,6 @@ class Parser {
         expect(TokenType.Dedent, "Expected dedent");
         return new FunctionDefNode(name, params, body);
     }
-
     private ASTNode parseClassDef() {
         string className = consume().value;
         string parentName = "";
@@ -182,7 +152,6 @@ class Parser {
         expect(TokenType.Colon, "Expected ':'");
         expect(TokenType.Newline, "Expected newline");
         expect(TokenType.Indent, "Expected indented block");
-
         ASTNode[] body;
         while (peek().type != TokenType.Dedent && peek().type != TokenType.EOF) {
             if (peek().type == TokenType.Newline) { consume(); continue; }
@@ -191,7 +160,6 @@ class Parser {
         expect(TokenType.Dedent, "Expected dedent");
         return new ClassDefNode(className, parentName, body);
     }
-
     private ASTNode parseTryExcept() {
         expect(TokenType.Colon, "Expected ':'");
         expect(TokenType.Newline, "Expected newline");
@@ -202,9 +170,8 @@ class Parser {
             tryBody ~= parseStatement();
         }
         expect(TokenType.Dedent, "Expected dedent");
-
         expect(TokenType.KwExcept, "Expected 'except'");
-        if (peek().type == TokenType.Identifier) consume(); // Optional exception name
+        if (peek().type == TokenType.Identifier) consume();
         expect(TokenType.Colon, "Expected ':'");
         expect(TokenType.Newline, "Expected newline");
         expect(TokenType.Indent, "Expected indented block");
@@ -214,7 +181,6 @@ class Parser {
             exceptBody ~= parseStatement();
         }
         expect(TokenType.Dedent, "Expected dedent");
-
         ASTNode[] finallyBody;
         if (match(TokenType.KwFinally)) {
             expect(TokenType.Colon, "Expected ':'");
@@ -228,26 +194,21 @@ class Parser {
         }
         return new TryExceptNode(tryBody, exceptBody, finallyBody);
     }
-
     private ASTNode parseImport() {
         string modName = consume().value;
         return new ImportNode(modName);
     }
-
     private ASTNode parseExpression() { return parseLogicalOr(); }
-
     private ASTNode parseLogicalOr() {
         auto left = parseLogicalAnd();
         while (match(TokenType.KwOr)) left = new BinaryOpNode("||", left, parseLogicalAnd());
         return left;
     }
-
     private ASTNode parseLogicalAnd() {
         auto left = parseEquality();
         while (match(TokenType.KwAnd)) left = new BinaryOpNode("&&", left, parseEquality());
         return left;
     }
-
     private ASTNode parseEquality() {
         auto left = parseRelational();
         while (peek().type == TokenType.EqualEqual || peek().type == TokenType.NotEqual) {
@@ -256,7 +217,6 @@ class Parser {
         }
         return left;
     }
-
     private ASTNode parseRelational() {
         auto left = parseAdditive();
         while (peek().type == TokenType.Less || peek().type == TokenType.Greater ||
@@ -266,7 +226,6 @@ class Parser {
         }
         return left;
     }
-
     private ASTNode parseAdditive() {
         auto left = parseTerm();
         while (peek().type == TokenType.Plus || peek().type == TokenType.Minus) {
@@ -275,7 +234,6 @@ class Parser {
         }
         return left;
     }
-
     private ASTNode parseTerm() {
         auto left = parseUnary();
         while (peek().type == TokenType.Star || peek().type == TokenType.Slash || peek().type == TokenType.Percent) {
@@ -284,13 +242,11 @@ class Parser {
         }
         return left;
     }
-
     private ASTNode parseUnary() {
         if (match(TokenType.KwNot)) return new UnaryOpNode("!", parseUnary());
         if (match(TokenType.Minus)) return new UnaryOpNode("-", parseUnary());
         return parseFactor();
     }
-
     private ASTNode parseFactor() {
         if (peek().type == TokenType.Number) {
             string val = consume().value;
@@ -299,14 +255,10 @@ class Parser {
         if (match(TokenType.KwTrue)) return new BoolNode(true);
         if (match(TokenType.KwFalse)) return new BoolNode(false);
         if (peek().type == TokenType.StringLiteral) return new StringNode(consume().value);
-
-        // List Literals or List Comprehensions: [x for x in y] or [1, 2, 3]
         if (match(TokenType.LBracket)) {
             ASTNode[] elems;
             if (peek().type != TokenType.RBracket) {
                 auto first = parseExpression();
-
-                // Check for List Comprehension syntax
                 if (match(TokenType.KwFor)) {
                     string varName = consume().value;
                     expect(TokenType.KwIn, "Expected 'in'");
@@ -314,7 +266,6 @@ class Parser {
                     expect(TokenType.RBracket, "Expected ']'");
                     return new ListCompNode(first, varName, iter);
                 }
-
                 elems ~= first;
                 while (match(TokenType.Comma)) {
                     if (peek().type == TokenType.RBracket) break;
@@ -324,8 +275,6 @@ class Parser {
             expect(TokenType.RBracket, "Expected ']'");
             return new ListNode(elems);
         }
-
-        // Tuples: (1, 2, 3)
         if (match(TokenType.LParen)) {
             auto first = parseExpression();
             if (match(TokenType.Comma)) {
@@ -340,8 +289,6 @@ class Parser {
             expect(TokenType.RParen, "Expected ')'");
             return first;
         }
-
-        // Dictionaries or Sets: {k: v} or {v1, v2}
         if (match(TokenType.LBrace)) {
             ASTNode[] keys, values;
             if (peek().type != TokenType.RBrace) {
@@ -358,7 +305,7 @@ class Parser {
                     expect(TokenType.RBrace, "Expected '}'");
                     return new DictNode(keys, values);
                 } else {
-                    keys ~= first; // Set representation
+                    keys ~= first;
                     while (match(TokenType.Comma)) {
                         if (peek().type == TokenType.RBrace) break;
                         keys ~= parseExpression();
@@ -370,11 +317,9 @@ class Parser {
             expect(TokenType.RBrace, "Expected '}'");
             return new DictNode([], []);
         }
-
         if (peek().type == TokenType.Identifier) {
             string name = consume().value;
             ASTNode base = new VarNode(name);
-
             while (peek().type == TokenType.Dot || peek().type == TokenType.LParen || peek().type == TokenType.LBracket) {
                 if (match(TokenType.Dot)) {
                     string member = consume().value;
@@ -403,7 +348,6 @@ class Parser {
             }
             return base;
         }
-
         throw new Exception("Unexpected token in expression: '" ~ peek().value ~ "' on line " ~ to!string(peek().line));
     }
 }
