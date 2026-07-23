@@ -20,6 +20,7 @@ void main(string[] args) {
     bool multi = false;
     bool isWizard = false;
     string[] files;
+    string ver = "1.2";
 
     foreach (arg; args[1 .. $]) {
         if (arg == "--only-c") onlyC = true;
@@ -29,6 +30,17 @@ void main(string[] args) {
     }
 
     if (isWizard || files.length == 0) {
+        writeln(GREEN ~ `            
+              #####                 #####    ###  
+#####  #   # #     # ###### ###### #     #  #   # 
+#    #  # #        # #          #  #     # #     #
+#    #   #    #####  #####     #    #####  #     #
+#####    #   #       #        #    #     # #     #
+#        #   #       #       #     #     #  #   # 
+#        #   ####### ###### ######  #####    ###                                           
+    ` ~ RESET);
+        writeln(YELLOW ~ "python to C transpiler to assembly for the TI-84+CE" ~ RESET);
+        writefln("version %s", ver);
         write(CYAN ~ "file(s)?: " ~ RESET);
         string input = readln().strip();
         if (input.length == 0) return;
@@ -142,6 +154,9 @@ void runPipeline(string inFile, bool onlyC) {
         writeln(CYAN ~ "[3/4] Copying " ~ outputBinaryName ~ " to root project directory..." ~ RESET);
         copy(builtBinary, rootBinary);
         writeln(GREEN ~ "[4/4] Success! Final calculator output: " ~ rootBinary ~ RESET);
+        writeln("Press enter to exit...");
+        readln();
+        writeln("bye! :)");
     } else {
         stderr.writeln(RED ~ "Error: Could not find compiled binary at " ~ builtBinary ~ RESET);
     }
