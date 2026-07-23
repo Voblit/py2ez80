@@ -75,7 +75,6 @@ You do not need to compile the transpiler yourself. For standard use, compiling 
 ### 1. Requirements
 
 * **Py2eZ80 Executable:** Download `py2ez80.exe` from [Releases](https://github.com/Voblit/py2ez80/releases) (or install [DMD](https://dlang.org/) if you specifically want to compile from source).
-* **Microsoft Visual C++ 2013 Redistributable (x86):** Required runtime dependency for running `py2ez80.exe` on Windows. Download `vcredist_x86.exe` directly from [Microsoft](https://learn.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170). *(Note: You MUST install the 32-bit x86 package even on 64-bit Windows, as the underlying build tools are 32-bit binaries).*
 * **CEdev SDK:** Download the [CEdev toolchain release](https://github.com/CE-Programming/toolchain/releases).
 
 ### 2. Setting Up the `CEdev` Folder
@@ -147,18 +146,17 @@ Py2eZ80 handles the entire build process under the hood:
 
 ## Quickstart
 
-### 1. Get `py2ez80.exe` and Dependencies
+### 1. Get `py2ez80.exe`
 
-1. Ensure you have installed the **[Microsoft Visual C++ 2013 Redistributable (x86)](https://learn.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170)** (`vcredist_x86.exe`).
-2. Download `py2ez80.exe` from the [Releases](https://github.com/Voblit/py2ez80/releases) tab.
+Download `py2ez80.exe` from the [Releases](https://github.com/Voblit/py2ez80/releases) tab.
 
-If you prefer to compile from source instead, clone the repo and run:
+If you prefer to compile from source instead, clone the repo and build with static linking (`-m32`):
 
 ```powershell
 git clone [https://github.com/Voblit/py2ez80.git](https://github.com/Voblit/py2ez80.git)
 cd py2ez80
 
-dmd src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d -of=py2ez80
+dmd -m32 src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d -of=py2ez80.exe
 Get-ChildItem *.obj -ErrorAction SilentlyContinue | Remove-Item -Force
 
 ```
