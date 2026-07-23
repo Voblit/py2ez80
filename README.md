@@ -75,6 +75,7 @@ You do not need to compile the transpiler yourself. For standard use, compiling 
 ### 1. Requirements
 
 * **Py2eZ80 Executable:** Download `py2ez80.exe` from [Releases](https://github.com/Voblit/py2ez80/releases) (or install [DMD](https://dlang.org/) if you specifically want to compile from source).
+* **Microsoft Visual C++ 2013 Redistributable (x86):** Required runtime dependency for running `py2ez80.exe` on Windows. Download `vcredist_x86.exe` directly from [Microsoft](https://learn.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170). *(Note: You MUST install the 32-bit x86 package even on 64-bit Windows, as the underlying build tools are 32-bit binaries).*
 * **CEdev SDK:** Download the [CEdev toolchain release](https://github.com/CE-Programming/toolchain/releases).
 
 ### 2. Setting Up the `CEdev` Folder
@@ -146,9 +147,12 @@ Py2eZ80 handles the entire build process under the hood:
 
 ## Quickstart
 
-### 1. Get `py2ez80.exe`
+### 1. Get `py2ez80.exe` and Dependencies
 
-Download `py2ez80.exe` from the [Releases](https://github.com/Voblit/py2ez80/releases) tab. If you prefer to compile from source instead, clone the repo and run:
+1. Ensure you have installed the **[Microsoft Visual C++ 2013 Redistributable (x86)](https://learn.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170)** (`vcredist_x86.exe`).
+2. Download `py2ez80.exe` from the [Releases](https://github.com/Voblit/py2ez80/releases) tab.
+
+If you prefer to compile from source instead, clone the repo and run:
 
 ```powershell
 git clone [https://github.com/Voblit/py2ez80.git](https://github.com/Voblit/py2ez80.git)
@@ -164,7 +168,6 @@ Get-ChildItem *.obj -ErrorAction SilentlyContinue | Remove-Item -Force
 ### 2. Add the CEdev Toolchain
 
 Before transpiling your code, make sure the CEdev SDK is placed in the root directory alongside `py2ez80.exe`:
-
 
 1. Download the [latest CEdev SDK release](https://github.com/CE-Programming/toolchain/releases).
 2. Extract the downloaded archive directly into your `py2ez80` folder so that `py2ez80.exe` and the `CEdev` folder sit in the exact same directory:
@@ -269,11 +272,11 @@ The compiler codebase is structured into clean, modular D source files:
 
 ```text
 src/
-├── main.d        # CLI interface, project workspace setup, process management
-├── lexer.d       # Lexical analyzer for tokenizing Python source code
-├── parser.d      # Recursive-descent parser producing Abstract Syntax Trees
-├── ast.d         # Strongly-typed AST node structure definitions
-└── codegen.d     # C code generator, type analysis, and runtime preamble injector
+├── main.d         # CLI interface, project workspace setup, process management
+├── lexer.d        # Lexical analyzer for tokenizing Python source code
+├── parser.d       # Recursive-descent parser producing Abstract Syntax Trees
+├── ast.d          # Strongly-typed AST node structure definitions
+└── codegen.d      # C code generator, type analysis, and runtime preamble injector
 
 ```
 
