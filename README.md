@@ -153,7 +153,7 @@ Download `py2ez80.exe` from the [Releases](https://github.com/Voblit/py2ez80/rel
 If you prefer to compile from source instead, clone the repo and build with static linking (`-m32`):
 
 ```powershell
-git clone https://github.com/Voblit/py2ez80.git
+git clone [https://github.com/Voblit/py2ez80.git](https://github.com/Voblit/py2ez80.git)
 cd py2ez80
 
 dmd -m32 src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d -of=py2ez80.exe
@@ -230,10 +230,41 @@ finally:
 
 ### 4. Transpile and Build
 
-Run `py2ez80.exe` targeting your Python script:
+Py2eZ80 offers a few flexible ways to run and compile your Python files:
+
+#### Standard Execution
+
+Simply pass your Python file directly to the executable:
 
 ```powershell
 .\py2ez80.exe demo.py
+
+```
+
+#### Interactive Wizard Mode
+
+If you run `py2ez80.exe` without arguments (e.g. by double-clicking it) or pass `--wizard`, an interactive setup wizard will launch:
+
+```powershell
+.\py2ez80.exe --wizard
+
+```
+
+#### Transpile to C Only (`--only-c`)
+
+To bypass the CEdev toolchain and inspect the generated `.c` code directly:
+
+```powershell
+.\py2ez80.exe --only-c demo.py
+
+```
+
+#### Multi-file Processing (`--multi`)
+
+To compile multiple Python scripts sequentially:
+
+```powershell
+.\py2ez80.exe --multi script1.py script2.py
 
 ```
 
@@ -270,7 +301,7 @@ The compiler codebase is structured into clean, modular D source files:
 
 ```text
 src/
-├── main.d         # CLI interface, project workspace setup, process management
+├── main.d         # CLI interface, process management, and interactive wizard
 ├── lexer.d        # Lexical analyzer for tokenizing Python source code
 ├── parser.d       # Recursive-descent parser producing Abstract Syntax Trees
 ├── ast.d          # Strongly-typed AST node structure definitions
@@ -283,4 +314,3 @@ src/
 ## License
 
 This project is licensed under the [MIT License](https://www.google.com/search?q=LICENSE).
-
