@@ -153,7 +153,7 @@ Download `py2ez80.exe` from the [Releases](https://github.com/Voblit/py2ez80/rel
 If you prefer to compile from source instead, clone the repo and build with static linking (`-m32`):
 
 ```powershell
-git clone [https://github.com/Voblit/py2ez80.git](https://github.com/Voblit/py2ez80.git)
+git clone https://github.com/Voblit/py2ez80.git
 cd py2ez80
 
 dmd -m32 src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d -of=py2ez80.exe
