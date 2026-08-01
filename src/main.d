@@ -145,8 +145,19 @@ void runPipeline(string inFile, bool onlyC) {
         exitCode = wait(pid);
     }
     version(Posix) {
-        // now it supports other inferior OSes too
-        auto pid = spawnProcess(["make"], stdin, stdout, stderr, null, Config.none, projectDir);
+        //now loonixtards can run my beauty of code
+        string cedevPath = buildPath(currentDir, "CEdev");
+        string cedevBin = buildPath(cedevPath, "bin");
+
+        string currentPath = environment.get("PATH", "");
+        string newPath = cedevBin ~ ":" ~ currentPath;
+
+        string[string] env = [
+            "CEDEV": cedevPath,
+            "PATH": newPath
+        ];
+
+        auto pid = spawnProcess(["make"], stdin, stdout, stderr, env, Config.none, projectDir);
         exitCode = wait(pid);
     }
 
