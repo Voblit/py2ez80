@@ -293,7 +293,7 @@ brew install dmd
 
 1. Clone the repository:
 ```bash
-git clone [https://github.com/Voblit/py2ez80.git](https://github.com/Voblit/py2ez80.git)
+git clone https://github.com/Voblit/py2ez80.git
 cd py2ez80
 
 ```
