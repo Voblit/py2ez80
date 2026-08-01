@@ -37,7 +37,7 @@ void main(string[] args) {
 #    #   #    #####  #####     #    #####  #     #
 #####    #   #       #        #    #     # #     #
 #        #   #       #       #     #     #  #   # 
-#        #   ####### ###### ######  #####    ###                                           
+#        #   ####### ###### ######  #####    ###                            
     ` ~ RESET);
         writeln(YELLOW ~ "python to C transpiler to assembly for the TI-84+CE" ~ RESET);
         writefln("version %s", ver);
@@ -137,9 +137,18 @@ void runPipeline(string inFile, bool onlyC) {
 
     writeln(CYAN ~ "[2/4] Invoking CEdev toolchain for " ~ appName ~ "..." ~ RESET);
 
-    string buildCmd = "cmd.exe /c \"cd /d \"" ~ projectDir ~ "\" && \"..\\cedev.bat\" make\"";
-    auto pid = spawnShell(buildCmd);
-    int exitCode = wait(pid);
+    int exitCode;
+
+    version(Windows) {
+        string buildCmd = "cmd.exe /c \"cd /d \"" ~ projectDir ~ "\" && \"..\\cedev.bat\" make\"";
+        auto pid = spawnShell(buildCmd);
+        exitCode = wait(pid);
+    }
+    version(Posix) {
+        // now it supports other inferior OSes too
+        auto pid = spawnProcess(["make"], stdin, stdout, stderr, null, Config.none, projectDir);
+        exitCode = wait(pid);
+    }
 
     if (exitCode != 0) {
         stderr.writeln(RED ~ "Error: CEdev compilation failed!" ~ RESET);
@@ -154,9 +163,6 @@ void runPipeline(string inFile, bool onlyC) {
         writeln(CYAN ~ "[3/4] Copying " ~ outputBinaryName ~ " to root project directory..." ~ RESET);
         copy(builtBinary, rootBinary);
         writeln(GREEN ~ "[4/4] Success! Final calculator output: " ~ rootBinary ~ RESET);
-        writeln("Press enter to exit...");
-        readln();
-        writeln("bye! :)");
     } else {
         stderr.writeln(RED ~ "Error: Could not find compiled binary at " ~ builtBinary ~ RESET);
     }
