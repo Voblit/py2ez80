@@ -156,7 +156,7 @@ If you prefer to compile from source instead, clone the repo and build with stat
 git clone https://github.com/Voblit/py2ez80.git
 cd py2ez80
 
-dmd -m32 src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d -of=py2ez80.exe
+dmd -m32 --build-only -cleanup src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d -of=py2ez80.exe
 Get-ChildItem *.obj -ErrorAction SilentlyContinue | Remove-Item -Force
 
 ```
