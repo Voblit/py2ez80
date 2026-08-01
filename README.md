@@ -1,7 +1,7 @@
 
 <p align="center">
 <div align="center">
- 
+  
   # Py2eZ80
 <img src=image_banner.png />
 
@@ -9,6 +9,345 @@
 
   <a href="https://github.com/Voblit/py2ez80/actions">
   </a>
+  <img src="https://img.shields.io/badge/Written%20In-D-BA595E?logo=d" />
+  <img src="https://img.shields.io/badge/Source-Python_3-3776AB?logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/Target-eZ80_CPU-FF6F00" />
+  <a href="https://github.com/Voblit/py2ez80">
+    <img src="https://img.shields.io/github/languages/code-size/Voblit/py2ez80" />
+  </a>
+  <a href="https://github.com/Voblit/py2ez80/releases">
+    <img src="https://img.shields.io/github/downloads/Voblit/py2ez80/total?color=brightgreen" />
+  </a>
+  <a href="https://github.com/Voblit/py2ez80/stargazers">
+    <img src="https://img.shields.io/github/stars/Voblit/py2ez80" />
+  </a>
+  <a href="https://github.com/Voblit/py2ez80/releases/latest">
+    <img src="https://img.shields.io/github/v/release/Voblit/py2ez80?include_prereleases" />
+  </a>
+  <img src="https://img.shields.io/badge/License-MIT-green" />
+</p>
+
+*Compile standard Python scripts directly into bare-metal binary .8xp executables.*
+
+[Overview](#overview) | [Why Py2eZ80](#why-py2ez80) | [Prerequisites and Setup](#prerequisites-and-setup) | [Features](#features) | [Language Support](#language-support) | [Quickstart](#quickstart) | [Building from Source](#building-from-source) | [Architecture](#architecture) | [License](#license)
+
+</div>
+
+---
+
+## Overview
+
+Py2eZ80 is an Ahead-of-Time (AOT) transpiler built in D. It takes standard Python code and translates it directly into optimized C99 targeting the Zilog eZ80 processor inside the TI-84 Plus CE.
+
+Instead of running a heavy interpreter like MicroPython on the calculator, Py2eZ80 compiles your code down to native machine code on your PC before sending it over. You get the readable syntax and convenience of Python with the raw speed, small memory footprint, and instant startup times of native C programs.
+
+```text
++-----------------+       +-----------------+       +-----------------+       +-----------------+
+|  Python Source  |  -->  |     Py2eZ80     |  -->  |   eZ80 C Code   |  -->  | CEdev Toolchain |  --> .8xp Native Binary
+|   (script.py)   |       | (Lex/Parse/Gen) |       |     (main.c)    |       | (CEdev Folder)  |      (Runs directly)
++-----------------+       +-----------------+       +-----------------+       +-----------------+
+
+```
+
+---
+
+## Why Py2eZ80?
+
+Writing C or C++ for the TI-84 Plus CE gives you peak performance, but it can be tedious for quick scripts or logic-heavy apps. Py2eZ80 bridges the gap: write high-level Python on your PC, then build and run a lightweight `.8xp` file on hardware.
+
+| Feature | Built-in TI Python | Py2eZ80 Transpiler |
+| --- | --- | --- |
+| **Execution Method** | On-Device interpreter | Bare-metal assembly |
+| **Startup Speed** | Slow | Instant |
+| **Performance** | Interpreted (slower execution) | Full native hardware speed |
+| **Dependencies** | Requires TI Python OS app | Standalone `.8xp` |
+| **RAM Usage** | High RAM footprint | Very low RAM usage |
+| **Hardware Access** | Limited | Direct C library access |
+
+---
+
+## Prerequisites and Setup
+
+Py2eZ80 compiles Python source files down to C and uses the **CEdev toolchain** behind the scenes to generate `.8xp` files.
+
+> ⚠️ **Platform Note:** The [Releases](https://github.com/Voblit/py2ez80/releases) page currently only provides a pre-built binary for Windows (`py2ez80.exe`). **If you are on Linux or macOS, there is no pre-built release binary yet—you will need to build the `py2ez80` binary yourself from source** (which takes less than a minute using DMD).
+
+### 1. Requirements
+
+* **Py2eZ80 Executable:** * **Windows:** Download `py2ez80.exe` directly from [Releases](https://github.com/Voblit/py2ez80/releases).
+* **Linux / macOS:** Install [DMD](https://dlang.org/) and see [Building from Source](https://www.google.com/search?q=%23building-from-source) below.
+
+
+* **CEdev SDK:** Download the [CEdev toolchain release](https://github.com/CE-Programming/toolchain/releases) (or install via your Linux package manager if available).
+
+### 2. Setting Up the `CEdev` Folder
+
+Py2eZ80 expects the CEdev toolchain to exist in a folder named `CEdev` inside the main `py2ez80` directory.
+
+1. Download the latest release archive of CEdev.
+2. Extract the archive contents directly into your project root as a subfolder named `CEdev`.
+3. Make sure your folder looks like this:
+
+**Windows:**
+
+```text
+py2ez80/
+├── CEdev/
+│   ├── cedev.bat
+│   ├── build_project/
+│   └── ...
+├── py2ez80.exe
+└── README.md
+
+```
+
+**Linux / macOS:**
+
+```text
+py2ez80/
+├── CEdev/
+│   ├── build_project/
+│   └── ...
+├── py2ez80
+└── README.md
+
+```
+
+---
+
+## What Py2eZ80 Provides
+
+Py2eZ80 handles the entire build process under the hood:
+
+* **Zero-Interpreter Output:** Outputs pure C99 code to be further compiled with CEdev.
+* **Automated Pipeline:** Parses Python, creates necessary Makefiles, triggers `CEdev`, and copies the final `.8xp` program all at once.
+* **Name Truncation:** Shrinks names down to the max name length (8 characters) on the CE (for example, `space_invaders.py` converts to `SPACE_IN.8xp`).
+* **Data Type Mapping:** Automatically infers primitive types (`int`, `float`, `bool`, `str`), arrays, and dynamic data structures.
+* **OOP Structure Lowering:** Translates Python classes into native C `struct` representations.
+* **Exception Engine:** Lowers Python `try`, `except`, `finally`, and `raise` blocks into standard C `setjmp` and `longjmp` execution commands.
+* **Standard Library Lowering:** Converts module calls like `import math` and `import random` to standard C system headers like `<math.h>` and `<stdlib.h>`.
+
+---
+
+## Language Support
+
+### Syntax & Control Flow
+
+* [x] Global and local variable declarations & reassignments
+* [x] Compound arithmetic operations (`+=`, `-=`, `*=`, `/=`)
+* [x] Conditionals (`if`, `elif`, `else`)
+* [x] Loops (`while` loops and `for` loops using `range()`)
+* [x] Loop control statements (`break`, `continue`, `pass`)
+* [x] Custom functions, parameter passing, and recursion
+
+### Data Structures & Types
+
+* [x] **Primitives:** `int`, `float`, `bool`, `str`
+* [x] **Lists:** Lowered array structures supporting operations like `.append()`
+* [x] **Tuples:** Fixed-length immutable arrays
+* [x] **Dictionaries & Sets:** Struct-backed pointer abstractions
+* [x] **Classes:** Class definitions lowered to standard C structures
+
+### Built-ins & Standard Library
+
+* [x] `print()`: Prints text to the screen
+* [x] `input()`: Allows for input
+* [x] `len()`: Check array length
+* [x] `import math`: Allows for math functions
+* [x] `import random`: Allows for random functions
+* [x] Exception handling (`try`, `except`, `finally`, `raise`)
+
+---
+
+## Quickstart
+
+### 1. Get the `py2ez80` Binary
+
+* **Windows:** Download `py2ez80.exe` from [Releases](https://github.com/Voblit/py2ez80/releases).
+* **Linux / macOS:** Build from source (see [Building from Source](https://www.google.com/search?q=%23building-from-source) section below).
+
+### 2. Write a Python Script
+
+Create a script named `demo.py`:
+
+```python
+import math
+import random
+
+class Particle:
+    pass
+
+def calculate_distance(x, y):
+    return math.sqrt(x * x + y * y)
+
+print("--- Py2eZ80 Engine ---")
+
+random.seed(42)
+
+scores = [100, 250, 500]
+player_name = "Hero"
+energy = 100.0
+
+crit_chance = random.random()
+bonus_damage = random.randint(15, 50)
+print("Random Crit Chance:")
+print(crit_chance)
+print("Random Bonus Damage:")
+print(bonus_damage)
+
+for i in range(0, 3):
+    energy -= 10.5
+    scores.append(i * 50 + random.randint(1, 10))
+
+dist = calculate_distance(30, 40)
+print("Calculated Distance:")
+print(dist)
+
+try:
+    if energy < 0:
+        raise 1
+    print("Energy Normal!")
+except:
+    print("Energy Depleted!")
+finally:
+    print("Execution complete.")
+
+```
+
+### 3. Transpile and Build
+
+Run Py2eZ80 via your terminal:
+
+**Linux / macOS:**
+
+```bash
+./py2ez80 demo.py
+
+```
+
+**Windows:**
+
+```powershell
+.\py2ez80.exe demo.py
+
+```
+
+#### CLI Options
+
+* **Interactive Wizard Mode:** Run without arguments or pass `--wizard`:
+```bash
+./py2ez80 --wizard
+
+```
+
+
+* **Transpile to C Only (`--only-c`):** Generates `.c` code without invoking the CEdev toolchain:
+```bash
+./py2ez80 --only-c demo.py
+
+```
+
+
+* **Multi-file Processing (`--multi`):** Process multiple scripts:
+```bash
+./py2ez80 --multi script1.py script2.py
+
+```
+
+
+
+### 4. Output
+
+Py2eZ80 will transpile your Python code, construct a C project, run the CEdev compiler, and output a native `.8xp` file to your root directory:
+
+```text
+[1/4] Transpiling demo.py -> CEdev/build_project/src/main.c...
+[2/4] Invoking CEdev toolchain for DEMO...
+[3/4] Copying DEMO.8xp to root project directory...
+[4/4] Success! Final calculator output: /path/to/py2ez80/DEMO.8xp
+
+```
+
+Transfer `DEMO.8xp` to your TI-84 Plus CE using **TI Connect CE** or **TILP**, press `PRGM`, and run it!
+
+---
+
+## Building from Source
+
+Since official pre-compiled releases are currently Windows-only, Linux and macOS users must build the `py2ez80` binary from source.
+
+### Requirements
+
+Install the **DMD** compiler (or `dlang` package via your package manager):
+
+```bash
+# Linux (Ubuntu / Debian)
+sudo apt install dmd
+
+# macOS (Homebrew)
+brew install dmd
+
+```
+
+### Compiling `py2ez80`
+
+1. Clone the repository:
+```bash
+git clone [https://github.com/Voblit/py2ez80.git](https://github.com/Voblit/py2ez80.git)
+cd py2ez80
+
+```
+
+
+2. Build the binary using `rdmd`:
+**Linux / macOS:**
+```bash
+rdmd --build-only -of=py2ez80 src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d && rm -f py2ez80.o
+
+```
+
+
+**Windows (PowerShell):**
+```powershell
+rdmd --build-only -of=py2ez80.exe src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d
+Get-ChildItem *.obj, *.o -ErrorAction SilentlyContinue | Remove-Item -Force
+
+```
+
+
+3. Make sure the executable has run permissions (Linux/macOS):
+```bash
+chmod +x py2ez80
+
+```
+
+
+
+---
+
+## Architecture
+
+The compiler codebase is structured into clean, modular D source files:
+
+```text
+src/
+├── main.d         # CLI interface, process management, and interactive wizard
+├── lexer.d        # Lexical analyzer for tokenizing Python source code
+├── parser.d       # Recursive-descent parser producing Abstract Syntax Trees
+├── ast.d          # Strongly-typed AST node structure definitions
+└── codegen.d      # C code generator, type analysis, and runtime preamble injector
+
+```
+
+---
+
+## License
+
+This project is licensed under the [MIT License](https://www.google.com/search?q=LICENSE).
+
+```
+
+```
   <img src="https://img.shields.io/badge/Written%20In-D-BA595E?logo=d" />
   <img src="https://img.shields.io/badge/Source-Python_3-3776AB?logo=python&logoColor=white" />
   <img src="https://img.shields.io/badge/Target-eZ80_CPU-FF6F00" />
