@@ -20,9 +20,13 @@ class CCodegen {
         textSection ~= "#include <keypadc.h>";
         textSection ~= "#include <setjmp.h>";
         textSection ~= "#include <math.h>";
+        textSection ~= "";
+        textSection ~= "// Prototypes & Helpers";
         textSection ~= "#ifndef RAND_MAX";
         textSection ~= "#define RAND_MAX 32767";
         textSection ~= "#endif";
+        textSection ~= "";
+        textSection ~= "// Polyfills & Runtime Support";
         textSection ~= "jmp_buf py_exception_env;";
         textSection ~= "void py_raise(int err) { longjmp(py_exception_env, err); }";
         textSection ~= "void py_list_append(void* list, int val) { (void)list; (void)val; }";
@@ -291,28 +295,19 @@ class CCodegen {
             return compileNode(mCall.obj) ~ "." ~ mCall.method ~ "(" ~ argsList ~ ")";
         }
         else if (auto returnNode = cast(ReturnNode)node) {
-            return "return " ~ compileNode(returnNode.expr) ~ ";";
+            return "return " ~ (returnNode.expr ? compileNode(returnNode.expr) : "") ~ ";";
         }
         else if (auto ifNode = cast(IfNode)node) {
             string code = "if (" ~ compileNode(ifNode.cond) ~ ") {\n";
-            foreach (stmt; ifNode.thenBody) {
+            foreach (stmt; ifNode.thenB) {
                 string line = compileNode(stmt);
                 if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
                 code ~= "        " ~ line ~ "\n";
             }
             code ~= "    }";
-            foreach (elif; ifNode.elifs) {
-                code ~= " else if (" ~ compileNode(elif.cond) ~ ") {\n";
-                foreach (stmt; elif.bodyStmts) {
-                    string line = compileNode(stmt);
-                    if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
-                    code ~= "        " ~ line ~ "\n";
-                }
-                code ~= "    }";
-            }
-            if (ifNode.elseBody.length > 0) {
+            if (ifNode.elseB.length > 0) {
                 code ~= " else {\n";
-                foreach (stmt; ifNode.elseBody) {
+                foreach (stmt; ifNode.elseB) {
                     string line = compileNode(stmt);
                     if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
                     code ~= "        " ~ line ~ "\n";
@@ -323,7 +318,7 @@ class CCodegen {
         }
         else if (auto whileNode = cast(WhileNode)node) {
             string code = "while (" ~ compileNode(whileNode.cond) ~ ") {\n";
-            foreach (stmt; whileNode.bodyStmts) {
+            foreach (stmt; whileNode.body) {
                 string line = compileNode(stmt);
                 if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
                 code ~= "        " ~ line ~ "\n";
@@ -332,19 +327,16 @@ class CCodegen {
             return code;
         }
         else if (auto forNode = cast(ForNode)node) {
-            if (forNode.rangeStop !is null) {
-                string start = forNode.rangeStart ? compileNode(forNode.rangeStart) : "0";
-                string stop = compileNode(forNode.rangeStop);
-                string step = forNode.rangeStep ? compileNode(forNode.rangeStep) : "1";
-                string code = "for (" ~ forNode.varName ~ " = " ~ start ~ "; " ~ forNode.varName ~ " < " ~ stop ~ "; " ~ forNode.varName ~ " += " ~ step ~ ") {\n";
-                foreach (stmt; forNode.bodyStmts) {
-                    string line = compileNode(stmt);
-                    if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
-                    code ~= "        " ~ line ~ "\n";
-                }
-                code ~= "    }";
-                return code;
+            string start = forNode.startExpr ? compileNode(forNode.startExpr) : "0";
+            string stop = compileNode(forNode.stopExpr);
+            string code = "for (" ~ forNode.varName ~ " = " ~ start ~ "; " ~ forNode.varName ~ " < " ~ stop ~ "; " ~ forNode.varName ~ "++) {\n";
+            foreach (stmt; forNode.body) {
+                string line = compileNode(stmt);
+                if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
+                code ~= "        " ~ line ~ "\n";
             }
+            code ~= "    }";
+            return code;
         }
         else if (auto fnDef = cast(FunctionDefNode)node) {
             string params = "";
@@ -352,7 +344,7 @@ class CCodegen {
                 params ~= "int " ~ p ~ (i + 1 < fnDef.params.length ? ", " : "");
             }
             string code = "int " ~ fnDef.name ~ "(" ~ params ~ ") {\n";
-            foreach (stmt; fnDef.bodyStmts) {
+            foreach (stmt; fnDef.body) {
                 string line = compileNode(stmt);
                 if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
                 code ~= "    " ~ line ~ "\n";
@@ -362,16 +354,20 @@ class CCodegen {
         }
         else if (auto classDef = cast(ClassDefNode)node) {
             string code = "typedef struct {\n";
-            foreach (stmt; classDef.bodyStmts) {
-                if (auto fn = cast(FunctionDefNode)stmt) {
-                    code ~= "    // Method " ~ fn.name ~ "\n";
-                }
+            if (classDef.parentName.length > 0) {
+                code ~= "    " ~ classDef.parentName ~ " base;\n";
             }
-            code ~= "} " ~ classDef.name ~ ";";
+            code ~= "} " ~ classDef.name ~ ";\n";
+            foreach (stmt; classDef.body) {
+                string line = compileNode(stmt);
+                if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
+                code ~= line ~ "\n";
+            }
             return code;
         }
         else if (auto imp = cast(ImportNode)node) {
             if (imp.modName == "random") return "#include <stdlib.h>";
+            if (imp.modName == "math") return "#include <math.h>";
             return "#include \"" ~ imp.modName ~ ".h\"";
         }
         else if (auto raise = cast(RaiseNode)node) {
