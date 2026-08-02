@@ -309,11 +309,11 @@ rdmd --build-only -of=py2ez80 src/main.d src/lexer.d src/parser.d src/ast.d src/
 
 **Windows (PowerShell):**
 ```powershell
-rdmd --build-only -of=py2ez80.exe src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d
+rdmd --build-only -of=py2ez80 src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d
 Get-ChildItem *.obj, *.o -ErrorAction SilentlyContinue | Remove-Item -Force
 
 ```
-
+*(add the file extension .exe afterwards)*
 
 3. Make sure the executable has run permissions (Linux/macOS):
 ```bash
