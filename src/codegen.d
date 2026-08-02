@@ -10,38 +10,64 @@ class CCodegen {
     private string[string] variableTypes;
     private int[string] arraySizes;
 
-this() {
-    textSection ~= "#include <tice.h>";
-    textSection ~= "#include <ti/screen.h>";
-    textSection ~= "#include <stdio.h>";
-    textSection ~= "#include <stdlib.h>";
-    textSection ~= "#include <stdbool.h>";
-    textSection ~= "#include <string.h>";
-    textSection ~= "#include <keypadc.h>";
-    textSection ~= "#include <setjmp.h>";
-    textSection ~= "#include <math.h>";
-    textSection ~= "";
-    textSection ~= "// Prototypes & Helpers";
-    textSection ~= "#ifndef RAND_MAX";
-    textSection ~= "#define RAND_MAX 32767";
-    textSection ~= "#endif";
-    textSection ~= "";
-    textSection ~= "// Polyfills & Runtime Support";
-    textSection ~= "jmp_buf py_exception_env;";
-    textSection ~= "void py_raise(int err) { longjmp(py_exception_env, err); }";
-    textSection ~= "void py_list_append(void* list, int val) { (void)list; (void)val; }";
-    textSection ~= "char* py_input(void) {";
-    textSection ~= "    static char buf[64];";
-    textSection ~= "    memset(buf, 0, sizeof(buf));";
-    textSection ~= "    os_GetStringInput(\":\", buf, sizeof(buf) - 1);";
-    textSection ~= "    return buf;";
-    textSection ~= "}";
-    textSection ~= "";
-}
+    this() {
+        textSection ~= "#include <tice.h>";
+        textSection ~= "#include <ti/screen.h>";
+        textSection ~= "#include <stdio.h>";
+        textSection ~= "#include <stdlib.h>";
+        textSection ~= "#include <stdbool.h>";
+        textSection ~= "#include <string.h>";
+        textSection ~= "#include <keypadc.h>";
+        textSection ~= "#include <setjmp.h>";
+        textSection ~= "#include <math.h>";
+        textSection ~= "#ifndef RAND_MAX";
+        textSection ~= "#define RAND_MAX 32767";
+        textSection ~= "#endif";
+        textSection ~= "jmp_buf py_exception_env;";
+        textSection ~= "void py_raise(int err) { longjmp(py_exception_env, err); }";
+        textSection ~= "void py_list_append(void* list, int val) { (void)list; (void)val; }";
+        textSection ~= "char* py_input(void) {";
+        textSection ~= "    static char buf[64];";
+        textSection ~= "    memset(buf, 0, sizeof(buf));";
+        textSection ~= "    os_GetStringInput(\":\", buf, sizeof(buf) - 1);";
+        textSection ~= "    return buf;";
+        textSection ~= "}";
+        textSection ~= "static char py_str_bufs[4][256];";
+        textSection ~= "static int py_str_buf_idx = 0;";
+        textSection ~= "char* py_str_concat(const char* s1, const char* s2) {";
+        textSection ~= "    py_str_buf_idx = (py_str_buf_idx + 1) % 4;";
+        textSection ~= "    char* buf = py_str_bufs[py_str_buf_idx];";
+        textSection ~= "    buf[0] = '\\0';";
+        textSection ~= "    strncat(buf, s1, 255);";
+        textSection ~= "    strncat(buf, s2, 255 - strlen(buf));";
+        textSection ~= "    return buf;";
+        textSection ~= "}";
+    }
+
+    public string getSourceCode() {
+        return textSection.join("\n");
+    }
+
     private void trackVar(string varName, string type = "int") {
         if (varName !in variableTypes) {
             variableTypes[varName] = type;
         }
+    }
+
+    private bool isStringExpr(ASTNode node) {
+        if (node is null) return false;
+        if (cast(StringNode)node) return true;
+        if (auto var = cast(VarNode)node) {
+            string* t = var.name in variableTypes;
+            return t !is null && (*t == "const char*" || *t == "char*");
+        }
+        if (auto binOp = cast(BinaryOpNode)node) {
+            return binOp.op == "+" && (isStringExpr(binOp.left) || isStringExpr(binOp.right));
+        }
+        if (auto call = cast(CallNode)node) {
+            if (call.name == "input" || call.name == "str") return true;
+        }
+        return false;
     }
 
     void generate(ASTNode[] ast) {
@@ -57,10 +83,10 @@ this() {
                     trackVar(assign.name, "void*");
                 } else if (auto numNode = cast(NumberNode)assign.expr) {
                     trackVar(assign.name, numNode.isFloat ? "float" : "int");
-                } else if (cast(StringNode)assign.expr) {
+                } else if (isStringExpr(assign.expr)) {
                     trackVar(assign.name, "const char*");
                 } else if (auto callNode = cast(CallNode)assign.expr) {
-                    if (callNode.name == "input") {
+                    if (callNode.name == "input" || callNode.name == "str") {
                         trackVar(assign.name, "const char*");
                     } else {
                         trackVar(assign.name, "int");
@@ -103,7 +129,6 @@ this() {
         if (includes.length > 0) textSection ~= "";
 
         if (variableTypes.length > 0) {
-            textSection ~= "// Global Variables";
             foreach (varName, type; variableTypes) {
                 if (type == "int_array") {
                     textSection ~= "int " ~ varName ~ "[" ~ to!string(arraySizes[varName]) ~ "];";
@@ -138,7 +163,6 @@ this() {
         }
 
         textSection ~= "";
-        textSection ~= "    // Wait for keypress before exiting";
         textSection ~= "    while (!os_GetCSC());";
         textSection ~= "    return 0;";
         textSection ~= "}";
@@ -163,6 +187,14 @@ this() {
             return unOp.op ~ compileNode(unOp.expr);
         }
         else if (auto binOp = cast(BinaryOpNode)node) {
+            if (binOp.op == "+" && (isStringExpr(binOp.left) || isStringExpr(binOp.right))) {
+                if (cast(StringNode)binOp.left && cast(StringNode)binOp.right) {
+                    auto lStr = cast(StringNode)binOp.left;
+                    auto rStr = cast(StringNode)binOp.right;
+                    return "\"" ~ lStr.val ~ rStr.val ~ "\"";
+                }
+                return "py_str_concat(" ~ compileNode(binOp.left) ~ ", " ~ compileNode(binOp.right) ~ ")";
+            }
             return compileNode(binOp.left) ~ " " ~ binOp.op ~ " " ~ compileNode(binOp.right);
         }
         else if (auto listNode = cast(ListNode)node) {
@@ -218,13 +250,13 @@ this() {
             if (call.name == "print") {
                 string result = "";
                 foreach (arg; call.args) {
-                    if (cast(StringNode)arg) {
+                    if (isStringExpr(arg)) {
                         result ~= "printf(\"%s\\n\", " ~ compileNode(arg) ~ "); ";
                     } else if (auto numArg = cast(NumberNode)arg) {
                         result ~= numArg.isFloat ? "printf(\"%f\\n\", " ~ compileNode(arg) ~ "); " : "printf(\"%d\\n\", " ~ compileNode(arg) ~ "); ";
                     } else if (auto varArg = cast(VarNode)arg) {
                         string* t = varArg.name in variableTypes;
-                        if (t !is null && (*t == "const char*")) {
+                        if (t !is null && (*t == "const char*" || *t == "char*")) {
                             result ~= "printf(\"%s\\n\", " ~ compileNode(arg) ~ "); ";
                         } else if (t !is null && (*t == "float" || *t == "double")) {
                             result ~= "printf(\"%f\\n\", " ~ compileNode(arg) ~ "); ";
@@ -248,75 +280,39 @@ this() {
                 return call.name ~ "(" ~ argsList ~ ")";
             }
         }
-        else if (auto member = cast(MemberAccessNode)node) {
-            return compileNode(member.obj) ~ "." ~ member.member;
-        }
         else if (auto mCall = cast(MethodCallNode)node) {
-            string objName = compileNode(mCall.obj);
-            if (objName == "math") {
-                string argsList = "";
-                foreach (i, arg; mCall.args) {
-                    argsList ~= compileNode(arg) ~ (i + 1 < mCall.args.length ? ", " : "");
-                }
-                return mCall.method ~ "(" ~ argsList ~ ")";
+            if (compileNode(mCall.obj) == "random" && mCall.method == "random") {
+                return "((float)rand() / (float)RAND_MAX)";
             }
-            if (objName == "random") {
-                if (mCall.method == "randint") {
-                    string a = compileNode(mCall.args[0]);
-                    string b = compileNode(mCall.args[1]);
-                    return "((rand() % ((" ~ b ~ ") - (" ~ a ~ ") + 1)) + (" ~ a ~ "))";
-                }
-                else if (mCall.method == "randrange") {
-                    if (mCall.args.length == 1) {
-                        string stop = compileNode(mCall.args[0]);
-                        return "(rand() % (" ~ stop ~ "))";
-                    } else if (mCall.args.length >= 2) {
-                        string start = compileNode(mCall.args[0]);
-                        string stop = compileNode(mCall.args[1]);
-                        return "((" ~ start ~ ") + (rand() % ((" ~ stop ~ ") - (" ~ start ~ "))))";
-                    }
-                }
-                else if (mCall.method == "random") {
-                    return "((double)rand() / (double)RAND_MAX)";
-                }
-                else if (mCall.method == "seed") {
-                    string seedVal = compileNode(mCall.args[0]);
-                    return "srand((unsigned int)(" ~ seedVal ~ "))";
-                }
+            string argsList = "";
+            foreach (i, arg; mCall.args) {
+                argsList ~= compileNode(arg) ~ (i + 1 < mCall.args.length ? ", " : "");
             }
-            if (mCall.method == "append") {
-                return "py_list_append(&" ~ objName ~ ", " ~ compileNode(mCall.args[0]) ~ ")";
-            }
-            string argsList = "&" ~ objName;
-            foreach (arg; mCall.args) {
-                argsList ~= ", " ~ compileNode(arg);
-            }
-            return objName ~ "_" ~ mCall.method ~ "(" ~ argsList ~ ")";
+            return compileNode(mCall.obj) ~ "." ~ mCall.method ~ "(" ~ argsList ~ ")";
         }
-        else if (auto classDef = cast(ClassDefNode)node) {
-            string code = "typedef struct {\n";
-            if (classDef.parentName.length > 0) {
-                code ~= "    " ~ classDef.parentName ~ " base;\n";
-            }
-            code ~= "} " ~ classDef.name ~ ";\n";
-            foreach (stmt; classDef.body) {
-                string line = compileNode(stmt);
-                if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
-                code ~= line ~ "\n";
-            }
-            return code;
+        else if (auto returnNode = cast(ReturnNode)node) {
+            return "return " ~ compileNode(returnNode.expr) ~ ";";
         }
         else if (auto ifNode = cast(IfNode)node) {
             string code = "if (" ~ compileNode(ifNode.cond) ~ ") {\n";
-            foreach (stmt; ifNode.thenB) {
+            foreach (stmt; ifNode.thenBody) {
                 string line = compileNode(stmt);
                 if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
                 code ~= "        " ~ line ~ "\n";
             }
             code ~= "    }";
-            if (ifNode.elseB.length > 0) {
+            foreach (elif; ifNode.elifs) {
+                code ~= " else if (" ~ compileNode(elif.cond) ~ ") {\n";
+                foreach (stmt; elif.bodyStmts) {
+                    string line = compileNode(stmt);
+                    if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
+                    code ~= "        " ~ line ~ "\n";
+                }
+                code ~= "    }";
+            }
+            if (ifNode.elseBody.length > 0) {
                 code ~= " else {\n";
-                foreach (stmt; ifNode.elseB) {
+                foreach (stmt; ifNode.elseBody) {
                     string line = compileNode(stmt);
                     if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
                     code ~= "        " ~ line ~ "\n";
@@ -327,7 +323,7 @@ this() {
         }
         else if (auto whileNode = cast(WhileNode)node) {
             string code = "while (" ~ compileNode(whileNode.cond) ~ ") {\n";
-            foreach (stmt; whileNode.body) {
+            foreach (stmt; whileNode.bodyStmts) {
                 string line = compileNode(stmt);
                 if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
                 code ~= "        " ~ line ~ "\n";
@@ -336,30 +332,27 @@ this() {
             return code;
         }
         else if (auto forNode = cast(ForNode)node) {
-            string code = "for (" ~ forNode.varName ~ " = " ~ compileNode(forNode.startExpr) ~ "; " ~
-                          forNode.varName ~ " < " ~ compileNode(forNode.stopExpr) ~ "; " ~
-                          forNode.varName ~ "++) {\n";
-            foreach (stmt; forNode.body) {
-                string line = compileNode(stmt);
-                if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
-                code ~= "        " ~ line ~ "\n";
+            if (forNode.rangeStop !is null) {
+                string start = forNode.rangeStart ? compileNode(forNode.rangeStart) : "0";
+                string stop = compileNode(forNode.rangeStop);
+                string step = forNode.rangeStep ? compileNode(forNode.rangeStep) : "1";
+                string code = "for (" ~ forNode.varName ~ " = " ~ start ~ "; " ~ forNode.varName ~ " < " ~ stop ~ "; " ~ forNode.varName ~ " += " ~ step ~ ") {\n";
+                foreach (stmt; forNode.bodyStmts) {
+                    string line = compileNode(stmt);
+                    if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
+                    code ~= "        " ~ line ~ "\n";
+                }
+                code ~= "    }";
+                return code;
             }
-            code ~= "    }";
-            return code;
         }
-        else if (cast(BreakNode)node) return "break;";
-        else if (cast(ContinueNode)node) return "continue;";
-        else if (cast(PassNode)node) return "/* pass */;";
-        else if (auto ret = cast(ReturnNode)node) {
-            return "return " ~ (ret.expr ? compileNode(ret.expr) : "") ~ ";";
-        }
-        else if (auto fn = cast(FunctionDefNode)node) {
+        else if (auto fnDef = cast(FunctionDefNode)node) {
             string params = "";
-            foreach (i, p; fn.params) {
-                params ~= "int " ~ p ~ (i + 1 < fn.params.length ? ", " : "");
+            foreach (i, p; fnDef.params) {
+                params ~= "int " ~ p ~ (i + 1 < fnDef.params.length ? ", " : "");
             }
-            string code = "int " ~ fn.name ~ "(" ~ params ~ ") {\n";
-            foreach (stmt; fn.body) {
+            string code = "int " ~ fnDef.name ~ "(" ~ params ~ ") {\n";
+            foreach (stmt; fnDef.bodyStmts) {
                 string line = compileNode(stmt);
                 if (line.length > 0 && !line.endsWith(";") && !line.endsWith("}")) line ~= ";";
                 code ~= "    " ~ line ~ "\n";
@@ -367,8 +360,17 @@ this() {
             code ~= "}";
             return code;
         }
+        else if (auto classDef = cast(ClassDefNode)node) {
+            string code = "typedef struct {\n";
+            foreach (stmt; classDef.bodyStmts) {
+                if (auto fn = cast(FunctionDefNode)stmt) {
+                    code ~= "    // Method " ~ fn.name ~ "\n";
+                }
+            }
+            code ~= "} " ~ classDef.name ~ ";";
+            return code;
+        }
         else if (auto imp = cast(ImportNode)node) {
-            if (imp.modName == "math") return "#include <math.h>";
             if (imp.modName == "random") return "#include <stdlib.h>";
             return "#include \"" ~ imp.modName ~ ".h\"";
         }
@@ -401,9 +403,5 @@ this() {
             return code;
         }
         return "";
-    }
-
-    string getSourceCode() {
-        return textSection.join("\n");
     }
 }
