@@ -5,7 +5,7 @@
   # Py2eZ80
 <img src=image_banner.png />
 
-### Ahead-of-Time Python Transpiler and Native SDK for the TI-84 Plus CE
+### Python To ez80 Assembly Converter for the Ti84+CE
 
   <a href="https://github.com/Voblit/py2ez80/actions">
   </a>
@@ -27,9 +27,7 @@
   <img src="https://img.shields.io/badge/License-MIT-green" />
 </p>
 
-*Compile standard Python scripts directly into bare-metal binary .8xp executables.*
-
-[Overview](#overview) | [Why Py2eZ80](#why-py2ez80) | [Prerequisites and Setup](#prerequisites-and-setup) | [Features](#features) | [Language Support](#language-support) | [Quickstart](#quickstart) | [Building from Source](#building-from-source) | [Architecture](#architecture) | [License](#license)
+[Overview](#overview) | [Why Py2eZ80](#why-py2ez80) |[Dependancies and Getting Started](#getting-started) | [Language Support](#language-support) | [Testing](#test) | [Building it Thyself](#building-from-source) | [Architecture](#architecture) | [License](#license)
 
 </div>
 
@@ -37,55 +35,45 @@
 
 ## Overview
 
-Py2eZ80 is an Ahead-of-Time (AOT) transpiler built in D. It takes standard Python code and translates it directly into optimized C99 targeting the Zilog eZ80 processor inside the TI-84 Plus CE.
+Py2eZ80 is an Ahead-of-Time (AOT) transpiler built in D. It takes a Python .py file in and then produces your .8xp out. Instead of directly compiling python to assembly, it transpiles it to C and then calls the CEdev toolchain.
 
-Instead of running a heavy interpreter like MicroPython on the calculator, Py2eZ80 compiles your code down to native machine code on your PC before sending it over. You get the readable syntax and convenience of Python with the raw speed, small memory footprint, and instant startup times of native C programs.
-
-```text
-+-----------------+       +-----------------+       +-----------------+       +-----------------+
-|  Python Source  |  -->  |     Py2eZ80     |  -->  |   eZ80 C Code   |  -->  | CEdev Toolchain |  --> .8xp Native Binary
-|   (script.py)   |       | (Lex/Parse/Gen) |       |     (main.c)    |       | (CEdev Folder)  |      (Runs directly)
-+-----------------+       +-----------------+       +-----------------+       +-----------------+
-
-```
+Instead of running a large (and slow) interpereter on the calculator, or doing how the Ti84+CE Python Edition does (having a secondary chip for interpereting,) it directly converts python to an .8xp, giving you the ease of a simple language like python while allowing it still to be compiled and fast.
 
 ---
 
 ## Why Py2eZ80?
 
-Writing C or C++ for the TI-84 Plus CE gives you peak performance, but it can be tedious for quick scripts or logic-heavy apps. Py2eZ80 bridges the gap: write high-level Python on your PC, then build and run a lightweight `.8xp` file on hardware.
+Writing C or C++ for the TI-84 Plus CE gives you peak performance, but it can be a hard ask, since a lot of people are more used to python, and python can be considered a much easier program to code in. py2ez80 gives the best of both worlds, python for coding and C/asm for running!
 
-| Feature | Built-in TI Python | Py2eZ80 Transpiler |
+| Feature | TI Python (on ONLY select models) | Py2eZ80 Transpiler |
 | --- | --- | --- |
-| **Execution Method** | On-Device interpreter | Bare-metal assembly |
-| **Startup Speed** | Slow | Instant |
-| **Performance** | Interpreted (slower execution) | Full native hardware speed |
-| **Dependencies** | Requires TI Python OS app | Standalone `.8xp` |
-| **RAM Usage** | High RAM footprint | Very low RAM usage |
-| **Hardware Access** | Limited | Direct C library access |
+| **Ran by** | An on-calc interpereter that is further bottlenecked by being on a seperate chip  | Really fast Assembly |
+| **Speed** | Slow and bottlenecked | As fast as the ez80 goes! |
+| **Dependencies** | Requires TI Python OS app + A calc that supports it | Ability to run ASM |
+| **RAM Usage** | Lots (because of interpereting) | None (if archiving) |
 
 ---
 
-## Prerequisites and Setup
+## Dependancies and Getting Started
 
-Py2eZ80 compiles Python source files down to C and uses the **CEdev toolchain** behind the scenes to generate `.8xp` files.
+Py2eZ80 uses the CEdev Toolchain to outsource the direct assembly conversion, most probably because I am not intelligent enough to touch that stuff.
 
-> ⚠️ **Platform Note:** The [Releases](https://github.com/Voblit/py2ez80/releases) page currently only provides a pre-built binary for Windows (`py2ez80.exe`). **If you are on Linux or macOS, there is no pre-built release binary yet—you will need to build the `py2ez80` binary yourself from source** (which takes less than a minute using DMD).
+>  **Note:** The [Releases](https://github.com/Voblit/py2ez80/releases) page only provides EXEs for windows users. Although windows is obviously the better OS, I get that some may want to run it on other operating systems, and thus need to [build it on your own time](#building-from-source).
 
 ### 1. Requirements
 
-* **Py2eZ80 Executable:** * **Windows:** Download `py2ez80.exe` directly from [Releases](https://github.com/Voblit/py2ez80/releases).
-* **Linux / macOS:** Install [DMD](https://dlang.org/) and see [Building from Source](https://www.google.com/search?q=%23building-from-source) below.
-
-
-* **CEdev SDK:** Download the [CEdev toolchain release](https://github.com/CE-Programming/toolchain/releases) (or install via your Linux package manager if available).
+* **Py2eZ80**: Download `py2ez80.exe` directly from [Releases](https://github.com/Voblit/py2ez80/releases).
+  
+* **Linux / macOS:** Install [DMD](https://dlang.org/) and see [how to diy it](#building-from-source) below.
+  
+* **CEdev SDK:** Download the [CEdev toolchain](https://github.com/CE-Programming/toolchain/releases).
 
 ### 2. Setting Up the `CEdev` Folder
 
-Py2eZ80 expects the CEdev toolchain to exist in a folder named `CEdev` inside the main `py2ez80` directory.
+Py2eZ80 expects the CEdev toolchain to exist in a folder named `CEdev` inside whatever directory it resides in.
 
-1. Download the latest release archive of CEdev.
-2. Extract the archive contents directly into your project root as a subfolder named `CEdev`.
+1. Download the CEdev toolchain, please make it a new one because the code is quite fragile and might die if the folders are configured.
+2. Put the CEdev folder right next to py2ez80! 
 3. Make sure your folder looks like this:
 
 **Windows:**
@@ -97,8 +85,8 @@ py2ez80/
 │   ├── build_project/
 │   └── ...
 ├── py2ez80.exe
+├── ...
 └── README.md
-
 ```
 
 **Linux / macOS:**
@@ -109,62 +97,43 @@ py2ez80/
 │   ├── build_project/
 │   └── ...
 ├── py2ez80
+├── ...
 └── README.md
-
 ```
-
----
-
-## What Py2eZ80 Provides
-
-Py2eZ80 handles the entire build process under the hood:
-
-* **Zero-Interpreter Output:** Outputs pure C99 code to be further compiled with CEdev.
-* **Automated Pipeline:** Parses Python, creates necessary Makefiles, triggers `CEdev`, and copies the final `.8xp` program all at once.
-* **Name Truncation:** Shrinks names down to the max name length (8 characters) on the CE (for example, `space_invaders.py` converts to `SPACE_IN.8xp`).
-* **Data Type Mapping:** Automatically infers primitive types (`int`, `float`, `bool`, `str`), arrays, and dynamic data structures.
-* **OOP Structure Lowering:** Translates Python classes into native C `struct` representations.
-* **Exception Engine:** Lowers Python `try`, `except`, `finally`, and `raise` blocks into standard C `setjmp` and `longjmp` execution commands.
-* **Standard Library Lowering:** Converts module calls like `import math` and `import random` to standard C system headers like `<math.h>` and `<stdlib.h>`.
-
 ---
 
 ## Language Support
 
 ### Syntax & Control Flow
 
-* [x] Global and local variable declarations & reassignments
-* [x] Compound arithmetic operations (`+=`, `-=`, `*=`, `/=`)
-* [x] Conditionals (`if`, `elif`, `else`)
+* [x] Global and local variables
+* [x] math operations (`+=`, `-=`, `*=`, `/=`)
+* [x] Conditions (`if`, `elif`, `else`)
 * [x] Loops (`while` loops and `for` loops using `range()`)
-* [x] Loop control statements (`break`, `continue`, `pass`)
-* [x] Custom functions, parameter passing, and recursion
-
-### Data Structures & Types
-
+* [x] Loop control (`break`, `continue`, `pass`)
+* [x] Custom functions, parameters, and recursion
 * [x] **Primitives:** `int`, `float`, `bool`, `str`
-* [x] **Lists:** Lowered array structures supporting operations like `.append()`
-* [x] **Tuples:** Fixed-length immutable arrays
-* [x] **Dictionaries & Sets:** Struct-backed pointer abstractions
-* [x] **Classes:** Class definitions lowered to standard C structures
-
-### Built-ins & Standard Library
-
+* [x] **Lists:** Regular list that support operations on them like `.append()`
+* [x] **Tuples:** Uneditable arrayd
+* [x] **Dictionaries & Sets** 
+* [x] **Classes** 
 * [x] `print()`: Prints text to the screen
-* [x] `input()`: Allows for input
+* [x] `input()`: Uses getkey
 * [x] `len()`: Check array length
-* [x] `import math`: Allows for math functions
+#### THERE ARE ONLY TWO SUPPORTED LIBRARIES (CURRENTLY). MORE ARE COMING SOON.
+* [x] `import math`: Allows for math 
 * [x] `import random`: Allows for random functions
-* [x] Exception handling (`try`, `except`, `finally`, `raise`)
-
+* [x] Exceptions (`try`, `except`, `finally`, `raise`)
 ---
 
-## Quickstart
+## Test
 
-### 1. Get the `py2ez80` Binary
+an easy way to see the capabilities of Py2eZ80, and get to learn how it works, is to try a small sample program.
+
+### 1. Get the `py2ez80` program
 
 * **Windows:** Download `py2ez80.exe` from [Releases](https://github.com/Voblit/py2ez80/releases).
-* **Linux / macOS:** Build from source (see [Building from Source](https://www.google.com/search?q=%23building-from-source) section below).
+* **Linux / macOS:** Build from source (see [Building from Source](https://www.google.com/search?q=%23building-from-source)).
 
 ### 2. Write a Python Script
 
@@ -214,9 +183,9 @@ finally:
 
 ```
 
-### 3. Transpile and Build
+### 3. Build
 
-Run Py2eZ80 via your terminal:
+Run Py2eZ80:
 
 **Linux / macOS:**
 
@@ -234,21 +203,21 @@ Run Py2eZ80 via your terminal:
 
 #### CLI Options
 
-* **Interactive Wizard Mode:** Run without arguments or pass `--wizard`:
+* **Magical Wizard Mode:** Run without arguments or add `--wizard`:
 ```bash
 ./py2ez80 --wizard
 
 ```
 
 
-* **Transpile to C Only (`--only-c`):** Generates `.c` code without invoking the CEdev toolchain:
+* **Transpile to C Only (`--only-c`):** Generates `.c` code without calling the CEdev toolchain and getting an `.8xp`:
 ```bash
 ./py2ez80 --only-c demo.py
 
 ```
 
 
-* **Multi-file Processing (`--multi`):** Process multiple scripts:
+* **Multi-file Processing (`--multi`):** do multiple programs at once:
 ```bash
 ./py2ez80 --multi script1.py script2.py
 
@@ -258,23 +227,23 @@ Run Py2eZ80 via your terminal:
 
 ### 4. Output
 
-Py2eZ80 will transpile your Python code, construct a C project, run the CEdev compiler, and output a native `.8xp` file to your root directory:
+Py2eZ80 will transpile your Python code, construct a C project, run the CEdev compiler, and output a native `.8xp` file to the root of the folder it is in:
 
 ```text
 [1/4] Transpiling demo.py -> CEdev/build_project/src/main.c...
 [2/4] Invoking CEdev toolchain for DEMO...
 [3/4] Copying DEMO.8xp to root project directory...
-[4/4] Success! Final calculator output: /path/to/py2ez80/DEMO.8xp
+[4/4] Success! Final calculator output: /path/to/wherever/py2ez80/is/DEMO.8xp
 
 ```
 
-Transfer `DEMO.8xp` to your TI-84 Plus CE using **TI Connect CE** or **TILP**, press `PRGM`, and run it!
+Transfer `DEMO.8xp` to your TI-84 Plus CE, and run it!
 
 ---
 
 ## Building from Source
 
-Since official pre-compiled releases are currently Windows-only, Linux and macOS users must build the `py2ez80` binary from source.
+Because I am a lazy bum and cannot provide linux/macOS binaries, you need to make them yourselves!
 
 ### Requirements
 
@@ -299,7 +268,7 @@ cd py2ez80
 ```
 
 
-2. Build the binary using `rdmd`:
+2. Build it using `rdmd`:
 **Linux / macOS:**
 ```bash
 rdmd --build-only -of=py2ez80 src/main.d src/lexer.d src/parser.d src/ast.d src/codegen.d && rm -f py2ez80.o
@@ -327,15 +296,15 @@ chmod +x py2ez80
 
 ## Architecture
 
-The compiler codebase is structured into clean, modular D source files:
+The final compiled program is split up into these source files:
 
 ```text
 src/
-├── main.d         # CLI interface, process management, and interactive wizard
-├── lexer.d        # Lexical analyzer for tokenizing Python source code
-├── parser.d       # Recursive-descent parser producing Abstract Syntax Trees
-├── ast.d          # Strongly-typed AST node structure definitions
-└── codegen.d      # C code generator, type analysis, and runtime preamble injector
+├── main.d         # the band director, CLI doer, and a magical wizard
+├── lexer.d        # Lexical analyzer
+├── parser.d       # Abstract Syntax Tree maker
+├── ast.d          # Strongly-typed AST
+└── codegen.d      # C code generator
 
 ```
 
