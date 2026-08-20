@@ -54,7 +54,7 @@ Writing C or C++ for the TI-84 Plus CE gives you peak performance, but it can be
 
 ---
 
-## Dependancies and Getting Started
+## Getting Started
 
 Py2eZ80 uses the CEdev Toolchain to outsource the direct assembly conversion, most probably because I am not intelligent enough to touch that stuff.
 
