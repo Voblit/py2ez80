@@ -9,6 +9,9 @@ class CCodegen {
     private string[] textSection;
     private string[string] variableTypes;
     private int[string] arraySizes;
+    private int listCounter = 0;
+    private string[] globalDeclarations;
+    private string[] mainAssignments;
 
     this() {
         textSection ~= "#include <tice.h>";
@@ -29,7 +32,27 @@ class CCodegen {
         textSection ~= "// Polyfills & Runtime Support";
         textSection ~= "jmp_buf py_exception_env;";
         textSection ~= "void py_raise(int err) { longjmp(py_exception_env, err); }";
-        textSection ~= "void py_list_append(void* list, int val) { (void)list; (void)val; }";
+        textSection ~= "";
+        textSection ~= "typedef enum {";
+        textSection ~= "    PY_INT,";
+        textSection ~= "    PY_FLOAT,";
+        textSection ~= "    PY_STRING,";
+        textSection ~= "    PY_LIST,";
+        textSection ~= "    PY_TUPLE,";
+        textSection ~= "    PY_BOOL";
+        textSection ~= "} PyType;";
+        textSection ~= "";
+        textSection ~= "typedef struct {";
+        textSection ~= "    PyType type;";
+        textSection ~= "    union {";
+        textSection ~= "        long i;";
+        textSection ~= "        double f;";
+        textSection ~= "        const char* s;";
+        textSection ~= "        void* l;";
+        textSection ~= "        bool b;";
+        textSection ~= "    };";
+        textSection ~= "} PyValue;";
+        textSection ~= "";
         textSection ~= "char* py_input(void) {";
         textSection ~= "    static char buf[64];";
         textSection ~= "    memset(buf, 0, sizeof(buf));";
@@ -46,6 +69,65 @@ class CCodegen {
         textSection ~= "    strncat(buf, s2, 255 - strlen(buf));";
         textSection ~= "    return buf;";
         textSection ~= "}";
+        textSection ~= "";
+        textSection ~= "PyValue py_add(PyValue a, PyValue b) {";
+        textSection ~= "    if (a.type == PY_INT && b.type == PY_INT) return (PyValue){PY_INT, .i = a.i + b.i};";
+        textSection ~= "    if (a.type == PY_FLOAT && b.type == PY_FLOAT) return (PyValue){PY_FLOAT, .f = a.f + b.f};";
+        textSection ~= "    if (a.type == PY_INT && b.type == PY_FLOAT) return (PyValue){PY_FLOAT, .f = (double)a.i + b.f};";
+        textSection ~= "    if (a.type == PY_FLOAT && b.type == PY_INT) return (PyValue){PY_FLOAT, .f = a.f + (double)b.i};";
+        textSection ~= "    if (a.type == PY_STRING) return (PyValue){PY_STRING, .s = py_str_concat(a.s, b.s)};";
+        textSection ~= "    return (PyValue){PY_INT, .i = 0};";
+        textSection ~= "}";
+        textSection ~= "";
+        textSection ~= "PyValue py_sub(PyValue a, PyValue b) {";
+        textSection ~= "    if (a.type == PY_INT && b.type == PY_INT) return (PyValue){PY_INT, .i = a.i - b.i};";
+        textSection ~= "    if (a.type == PY_FLOAT && b.type == PY_FLOAT) return (PyValue){PY_FLOAT, .f = a.f - b.f};";
+        textSection ~= "    if (a.type == PY_INT && b.type == PY_FLOAT) return (PyValue){PY_FLOAT, .f = (double)a.i - b.f};";
+        textSection ~= "    if (a.type == PY_FLOAT && b.type == PY_INT) return (PyValue){PY_FLOAT, .f = a.f - (double)b.i};";
+        textSection ~= "    return (PyValue){PY_INT, .i = 0};";
+        textSection ~= "}";
+        textSection ~= "";
+        textSection ~= "PyValue py_mul(PyValue a, PyValue b) {";
+        textSection ~= "    if (a.type == PY_INT && b.type == PY_INT) return (PyValue){PY_INT, .i = a.i * b.i};";
+        textSection ~= "    if (a.type == PY_FLOAT && b.type == PY_FLOAT) return (PyValue){PY_FLOAT, .f = a.f * b.f};";
+        textSection ~= "    if (a.type == PY_INT && b.type == PY_FLOAT) return (PyValue){PY_FLOAT, .f = (double)a.i * b.f};";
+        textSection ~= "    if (a.type == PY_FLOAT && b.type == PY_INT) return (PyValue){PY_FLOAT, .f = a.f * (double)b.i};";
+        textSection ~= "    return (PyValue){PY_INT, .i = 0};";
+        textSection ~= "}";
+        textSection ~= "";
+        textSection ~= "PyValue py_div(PyValue a, PyValue b) {";
+        textSection ~= "    if (a.type == PY_INT && b.type == PY_INT) return (PyValue){PY_INT, .i = a.i / b.i};";
+        textSection ~= "    if (a.type == PY_FLOAT && b.type == PY_FLOAT) return (PyValue){PY_FLOAT, .f = a.f / b.f};";
+        textSection ~= "    if (a.type == PY_INT && b.type == PY_FLOAT) return (PyValue){PY_FLOAT, .f = (double)a.i / b.f};";
+        textSection ~= "    if (a.type == PY_FLOAT && b.type == PY_INT) return (PyValue){PY_FLOAT, .f = a.f / (double)b.i};";
+        textSection ~= "    return (PyValue){PY_INT, .i = 0};";
+        textSection ~= "}";
+        textSection ~= "";
+        textSection ~= "bool py_lt(PyValue a, PyValue b) {";
+        textSection ~= "    if (a.type == PY_INT && b.type == PY_INT) return a.i < b.i;";
+        textSection ~= "    if (a.type == PY_FLOAT && b.type == PY_FLOAT) return a.f < b.f;";
+        textSection ~= "    return false;";
+        textSection ~= "}";
+        textSection ~= "";
+        textSection ~= "bool py_gt(PyValue a, PyValue b) {";
+        textSection ~= "    if (a.type == PY_INT && b.type == PY_INT) return a.i > b.i;";
+        textSection ~= "    if (a.type == PY_FLOAT && b.type == PY_FLOAT) return a.f > b.f;";
+        textSection ~= "    return false;";
+        textSection ~= "}";
+        textSection ~= "";
+        textSection ~= "bool py_eq(PyValue a, PyValue b) {";
+        textSection ~= "    if (a.type == PY_INT && b.type == PY_INT) return a.i == b.i;";
+        textSection ~= "    if (a.type == PY_FLOAT && b.type == PY_FLOAT) return a.f == b.f;";
+        textSection ~= "    if (a.type == PY_STRING) return strcmp(a.s, b.s) == 0;";
+        textSection ~= "    return false;";
+        textSection ~= "}";
+        textSection ~= "";
+        textSection ~= "bool py_ne(PyValue a, PyValue b) { return !py_eq(a, b); }";
+        textSection ~= "";
+        textSection ~= "bool py_le(PyValue a, PyValue b) { return py_lt(a, b) || py_eq(a, b); }";
+        textSection ~= "";
+        textSection ~= "bool py_ge(PyValue a, PyValue b) { return py_gt(a, b) || py_eq(a, b); }";
+        textSection ~= "";
     }
 
     public string getSourceCode() {
@@ -54,6 +136,7 @@ class CCodegen {
 
     private void trackVar(string varName, string type = "int") {
         if (varName !in variableTypes) {
+            if (type == "int_array") type = "PyValue_array";
             variableTypes[varName] = type;
         }
     }
@@ -74,15 +157,28 @@ class CCodegen {
         return false;
     }
 
+    private string getNextListId() {
+        listCounter++;
+        return "list_data_" ~ to!string(listCounter);
+    }
+
     void generate(ASTNode[] ast) {
+        globalDeclarations = [];
+        mainAssignments = [];
         foreach (node; ast) {
             if (auto assign = cast(AssignNode)node) {
                 if (auto listNode = cast(ListNode)assign.expr) {
-                    variableTypes[assign.name] = "int_array";
+                    variableTypes[assign.name] = "PyValue_array";
                     arraySizes[assign.name] = cast(int)listNode.elems.length;
+                    foreach (i, elem; listNode.elems) {
+                        mainAssignments ~= assign.name ~ "[" ~ to!string(i) ~ "] = " ~ compileNode(elem) ~ "; ";
+                    }
                 } else if (auto tupleNode = cast(TupleNode)assign.expr) {
-                    variableTypes[assign.name] = "int_array";
+                    variableTypes[assign.name] = "PyValue_array";
                     arraySizes[assign.name] = cast(int)tupleNode.elems.length;
+                    foreach (i, elem; tupleNode.elems) {
+                        mainAssignments ~= assign.name ~ "[" ~ to!string(i) ~ "] = " ~ compileNode(elem) ~ "; ";
+                    }
                 } else if (cast(DictNode)assign.expr || cast(SetNode)assign.expr) {
                     trackVar(assign.name, "void*");
                 } else if (auto numNode = cast(NumberNode)assign.expr) {
@@ -121,28 +217,39 @@ class CCodegen {
                 if (inc.length > 0) includes ~= inc;
             } else if (cast(FunctionDefNode)node || cast(ClassDefNode)node) {
                 functionDefs ~= compileNode(node);
+            } else if (auto assign = cast(AssignNode)node) {
+                if (cast(ListNode)assign.expr || cast(TupleNode)assign.expr) continue;
+                mainStmts ~= compileNode(node);
             } else {
                 mainStmts ~= compileNode(node);
             }
         }
 
-        foreach (inc; includes) {
-            if (inc.length > 0) textSection ~= inc;
+        if (includes.length > 0) {
+            textSection ~= "";
         }
-
-        if (includes.length > 0) textSection ~= "";
 
         if (variableTypes.length > 0) {
             foreach (varName, type; variableTypes) {
-                if (type == "int_array") {
-                    textSection ~= "int " ~ varName ~ "[" ~ to!string(arraySizes[varName]) ~ "];";
+                if (type == "PyValue_array") {
+                    textSection ~= "PyValue " ~ varName ~ "[" ~ to!string(arraySizes[varName]) ~ "];";
                 } else if (type == "const char*") {
                     textSection ~= "const char* " ~ varName ~ " = \"\";";
                 } else if (type == "void*") {
                     textSection ~= "void* " ~ varName ~ " = NULL;";
+                } else if (type == "PyValue") {
+                    textSection ~= "PyValue " ~ varName ~ " = {PY_INT, .i = 0};";
                 } else {
                     textSection ~= type ~ " " ~ varName ~ " = 0;";
                 }
+            }
+            textSection ~= "";
+        }
+
+        if (globalDeclarations.length > 0) {
+            textSection ~= "";
+            foreach (decl; globalDeclarations) {
+                textSection ~= decl;
             }
             textSection ~= "";
         }
@@ -154,14 +261,17 @@ class CCodegen {
 
         textSection ~= "int main(void) {";
         textSection ~= "    os_ClrHome();";
-        textSection ~= "";
+        if (mainAssignments.length > 0) {
+            foreach (assign; mainAssignments) {
+                textSection ~= "    " ~ assign ~ "\n";
+            }
+            textSection ~= "";
+        }
 
         foreach (stmt; mainStmts) {
             if (stmt.length > 0) {
                 string line = stmt;
-                if (!line.endsWith(";") && !line.endsWith("}")) {
-                    line ~= ";";
-                }
+                if (!line.endsWith(";") && !line.endsWith("}")) line ~= ";";
                 textSection ~= "    " ~ line;
             }
         }
@@ -176,13 +286,13 @@ class CCodegen {
         if (node is null) return "";
 
         if (auto num = cast(NumberNode)node) {
-            return num.isFloat ? to!string(num.val) : to!string(cast(long)num.val);
+            return "(PyValue){" ~ (num.isFloat ? "PY_FLOAT, .f = " : "PY_INT, .i = ") ~ to!string(num.val) ~ "}";
         }
         else if (auto b = cast(BoolNode)node) {
-            return b.val ? "true" : "false";
+            return "(PyValue){" ~ (b.val ? "PY_BOOL, .b = true" : "PY_BOOL, .b = false") ~ "}";
         }
         else if (auto strNode = cast(StringNode)node) {
-            return "\"" ~ strNode.val ~ "\"";
+            return "(PyValue){" ~ "PY_STRING, .s = " ~ "\"" ~ strNode.val ~ "\"" ~ "}";
         }
         else if (auto var = cast(VarNode)node) {
             return var.name;
@@ -195,25 +305,41 @@ class CCodegen {
                 if (cast(StringNode)binOp.left && cast(StringNode)binOp.right) {
                     auto lStr = cast(StringNode)binOp.left;
                     auto rStr = cast(StringNode)binOp.right;
-                    return "\"" ~ lStr.val ~ rStr.val ~ "\"";
+                    return "(PyValue){" ~ "PY_STRING, .s = " ~ "\"" ~ lStr.val ~ rStr.val ~ "\"" ~ "}";
                 }
-                return "py_str_concat(" ~ compileNode(binOp.left) ~ ", " ~ compileNode(binOp.right) ~ ")";
+                return "py_add(" ~ compileNode(binOp.left) ~ ", " ~ compileNode(binOp.right) ~ ")";
             }
-            return compileNode(binOp.left) ~ " " ~ binOp.op ~ " " ~ compileNode(binOp.right);
+
+            string left = compileNode(binOp.left);
+            string right = compileNode(binOp.right);
+
+            if (binOp.op == "-") return "py_sub(" ~ left ~ ", " ~ right ~ ")";
+            if (binOp.op == "*") return "py_mul(" ~ left ~ ", " ~ right ~ ")";
+            if (binOp.op == "/") return "py_div(" ~ left ~ ", " ~ right ~ ")";
+            if (binOp.op == "<") return "py_lt(" ~ left ~ ", " ~ right ~ ")";
+            if (binOp.op == ">") return "py_gt(" ~ left ~ ", " ~ right ~ ")";
+            if (binOp.op == "==") return "py_eq(" ~ left ~ ", " ~ right ~ ")";
+            if (binOp.op == "!=") return "py_ne(" ~ left ~ ", " ~ right ~ ")";
+            if (binOp.op == "<=") return "py_le(" ~ left ~ ", " ~ right ~ ")";
+            if (binOp.op == ">=") return "py_ge(" ~ left ~ ", " ~ right ~ ")";
+
+            return left ~ " " ~ binOp.op ~ " " ~ right;
         }
         else if (auto listNode = cast(ListNode)node) {
-            string res = "{";
+            string arrayName = getNextListId();
+            globalDeclarations ~= "PyValue " ~ arrayName ~ "[" ~ to!string(listNode.elems.length) ~ "];\n";
             foreach (i, elem; listNode.elems) {
-                res ~= compileNode(elem) ~ (i + 1 < listNode.elems.length ? ", " : "");
+                mainAssignments ~= arrayName ~ "[" ~ to!string(i) ~ "] = " ~ compileNode(elem) ~ "; ";
             }
-            return res ~ "}";
+            return "(PyValue){" ~ "PY_LIST, .l = " ~ arrayName ~ "}";
         }
         else if (auto tupleNode = cast(TupleNode)node) {
-            string res = "{";
+            string arrayName = getNextListId();
+            globalDeclarations ~= "PyValue " ~ arrayName ~ "[" ~ to!string(tupleNode.elems.length) ~ "];\n";
             foreach (i, elem; tupleNode.elems) {
-                res ~= compileNode(elem) ~ (i + 1 < tupleNode.elems.length ? ", " : "");
+                mainAssignments ~= arrayName ~ "[" ~ to!string(i) ~ "] = " ~ compileNode(elem) ~ "; ";
             }
-            return res ~ "}";
+            return "(PyValue){" ~ "PY_TUPLE, .l = " ~ arrayName ~ "}";
         }
         else if (cast(DictNode)node) {
             return "NULL";
@@ -229,18 +355,13 @@ class CCodegen {
         }
         else if (auto assign = cast(AssignNode)node) {
             if (auto listNode = cast(ListNode)assign.expr) {
-                string initCode = "";
-                foreach (i, elem; listNode.elems) {
-                    initCode ~= assign.name ~ "[" ~ to!string(i) ~ "] = " ~ compileNode(elem) ~ "; ";
-                }
-                return initCode;
-            }
-            if (auto tupleNode = cast(TupleNode)assign.expr) {
-                string initCode = "";
-                foreach (i, elem; tupleNode.elems) {
-                    initCode ~= assign.name ~ "[" ~ to!string(i) ~ "] = " ~ compileNode(elem) ~ "; ";
-                }
-                return initCode;
+                variableTypes[assign.name] = "PyValue_array";
+                arraySizes[assign.name] = cast(int)listNode.elems.length;
+                return assign.name ~ " = " ~ compileNode(assign.expr) ~ ";";
+            } else if (auto tupleNode = cast(TupleNode)assign.expr) {
+                variableTypes[assign.name] = "PyValue_array";
+                arraySizes[assign.name] = cast(int)tupleNode.elems.length;
+                return assign.name ~ " = " ~ compileNode(assign.expr) ~ ";";
             }
             if (assign.index !is null) {
                 return assign.name ~ "[" ~ compileNode(assign.index) ~ "] = " ~ compileNode(assign.expr) ~ ";";
@@ -292,10 +413,10 @@ class CCodegen {
             foreach (i, arg; mCall.args) {
                 argsList ~= compileNode(arg) ~ (i + 1 < mCall.args.length ? ", " : "");
             }
-            return compileNode(mCall.obj) ~ "." ~ mCall.method ~ "(" ~ argsList ~ ")";
+            return mCall.toC();
         }
         else if (auto returnNode = cast(ReturnNode)node) {
-            return "return " ~ (returnNode.expr ? compileNode(returnNode.expr) : "") ~ ";";
+            return "return " ~ (returnNode.expr ? compileNode(returnNode.expr) : "");
         }
         else if (auto ifNode = cast(IfNode)node) {
             string code = "if (" ~ compileNode(ifNode.cond) ~ ") {\n";
