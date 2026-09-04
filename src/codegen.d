@@ -113,75 +113,91 @@ class CCodegen {
 
     private void analyzeAST(ASTNode[] ast) {
         foreach (node; ast) {
-            if (auto assign = cast(AssignNode)node) {
-                if (cast(ListNode)assign.expr || cast(TupleNode)assign.expr) {
-                    auto listNode = cast(ListNode)assign.expr;
-                    auto tupleNode = cast(TupleNode)assign.expr;
-                    auto elems = listNode ? listNode.elems : tupleNode.elems;
-                    
-                    if (isHeterogeneousElems(elems)) {
-                        useHetero = true;
-                    }
+            analyzeNode(node);
+        }
+    }
+
+    private void analyzeNode(ASTNode node) {
+        if (node is null) return;
+
+        if (auto assign = cast(AssignNode)node) {
+            if (cast(ListNode)assign.expr || cast(TupleNode)assign.expr) {
+                auto listNode = cast(ListNode)assign.expr;
+                auto tupleNode = cast(TupleNode)assign.expr;
+                auto elems = listNode ? listNode.elems : tupleNode.elems;
+                
+                if (isHeterogeneousElems(elems)) {
+                    useHetero = true;
                 }
             }
         }
 
-        foreach (node; ast) {
-            if (auto assign = cast(AssignNode)node) {
-                if (cast(ListNode)assign.expr || cast(TupleNode)assign.expr) {
-                    auto listNode = cast(ListNode)assign.expr;
-                    auto tupleNode = cast(TupleNode)assign.expr;
-                    auto elems = listNode ? listNode.elems : tupleNode.elems;
-                    
-                    if (useHetero || isHeterogeneousElems(elems)) {
-                        variableTypes[assign.name] = "PyValue_array";
-                        arraySizes[assign.name] = cast(int)elems.length;
-                    } else {
-                        bool hasString = false;
-                        bool hasFloat = false;
+        if (auto assign = cast(AssignNode)node) {
+            if (cast(ListNode)assign.expr || cast(TupleNode)assign.expr) {
+                auto listNode = cast(ListNode)assign.expr;
+                auto tupleNode = cast(TupleNode)assign.expr;
+                auto elems = listNode ? listNode.elems : tupleNode.elems;
+                
+                if (useHetero || isHeterogeneousElems(elems)) {
+                    variableTypes[assign.name] = "PyValue_array";
+                    arraySizes[assign.name] = cast(int)elems.length;
+                } else {
+                    bool hasString = false;
+                    bool hasFloat = false;
 
-                        foreach (elem; elems) {
-                            if (cast(StringNode)elem) hasString = true;
-                            if (auto num = cast(NumberNode)elem) {
-                                if (num.isFloat) hasFloat = true;
-                            }
+                    foreach (elem; elems) {
+                        if (cast(StringNode)elem) hasString = true;
+                        if (auto num = cast(NumberNode)elem) {
+                            if (num.isFloat) hasFloat = true;
                         }
-
-                        if (hasString) {
-                            variableTypes[assign.name] = "char*[]";
-                        } else if (hasFloat) {
-                            variableTypes[assign.name] = "double[]";
-                        } else {
-                            variableTypes[assign.name] = "long[]";
-                        }
-                        arraySizes[assign.name] = cast(int)elems.length;
                     }
-                } else if (cast(DictNode)assign.expr || cast(SetNode)assign.expr) {
-                    trackVar(assign.name, "void*");
-                } else if (auto numNode = cast(NumberNode)assign.expr) {
-                    trackVar(assign.name, numNode.isFloat ? "float" : "int");
-                } else if (isStringExpr(assign.expr)) {
+
+                    if (hasString) {
+                        variableTypes[assign.name] = "char*[]";
+                    } else if (hasFloat) {
+                        variableTypes[assign.name] = "double[]";
+                    } else {
+                        variableTypes[assign.name] = "long[]";
+                    }
+                    arraySizes[assign.name] = cast(int)elems.length;
+                }
+            } else if (cast(DictNode)assign.expr || cast(SetNode)assign.expr) {
+                trackVar(assign.name, "void*");
+            } else if (auto numNode = cast(NumberNode)assign.expr) {
+                trackVar(assign.name, numNode.isFloat ? "float" : "int");
+            } else if (isStringExpr(assign.expr)) {
+                trackVar(assign.name, "const char*");
+            } else if (auto callNode = cast(CallNode)assign.expr) {
+                if (callNode.name == "input" || callNode.name == "str") {
                     trackVar(assign.name, "const char*");
-                } else if (auto callNode = cast(CallNode)assign.expr) {
-                    if (callNode.name == "input" || callNode.name == "str") {
-                        trackVar(assign.name, "const char*");
-                    } else {
-                        trackVar(assign.name, "int");
-                    }
-                } else if (auto mCall = cast(MethodCallNode)assign.expr) {
-                    if (compileNode(mCall.obj) == "random" && mCall.method == "random") {
-                        trackVar(assign.name, "float");
-                    } else {
-                        trackVar(assign.name, "int");
-                    }
                 } else {
                     trackVar(assign.name, "int");
                 }
-            } else if (auto compAssign = cast(CompoundAssignNode)node) {
-                trackVar(compAssign.name, "int");
-            } else if (auto forNode = cast(ForNode)node) {
-                trackVar(forNode.varName, "int");
+            } else if (auto mCall = cast(MethodCallNode)assign.expr) {
+                if (compileNode(mCall.obj) == "random" && mCall.method == "random") {
+                    trackVar(assign.name, "float");
+                } else {
+                    trackVar(assign.name, "int");
+                }
+            } else {
+                trackVar(assign.name, "int");
             }
+        } else if (auto compAssign = cast(CompoundAssignNode)node) {
+            trackVar(compAssign.name, "int");
+        } else if (auto forNode = cast(ForNode)node) {
+            trackVar(forNode.varName, "int");
+            foreach (stmt; forNode.body) analyzeNode(stmt);
+        } else if (auto whileNode = cast(WhileNode)node) {
+            foreach (stmt; whileNode.body) analyzeNode(stmt);
+        } else if (auto ifNode = cast(IfNode)node) {
+            foreach (stmt; ifNode.thenB) analyzeNode(stmt);
+            foreach (stmt; ifNode.elseB) analyzeNode(stmt);
+        } else if (auto fnDef = cast(FunctionDefNode)node) {
+            foreach (stmt; fnDef.body) analyzeNode(stmt);
+        } else if (auto tryExcept = cast(TryExceptNode)node) {
+            foreach (stmt; tryExcept.tryBody) analyzeNode(stmt);
+            foreach (stmt; tryExcept.exceptBody) analyzeNode(stmt);
+            foreach (stmt; tryExcept.finallyBody) analyzeNode(stmt);
         }
     }
 
