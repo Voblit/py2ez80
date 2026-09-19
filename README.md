@@ -103,9 +103,7 @@ py2ez80/
 ---
 
 ## Language Support
-
-### Syntax & Control Flow
-
+the current python features are supported: 
 * [x] Global and local variables
 * [x] math operations (`+=`, `-=`, `*=`, `/=`)
 * [x] Conditions (`if`, `elif`, `else`)
@@ -120,9 +118,7 @@ py2ez80/
 * [x] `print()`: Prints text to the screen
 * [x] `input()`: Uses getkey
 * [x] `len()`: Check array length
-#### THERE ARE ONLY TWO SUPPORTED LIBRARIES (CURRENTLY). MORE ARE COMING SOON.
-* [x] `import math`: Allows for math 
-* [x] `import random`: Allows for random functions
+* [x] `import [program name]`: this allows you to import any python program in the project folder. The inbuilt math and random imports are still there. Keep in mind that any imported program must still be compatible with this list, as it is also transpiled.
 * [x] Exceptions (`try`, `except`, `finally`, `raise`)
 ---
 
@@ -133,7 +129,7 @@ an easy way to see the capabilities of Py2eZ80, and get to learn how it works, i
 ### 1. Get the `py2ez80` program
 
 * **Windows:** Download `py2ez80.exe` from [Releases](https://github.com/Voblit/py2ez80/releases).
-* **Linux / macOS:** Build from source (see [Building from Source](https://www.google.com/search?q=%23building-from-source)).
+* **Linux / macOS:** Build from source (see [Building from Source](#building-from-source).
 
 ### 2. Write a Python Script
 
