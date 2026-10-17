@@ -1,0 +1,51 @@
+#ifndef _CDEFS_H
+#define _CDEFS_H
+
+#define __JOIN2(x, y)     x ## y
+#define __JOIN3(x, y, z)  x ## y ## z
+#define __CONCAT(x, y)    __JOIN2(x, y)
+#define __TOSTRING(x)     #x
+
+#define __STDINT_C(C, T)  __CONCAT(C, __##T##_C_SUFFIX__)
+#define __STDINT_WIDTH(T) (sizeof(__##T##_TYPE__)*__CHAR_BIT__)
+
+#ifndef __cplusplus
+# define __BEGIN_DECLS
+# define __END_DECLS
+# define __IGNORE(expr) ((void)(expr))
+#else /* __cplusplus */
+# define __BEGIN_DECLS  extern "C" {
+# define __END_DECLS    }
+# define __IGNORE(expr) (static_cast<void>(expr))
+#endif /* __cplusplus */
+
+#if defined(__cplusplus) && __cplusplus >= 201103L
+# define __NOEXCEPT noexcept
+#else /* __cplusplus */
+# define __NOEXCEPT __attribute__((__nothrow__, __leaf__))
+#endif /* __cplusplus */
+
+#define __NOEXCEPT_CONST __NOEXCEPT __attribute__((__const__))
+#define __NOEXCEPT_PURE __NOEXCEPT __attribute__((__pure__))
+
+#ifndef NULL
+# ifndef __cplusplus
+#  define NULL ((void *)0)
+# else /* __cplusplus */
+#  define NULL 0
+# endif /* __cplusplus */
+#endif /* NULL */
+
+#ifndef _SIZE_T_DEFINED
+#define _SIZE_T_DEFINED
+typedef __SIZE_TYPE__ size_t;
+#endif /* _SIZE_T_DEFINED */
+
+#ifndef _WCHAR_T_DEFINED
+#define _WCHAR_T_DEFINED
+#ifndef __cplusplus
+typedef __WCHAR_TYPE__ wchar_t;
+#endif /* __cplusplus */
+#endif /* _WCHAR_T_DEFINED */
+
+#endif /* _CDEFS_H */

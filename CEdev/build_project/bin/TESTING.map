@@ -1,0 +1,286 @@
+
+Merging object attributes
+
+
+Discarded input sections
+
+ .comment       0x00000000      0x14f obj/TESTING.o
+ .note.GNU-stack
+                0x00000000        0x0 obj/TESTING.o
+ .init.weak_crt
+                0x00000000       0x10 obj/TESTING.o
+ .text          0x00000000        0x0 obj/crt0.o
+ .data          0x00000000        0x0 obj/crt0.o
+ .bss           0x00000000        0x0 obj/crt0.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+prgm             0x00d1a87f         0x00400000
+bss              0x00d052c6         0x0000ed12
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+                0x00d1a87f                        LOAD_ADDR = 0xd1a87f
+                0x00d052c6                        BSSHEAP_LOW = 0xd052c6
+                0x00d13fd8                        BSSHEAP_HIGH = 0xd13fd8
+                0x00d1a87e                        STACK_HIGH = 0xd1a87e
+                0x00000001                        __TICE__ = 0x1
+                0x00d1a87f                        . = LOAD_ADDR
+
+.header         0x00d1a87f       0x1e
+ *(.header)
+ .header        0x00d1a87f        0x3 obj/crt0.o
+ *(.header.icon)
+ .header.icon   0x00d1a882       0x1b obj/TESTING.o
+                0x00d1a887                ___description
+
+.init           0x00d1a89d       0x79
+ *(.init)
+ .init          0x00d1a89d       0x79 obj/crt0.o
+                0x00d1a89d                __start
+                0x00d1a8da                ___exithl
+                0x00d1a8db                _exit.sp
+
+.text           0x00d1a916     0x1d74
+ *(.text.unlikely .text.*_unlikely .text.unlikely.*)
+ *(.text.exit .text.exit.*)
+ *(.text.startup .text.startup.*)
+ *(.text.hot .text.hot.*)
+ *(SORT_BY_NAME(.text.sorted.*))
+ *(.text .stub .text.* .gnu.linkonce.t.*)
+ .text          0x00d1a916      0x40a obj/TESTING.o
+                0x00d1a916                __land
+                0x00d1a91a                __iand
+                0x00d1a931                __dcmp
+                0x00d1a98f                __frameset
+                0x00d1a99d                __frameset0
+                0x00d1a9a8                __ftod
+                0x00d1a9f0                __imuls
+                0x00d1a9f0                __imulu
+                0x00d1aa20                __sshl
+                0x00d1aa20                __ishl
+                0x00d1aa46                __ishru
+                0x00d1aa4b                __ishrs
+                0x00d1aa87                __lladd
+                0x00d1aaab                __lland
+                0x00d1aae7                __llcmps
+                0x00d1ab14                __llcmpu
+                0x00d1ab3e                __llequzero
+                0x00d1ab3e                __llcmpzero
+                0x00d1ab53                __lldivu
+                0x00d1ab67                __lldvrmu
+                0x00d1ab6e                __lldvrmu.hijack
+                0x00d1abc5                __llmulu
+                0x00d1ac1a                __llshl
+                0x00d1ac34                __llshru
+                0x00d1ac64                __llshrs
+                0x00d1aca0                __llxor
+                0x00d1acdc                __sand
+                0x00d1ace5                __setflag
+                0x00d1acef                __lxor
+                0x00d1acf3                __ixor
+                0x00d1ad0a                _outchar
+ .text._calculate
+                0x00d1ad20       0x24 obj/TESTING.o
+                0x00d1ad20                _calculate
+ .text._main    0x00d1ad44       0x20 obj/TESTING.o
+                0x00d1ad44                _main
+ .text._npf_vpprintf
+                0x00d1ad64     0x1775 obj/TESTING.o
+                0x00d1ad64                _npf_vpprintf
+ .text._NPF_PUTC_IMPL
+                0x00d1c4d9       0x2d obj/TESTING.o
+ .text._npf_utoa_rev
+                0x00d1c506       0xe6 obj/TESTING.o
+ .text._npf_putc_std
+                0x00d1c5ec       0x10 obj/TESTING.o
+ .text._printf  0x00d1c5fc       0x2b obj/TESTING.o
+                0x00d1c5fc                _printf
+ .text.__bctlz  0x00d1c627       0x22 obj/TESTING.o
+                0x00d1c627                __bctlz
+ .text.__sctlz  0x00d1c649        0xc obj/TESTING.o
+                0x00d1c649                __sctlz
+ .text.__ictlz  0x00d1c655       0x12 obj/TESTING.o
+                0x00d1c655                __ictlz
+ .text.__llctlz
+                0x00d1c667        0xe obj/TESTING.o
+                0x00d1c667                __llctlz
+ .text.__i48ctlz
+                0x00d1c675       0x15 obj/TESTING.o
+                0x00d1c675                __i48ctlz
+ *(.gnu.warning)
+
+.rodata         0x00d1c68a      0x112
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+ .rodata._.str  0x00d1c68a        0x8 obj/TESTING.o
+ .rodata._npf_vpprintf
+                0x00d1c692      0x102 obj/TESTING.o
+ .rodata._.str.1
+                0x00d1c794        0x4 obj/TESTING.o
+ .rodata._.str.2
+                0x00d1c798        0x4 obj/TESTING.o
+
+.init_array     0x00d1c79c        0x0
+                [!provide]                        PROVIDE (__init_array_start = .)
+ *(.preinit_array)
+ *(SORT_BY_INIT_PRIORITY(.init_array.*))
+ *(.init_array)
+                [!provide]                        PROVIDE (__init_array_end = .)
+
+.fini_array     0x00d1c79c        0x0
+                [!provide]                        PROVIDE (__fini_array_start = .)
+ *(SORT_BY_INIT_PRIORITY(.fini_array.*))
+ *(.fini_array)
+                [!provide]                        PROVIDE (__fini_array_end = .)
+                0x00d1c79c                        ___data_low = .
+
+.data           0x00d1c79c        0x0
+ *(.data .data.* .gnu.linkonce.d.*)
+ *(.data1)
+                0x00d1c79c                        ___runprgm_reloc_start = .
+ *(.runprgm.reloc)
+                0x00d1c79c                        ___runprgm_reloc_end = .
+                0x00d1c79c                        ___data_high = .
+                0x00000000                        ___data_len = (___data_high - ___data_low)
+                0x00d052c6                        . = BSSHEAP_LOW
+                0x00d052c6                        ___bss_low = .
+
+.bss            0x00d052c6        0x9
+ *(.dynbss)
+ *(.bss .bss.* .gnu.linkonce.b.*)
+ .bss._pc_cnt.0
+                0x00d052c6        0x3 obj/TESTING.o
+ .bss._pc_cnt.1
+                0x00d052c9        0x3 obj/TESTING.o
+ .bss._pc_cnt.2
+                0x00d052cc        0x3 obj/TESTING.o
+ *(COMMON)
+                0x00d052cf                        ___bss_high = .
+                0x00000009                        ___bss_len = (___bss_high - ___bss_low)
+                0x00000001                        ASSERT ((. <= BSSHEAP_HIGH), Error: BSS exceed BSSHEAP_HIGH limit)
+                0x00d052cf                        ___heap_low = .
+                0x00d13fd8                        . = BSSHEAP_HIGH
+                0x00d13fd8                        ___heap_high = .
+
+.runprgm
+ *(.runprgm.reloc)
+
+.debug_info
+ *(.debug_info .debug_info.*)
+
+.debug_abbrev
+ *(.debug_abbrev .debug_abbrev.*)
+
+.debug_line
+ *(.debug_line .debug_line.*)
+
+.debug_line_str
+ *(.debug_line_str .debug_line_str.*)
+
+.debug_str
+ *(.debug_str .debug_str.*)
+
+.debug_str_offsets
+ *(.debug_str_offsets .debug_str_offsets.*)
+
+.debug_addr
+ *(.debug_addr .debug_addr.*)
+
+.debug_aranges
+ *(.debug_aranges .debug_aranges.*)
+
+.debug_ranges
+ *(.debug_ranges .debug_ranges.*)
+
+.debug_rnglists
+ *(.debug_rnglists .debug_rnglists.*)
+
+.debug_loc
+ *(.debug_loc .debug_loc.*)
+
+.debug_loclists
+ *(.debug_loclists .debug_loclists.*)
+
+.debug_frame
+ *(.debug_frame .debug_frame.*)
+
+.debug_macro
+ *(.debug_macro .debug_macro.*)
+
+.debug_macinfo
+ *(.debug_macinfo .debug_macinfo.*)
+
+.debug_names
+ *(.debug_names .debug_names.*)
+
+.debug_pubnames
+ *(.debug_pubnames .debug_pubnames.*)
+
+.debug_pubtypes
+ *(.debug_pubtypes .debug_pubtypes.*)
+
+.debug_types
+ *(.debug_types .debug_types.*)
+
+.debug_sup
+ *(.debug_sup .debug_sup.*)
+
+.debug_cu_index
+ *(.debug_cu_index .debug_cu_index.*)
+
+.debug_tu_index
+ *(.debug_tu_index .debug_tu_index.*)
+
+.gdb_index
+ *(.gdb_index)
+
+.debug_gdb_scripts
+ *(.debug_gdb_scripts)
+
+.debug_abbrev.dwo
+ *(.debug_abbrev.dwo .debug_abbrev.dwo.*)
+
+.debug_info.dwo
+ *(.debug_info.dwo .debug_info.dwo.*)
+
+.debug_line.dwo
+ *(.debug_line.dwo .debug_line.dwo.*)
+
+.debug_loclists.dwo
+ *(.debug_loclists.dwo .debug_loclists.dwo.*)
+
+.debug_macro.dwo
+ *(.debug_macro.dwo .debug_macro.dwo.*)
+
+.debug_rnglists.dwo
+ *(.debug_rnglists.dwo .debug_rnglists.dwo.*)
+
+.debug_str.dwo
+ *(.debug_str.dwo .debug_str.dwo.*)
+
+.debug_str_offsets.dwo
+ *(.debug_str_offsets.dwo .debug_str_offsets.dwo.*)
+
+.eh_frame
+ *(.eh_frame)
+
+.eh_frame_hdr
+ *(.eh_frame_hdr)
+
+/DISCARD/
+ *(.comment)
+ *(.note*)
+                [!provide]                        PROVIDE (___runprgm_reloc_len = (___runprgm_reloc_end - ___runprgm_reloc_start))
+LOAD obj/TESTING.o
+LOAD obj/crt0.o
+START GROUP
+LOAD D:/py2ez80/CEdev/lib/libc/allocator_standard.a
+LOAD D:/py2ez80/CEdev/lib/crt/libcrt.a
+LOAD D:/py2ez80/CEdev/lib/ce/libce.a
+LOAD D:/py2ez80/CEdev/lib/softfloat/libsoftfloat.a
+LOAD D:/py2ez80/CEdev/lib/libc/libc_os.a
+LOAD D:/py2ez80/CEdev/lib/libcxx/libcxx.a
+END GROUP
+OUTPUT(bin/TESTING.obj elf32-z80)

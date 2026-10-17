@@ -1,0 +1,4626 @@
+convfont
+: Font Metadata
+: Font Properties
+Height: 14
+Double width: True
+Code page: ASCII
+: Font Metrics
+Weight: Normal
+Style: Sans-serif
+Style: Upright
+Style: Proportional
+Italic adjust: 0
+Space above: 1
+Space below: 1
+Cap height: 2
+x-height: 5
+Baseline: 11
+Font Data:
+Code point: 0
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+Code point: 1
+Unicode: U+0000FFFD
+Width: 8
+Data:
+##  ##  ##  ##  
+  ##  ##  ##    
+##  ##  ##  ##  
+  ##  ##  ##    
+##  ##  ##  ##  
+  ##  ##  ##    
+##  ##  ##  ##  
+  ##  ##  ##    
+##  ##  ##  ##  
+  ##  ##  ##    
+##  ##  ##  ##  
+  ##  ##  ##    
+##  ##  ##  ##  
+                
+Code point: 2
+Unicode: U+0000FFFD
+Width: 8
+Data:
+    ##          
+    ##          
+    ##          
+    ##          
+    ##          
+    ##          
+    ##          
+    ##          
+    ##          
+    ##          
+    ##          
+    ##          
+    ##          
+                
+Code point: 3
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+##############  
+##############  
+##############  
+                
+Code point: 4
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+##############  
+##############  
+##############  
+##############  
+##############  
+##############  
+##############  
+##############  
+##############  
+##############  
+##############  
+##############  
+                
+Code point: 5
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+##############  
+##############  
+######  ######  
+####      ####  
+##  ##  ##  ##  
+######  ######  
+######  ######  
+######  ######  
+######  ######  
+######  ######  
+##############  
+##############  
+                
+Code point: 6
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+##############  
+##############  
+######  ######  
+######  ######  
+####  ##  ####  
+####  ##  ####  
+##          ##  
+##  ######  ##  
+##  ######  ##  
+##  ######  ##  
+##############  
+##############  
+                
+Code point: 7
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+##############  
+##############  
+##############  
+####      ####  
+##########  ##  
+##########  ##  
+####        ##  
+##  ######  ##  
+##  ######  ##  
+####        ##  
+##############  
+##############  
+                
+Code point: 8
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+##############  
+##          ##  
+##          ##  
+                
+                
+                
+                
+                
+                
+##          ##  
+##          ##  
+##############  
+                
+Code point: 9
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+##############  
+##          ##  
+##    ##    ##  
+    ######      
+  ##  ##  ##    
+      ##        
+      ##        
+      ##        
+      ##        
+      ##        
+##          ##  
+##############  
+                
+Code point: 10
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+##############  
+##          ##  
+##    ##    ##  
+      ##        
+    ##  ##      
+    ##  ##      
+  ##########    
+  ##      ##    
+  ##      ##    
+                
+##          ##  
+##############  
+                
+Code point: 11
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+##############  
+##          ##  
+##          ##  
+    ######      
+          ##    
+    ########    
+  ##      ##    
+  ##      ##    
+    ########    
+                
+##          ##  
+##############  
+                
+Code point: 12
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+      ##        
+    ######      
+  ##########    
+##############  
+##############  
+                
+                
+                
+                
+                
+                
+                
+Code point: 13
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+                
+                
+                
+##############  
+##############  
+  ##########    
+    ######      
+      ##        
+                
+                
+Code point: 14
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+          ####  
+        ######  
+      ########  
+    ##########  
+  ############  
+    ##########  
+      ########  
+        ######  
+          ####  
+                
+                
+                
+Code point: 15
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ####          
+  ######        
+  ########      
+  ##########    
+  ############  
+  ##########    
+  ########      
+  ######        
+  ####          
+                
+                
+                
+Code point: 16
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+      ##        
+    ######      
+  ##  ##  ##    
+      ##        
+      ##        
+      ##        
+      ##        
+      ##        
+      ##        
+                
+                
+                
+Code point: 17
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+      ##        
+      ##        
+      ##        
+      ##        
+      ##        
+      ##        
+  ##  ##  ##    
+    ######      
+      ##        
+                
+                
+                
+Code point: 18
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+    ##          
+  ##            
+##############  
+  ##            
+    ##          
+                
+                
+                
+                
+                
+Code point: 19
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+        ##      
+          ##    
+##############  
+          ##    
+        ##      
+                
+                
+                
+                
+                
+Code point: 20
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+    ##  ##      
+  ##      ##    
+##############  
+  ##      ##    
+    ##  ##      
+                
+                
+                
+                
+                
+Code point: 21
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+    ######      
+  ##      ##    
+##          ##  
+##          ##  
+##          ##  
+  ##      ##    
+    ######      
+                
+                
+                
+                
+Code point: 22
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+    ######      
+  ##########    
+##############  
+##############  
+##############  
+  ##########    
+    ######      
+                
+                
+                
+                
+Code point: 23
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+          ####    
+        ##    ##  
+        ##    ##  
+        ##        
+        ##        
+        ##        
+        ##        
+        ##        
+        ##        
+  ##    ##        
+  ##    ##        
+    ####          
+Code point: 24
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ############  
+            ##  
+            ##  
+            ##  
+    ##########  
+            ##  
+            ##  
+            ##  
+  ############  
+                
+                
+                
+Code point: 25
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+##          ##
+##          ##
+##          ##
+  ##########  
+  ##      ##  
+  ##      ##  
+    ##  ##    
+    ##  ##    
+      ##      
+              
+              
+              
+Code point: 26
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+      ##      
+      ##      
+              
+              
+  ##      ##  
+  ##      ##  
+              
+              
+              
+              
+Code point: 27
+Unicode: U+0000FFFD
+Width: 11
+Data:
+                      
+                  ##  
+                  ##  
+                ##    
+                ##    
+                ##    
+              ##      
+######        ##      
+    ##        ##      
+      ##    ##        
+      ##    ##        
+        ####          
+          ##          
+                      
+Code point: 28
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+        ####  
+    ####      
+  ##          
+    ####      
+        ####  
+              
+  ##########  
+              
+              
+              
+Code point: 29
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+    ##        
+  ##  ##  ##  
+        ##    
+    ##        
+  ##  ##  ##  
+        ##    
+              
+              
+              
+              
+Code point: 30
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+  ####        
+      ####    
+          ##  
+      ####    
+  ####        
+              
+  ##########  
+              
+              
+              
+Code point: 31
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+        ##    
+        ##    
+  ##########  
+      ##      
+      ##      
+  ##########  
+    ##        
+    ##        
+              
+              
+              
+Code point: 32
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+Code point: 33
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+      
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+      
+  ##  
+  ##  
+      
+      
+      
+Code point: 34
+Unicode: U+0000FFFD
+Width: 5
+Data:
+          
+  ##  ##  
+  ##  ##  
+  ##  ##  
+    ##    
+          
+          
+          
+          
+          
+          
+          
+          
+          
+Code point: 35
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+      ##    ##  
+      ##    ##  
+  ##############
+    ##    ##    
+    ##    ##    
+    ##    ##    
+##############  
+  ##    ##      
+  ##    ##      
+                
+                
+                
+Code point: 36
+Unicode: U+0000FFFD
+Width: 8
+Data:
+        ##      
+        ##      
+    ########    
+  ##    ##  ##  
+  ##    ##      
+  ##    ##      
+    ########    
+      ##    ##  
+      ##    ##  
+  ##  ##    ##  
+    ########    
+      ##        
+      ##        
+                
+Code point: 37
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+    ##          
+  ##  ##    ##  
+    ##    ##    
+        ##      
+      ##        
+    ##    ##    
+  ##    ##  ##  
+          ##    
+                
+                
+                
+Code point: 38
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+      ####        
+    ##    ##      
+    ##    ##      
+      ####        
+    ##  ##    ##  
+  ##      ####    
+  ##      ##      
+  ##    ##  ##    
+    ####      ##  
+                  
+                  
+                  
+Code point: 39
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+  ##  
+  ##  
+  ##  
+##    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+Code point: 40
+Unicode: U+0000FFFD
+Width: 4
+Data:
+        
+        
+    ##  
+  ##    
+  ##    
+##      
+##      
+##      
+##      
+  ##    
+  ##    
+    ##  
+        
+        
+Code point: 41
+Unicode: U+0000FFFD
+Width: 4
+Data:
+        
+        
+##      
+  ##    
+  ##    
+    ##  
+    ##  
+    ##  
+    ##  
+  ##    
+  ##    
+##      
+        
+        
+Code point: 42
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+      ##      
+  ##  ##  ##  
+    ######    
+  ##  ##  ##  
+      ##      
+              
+              
+              
+              
+              
+              
+              
+Code point: 43
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+      ##      
+      ##      
+  ##########  
+      ##      
+      ##      
+              
+              
+              
+              
+              
+Code point: 44
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+      
+      
+      
+      
+      
+      
+      
+      
+  ##  
+  ##  
+  ##  
+##    
+      
+Code point: 45
+Unicode: U+0000FFFD
+Width: 5
+Data:
+          
+          
+          
+          
+          
+          
+          
+  ######  
+          
+          
+          
+          
+          
+          
+Code point: 46
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+      
+      
+      
+      
+      
+      
+      
+      
+  ##  
+  ##  
+      
+      
+      
+Code point: 47
+Unicode: U+0000FFFD
+Width: 6
+Data:
+            
+            
+        ##  
+        ##  
+      ##    
+      ##    
+    ##      
+  ##        
+  ##        
+##          
+##          
+            
+            
+            
+Code point: 48
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+      ####      
+    ##    ##    
+  ##        ##  
+  ##      ####  
+  ##  ####  ##  
+  ####      ##  
+  ##        ##  
+    ##    ##    
+      ####      
+                
+                
+                
+Code point: 49
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+      ##        
+    ####        
+  ##  ##        
+      ##        
+      ##        
+      ##        
+      ##        
+      ##        
+  ##########    
+                
+                
+                
+Code point: 50
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+    ########    
+  ##        ##  
+            ##  
+          ##    
+        ##      
+      ##        
+    ##          
+  ##            
+  ############  
+                
+                
+                
+Code point: 51
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+    ########    
+  ##        ##  
+            ##  
+            ##  
+      ######    
+            ##  
+            ##  
+  ##        ##  
+    ########    
+                
+                
+                
+Code point: 52
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+          ##    
+        ####    
+      ##  ##    
+    ##    ##    
+  ##      ##    
+  ############  
+          ##    
+          ##    
+          ##    
+                
+                
+                
+Code point: 53
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ############  
+  ##            
+  ##            
+  ##            
+  ##########    
+            ##  
+            ##  
+  ##        ##  
+    ########    
+                
+                
+                
+Code point: 54
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+      ######    
+    ##          
+  ##            
+  ##            
+  ##########    
+  ##        ##  
+  ##        ##  
+  ##        ##  
+    ########    
+                
+                
+                
+Code point: 55
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ############  
+            ##  
+            ##  
+          ##    
+          ##    
+        ##      
+        ##      
+      ##        
+      ##        
+                
+                
+                
+Code point: 56
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+    ########    
+  ##        ##  
+  ##        ##  
+  ##        ##  
+    ########    
+  ##        ##  
+  ##        ##  
+  ##        ##  
+    ########    
+                
+                
+                
+Code point: 57
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+    ########    
+  ##        ##  
+  ##        ##  
+  ##        ##  
+    ##########  
+            ##  
+            ##  
+          ##    
+    ######      
+                
+                
+                
+Code point: 58
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+      
+      
+      
+  ##  
+  ##  
+      
+      
+  ##  
+  ##  
+      
+      
+      
+      
+Code point: 59
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+      
+      
+      
+  ##  
+  ##  
+      
+      
+  ##  
+  ##  
+##    
+      
+      
+      
+Code point: 60
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+        ####  
+    ####      
+  ##          
+    ####      
+        ####  
+              
+              
+              
+              
+Code point: 61
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+  ##########  
+              
+              
+  ##########  
+              
+              
+              
+              
+              
+Code point: 62
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+  ####        
+      ####    
+          ##  
+      ####    
+  ####        
+              
+              
+              
+              
+Code point: 63
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+    ########    
+  ##        ##  
+  ##        ##  
+            ##  
+          ##    
+        ##      
+                
+        ##      
+        ##      
+                
+                
+                
+Code point: 64
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+      ######      
+    ##      ##    
+  ##          ##  
+  ##    ####  ##  
+  ##  ##  ##  ##  
+  ##  ##  ##  ##  
+  ##    ######    
+    ##            
+      ##########  
+                  
+                  
+                  
+Code point: 65
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+      ##      
+    ##  ##    
+    ##  ##    
+  ##      ##  
+  ##      ##  
+  ##########  
+##          ##
+##          ##
+##          ##
+              
+              
+              
+Code point: 66
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ##########    
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##########    
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##########    
+                
+                
+                
+Code point: 67
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+      ######    
+    ##      ##  
+  ##            
+  ##            
+  ##            
+  ##            
+  ##            
+    ##      ##  
+      ######    
+                
+                
+                
+Code point: 68
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ########      
+  ##      ##    
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##      ##    
+  ########      
+                
+                
+                
+Code point: 69
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ############  
+  ##            
+  ##            
+  ##            
+  ##########    
+  ##            
+  ##            
+  ##            
+  ############  
+                
+                
+                
+Code point: 70
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ############  
+  ##            
+  ##            
+  ##            
+  ##########    
+  ##            
+  ##            
+  ##            
+  ##            
+                
+                
+                
+Code point: 71
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+      ########    
+    ##        ##  
+  ##              
+  ##              
+  ##    ########  
+  ##          ##  
+  ##          ##  
+    ##      ####  
+      ######  ##  
+                  
+                  
+                  
+Code point: 72
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+  ##          ##  
+  ##          ##  
+  ##          ##  
+  ##          ##  
+  ##############  
+  ##          ##  
+  ##          ##  
+  ##          ##  
+  ##          ##  
+                  
+                  
+                  
+Code point: 73
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+  ##########  
+      ##      
+      ##      
+      ##      
+      ##      
+      ##      
+      ##      
+      ##      
+  ##########  
+              
+              
+              
+Code point: 74
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+      ##########
+          ##    
+          ##    
+          ##    
+          ##    
+          ##    
+  ##      ##    
+  ##      ##    
+    ######      
+                
+                
+                
+Code point: 75
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ##        ##  
+  ##      ##    
+  ##    ##      
+  ##  ##        
+  ####          
+  ##  ##        
+  ##    ##      
+  ##      ##    
+  ##        ##  
+                
+                
+                
+Code point: 76
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ##            
+  ##            
+  ##            
+  ##            
+  ##            
+  ##            
+  ##            
+  ##            
+  ############  
+                
+                
+                
+Code point: 77
+Unicode: U+0000FFFD
+Width: 11
+Data:
+                      
+                      
+  ##              ##  
+  ##              ##  
+  ####          ####  
+  ##  ##      ##  ##  
+  ##    ##  ##    ##  
+  ##      ##      ##  
+  ##      ##      ##  
+  ##              ##  
+  ##              ##  
+                      
+                      
+                      
+Code point: 78
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+  ##          ##  
+  ##          ##  
+  ####        ##  
+  ##  ##      ##  
+  ##    ##    ##  
+  ##      ##  ##  
+  ##        ####  
+  ##          ##  
+  ##          ##  
+                  
+                  
+                  
+Code point: 79
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+      ######      
+    ##      ##    
+  ##          ##  
+  ##          ##  
+  ##          ##  
+  ##          ##  
+  ##          ##  
+    ##      ##    
+      ######      
+                  
+                  
+                  
+Code point: 80
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ##########    
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##########    
+  ##            
+  ##            
+  ##            
+  ##            
+                
+                
+                
+Code point: 81
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+      ######      
+    ##      ##    
+  ##          ##  
+  ##          ##  
+  ##    ##    ##  
+  ##    ##    ##  
+    ##    ####    
+      ######      
+            ##    
+                  
+                  
+                  
+Code point: 82
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ##########    
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##########    
+  ##    ##      
+  ##      ##    
+  ##        ##  
+  ##        ##  
+                
+                
+                
+Code point: 83
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+    ########    
+  ##        ##  
+  ##            
+    ##          
+      ####      
+          ##    
+            ##  
+  ##        ##  
+    ########    
+                
+                
+                
+Code point: 84
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+##############
+      ##      
+      ##      
+      ##      
+      ##      
+      ##      
+      ##      
+      ##      
+      ##      
+              
+              
+              
+Code point: 85
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+    ##    ##    
+      ####      
+                
+                
+                
+Code point: 86
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+##          ##
+##          ##
+##          ##
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ##  ##    
+    ##  ##    
+      ##      
+              
+              
+              
+Code point: 87
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+##              ##
+##              ##
+##      ##      ##
+  ##    ##    ##  
+  ##  ##  ##  ##  
+  ##  ##  ##  ##  
+    ##      ##    
+    ##      ##    
+    ##      ##    
+                  
+                  
+                  
+Code point: 88
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+  ##          ##  
+  ##          ##  
+    ##      ##    
+      ##  ##      
+        ##        
+      ##  ##      
+    ##      ##    
+  ##          ##  
+  ##          ##  
+                  
+                  
+                  
+Code point: 89
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+  ##          ##  
+  ##          ##  
+    ##      ##    
+    ##      ##    
+      ##  ##      
+        ##        
+        ##        
+        ##        
+        ##        
+                  
+                  
+                  
+Code point: 90
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+  ##############  
+              ##  
+            ##    
+          ##      
+        ##        
+      ##          
+    ##            
+  ##              
+  ##############  
+                  
+                  
+                  
+Code point: 91
+Unicode: U+0000FFFD
+Width: 5
+Data:
+          
+          
+  ######  
+  ##      
+  ##      
+  ##      
+  ##      
+  ##      
+  ##      
+  ##      
+  ##      
+  ######  
+          
+          
+Code point: 92
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+  ##          
+  ##          
+    ##        
+    ##        
+      ##      
+        ##    
+        ##    
+          ##  
+          ##  
+              
+              
+              
+Code point: 93
+Unicode: U+0000FFFD
+Width: 5
+Data:
+          
+          
+  ######  
+      ##  
+      ##  
+      ##  
+      ##  
+      ##  
+      ##  
+      ##  
+      ##  
+  ######  
+          
+          
+Code point: 94
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+      ##      
+    ##  ##    
+  ##      ##  
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+Code point: 95
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+  ############  
+                
+                
+Code point: 96
+Unicode: U+0000FFFD
+Width: 3
+Data:
+##    
+##    
+##    
+  ##  
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+Code point: 97
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+    ######    
+          ##  
+    ########  
+  ##      ##  
+  ##      ##  
+    ########  
+              
+              
+              
+Code point: 98
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+  ##          
+  ##          
+  ##          
+  ######      
+  ##    ##    
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ########    
+              
+              
+              
+Code point: 99
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+    ######    
+  ##      ##  
+  ##          
+  ##          
+  ##      ##  
+    ######    
+              
+              
+              
+Code point: 100
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+          ##  
+          ##  
+          ##  
+      ######  
+    ##    ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ########  
+              
+              
+              
+Code point: 101
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+    ######    
+  ##      ##  
+  ##########  
+  ##          
+  ##      ##  
+    ######    
+              
+              
+              
+Code point: 102
+Unicode: U+0000FFFD
+Width: 5
+Data:
+          
+          
+    ####  
+  ##    ##
+  ##      
+  ##      
+######    
+  ##      
+  ##      
+  ##      
+  ##      
+          
+          
+          
+Code point: 103
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+    ####  ##  
+  ##    ####  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ########  
+          ##  
+  ##      ##  
+    ######    
+Code point: 104
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+  ##          
+  ##          
+  ##          
+  ##  ####    
+  ####    ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+              
+              
+              
+Code point: 105
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+      
+  ##  
+  ##  
+      
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+      
+      
+      
+Code point: 106
+Unicode: U+0000FFFD
+Width: 5
+Data:
+          
+          
+      ##  
+      ##  
+          
+    ####  
+      ##  
+      ##  
+      ##  
+      ##  
+      ##  
+##    ##  
+  ####    
+          
+Code point: 107
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+  ##          
+  ##          
+  ##          
+  ##      ##  
+  ##    ##    
+  ##  ##      
+  ######      
+  ##    ##    
+  ##      ##  
+              
+              
+              
+Code point: 108
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+      
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+      
+      
+      
+Code point: 109
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+                  
+                  
+                  
+  ######  ####    
+  ##    ##    ##  
+  ##    ##    ##  
+  ##    ##    ##  
+  ##    ##    ##  
+  ##    ##    ##  
+                  
+                  
+                  
+Code point: 110
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+  ##  ####    
+  ####    ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+              
+              
+              
+Code point: 111
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+    ######    
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ######    
+              
+              
+              
+Code point: 112
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+  ##  ####    
+  ####    ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ########    
+  ##          
+  ##          
+  ##          
+Code point: 113
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+    ####  ##  
+  ##    ####  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ########  
+          ##  
+          ##  
+          ####
+Code point: 114
+Unicode: U+0000FFFD
+Width: 6
+Data:
+            
+            
+            
+            
+            
+  ##  ####  
+  ####    ##
+  ##        
+  ##        
+  ##        
+  ##        
+            
+            
+            
+Code point: 115
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+                
+    ########    
+  ##        ##  
+    ####        
+        ####    
+  ##        ##  
+    ########    
+                
+                
+                
+Code point: 116
+Unicode: U+0000FFFD
+Width: 4
+Data:
+        
+        
+  ##    
+  ##    
+  ##    
+######  
+  ##    
+  ##    
+  ##    
+  ##    
+    ##  
+        
+        
+        
+Code point: 117
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##    ####  
+    ####  ##  
+              
+              
+              
+Code point: 118
+Unicode: U+0000FFFD
+Width: 5
+Data:
+          
+          
+          
+          
+          
+##      ##
+##      ##
+  ##  ##  
+  ##  ##  
+    ##    
+    ##    
+          
+          
+          
+Code point: 119
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+##          ##
+##    ##    ##
+  ##  ##  ##  
+  ##  ##  ##  
+    ##  ##    
+    ##  ##    
+              
+              
+              
+Code point: 120
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+                
+  ##        ##  
+    ##    ##    
+      ####      
+      ####      
+    ##    ##    
+  ##        ##  
+                
+                
+                
+Code point: 121
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ##  ##    
+    ##  ##    
+      ##      
+      ##      
+    ##        
+  ##          
+Code point: 122
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+                
+  ############  
+          ##    
+        ##      
+      ##        
+    ##          
+  ############  
+                
+                
+                
+Code point: 123
+Unicode: U+0000FFFD
+Width: 6
+Data:
+            
+      ####  
+    ##      
+    ##      
+    ##      
+    ##      
+  ##        
+    ##      
+    ##      
+    ##      
+    ##      
+      ####  
+            
+            
+Code point: 124
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+      
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+      
+      
+Code point: 125
+Unicode: U+0000FFFD
+Width: 6
+Data:
+            
+  ####      
+      ##    
+      ##    
+      ##    
+      ##    
+        ##  
+      ##    
+      ##    
+      ##    
+      ##    
+  ####      
+            
+            
+Code point: 126
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+                
+    ####    ##  
+  ##    ####    
+                
+                
+                
+                
+                
+                
+                
+Code point: 127
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+                  
+                  
+                  
+    ####  ####    
+  ##    ##    ##  
+  ##    ##    ##  
+    ####  ####    
+                  
+                  
+                  
+                  
+                  
+Code point: 128
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+      ####    
+    ##    ##  
+  ##          
+########      
+  ##          
+########      
+  ##          
+    ##    ##  
+      ####    
+              
+              
+              
+Code point: 129
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+  ############  
+    ##    ##    
+    ##    ##    
+    ##    ##    
+    ##    ##    
+    ##    ##    
+    ##    ##    
+                
+                
+                
+Code point: 130
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+      
+      
+      
+      
+      
+      
+      
+      
+  ##  
+  ##  
+  ##  
+##    
+      
+Code point: 131
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+    ######    
+  ##      ##  
+    ####      
+  ##          
+  ##      ##  
+    ######    
+              
+              
+              
+Code point: 132
+Unicode: U+0000FFFD
+Width: 6
+Data:
+            
+            
+            
+            
+            
+            
+            
+            
+            
+####  ####  
+  ##    ##  
+  ##    ##  
+##    ##    
+            
+Code point: 133
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+                
+    ######  ##  
+  ##      ##    
+  ##      ##    
+  ##      ##    
+  ##      ##    
+    ######  ##  
+                
+                
+                
+Code point: 134
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+      ##      
+      ##      
+  ##########  
+      ##      
+      ##      
+      ##      
+      ##      
+      ##      
+              
+              
+              
+              
+              
+Code point: 135
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+      ##      
+      ##      
+  ##########  
+      ##      
+      ##      
+  ##########  
+      ##      
+      ##      
+              
+              
+              
+              
+              
+Code point: 136
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ############  
+  ##            
+  ##            
+  ##            
+  ##            
+  ##            
+  ##            
+  ##            
+  ##            
+                
+                
+                
+Code point: 137
+Unicode: U+0000FFFD
+Width: 12
+Data:
+                        
+                        
+                        
+    ##                  
+  ##  ##    ##          
+    ##    ##            
+        ##              
+      ##                
+    ##    ##      ##    
+  ##    ##  ##  ##  ##  
+          ##      ##    
+                        
+                        
+                        
+Code point: 138
+Unicode: U+0000FFFD
+Width: 8
+Data:
+    ##      ##  
+      ##  ##    
+        ##      
+                
+    ########    
+  ##        ##  
+  ##            
+    ########    
+            ##  
+  ##        ##  
+    ########    
+                
+                
+                
+Code point: 139
+Unicode: U+0000FFFD
+Width: 5
+Data:
+          
+          
+          
+          
+      ##  
+    ##    
+  ##      
+    ##    
+      ##  
+          
+          
+          
+          
+          
+Code point: 140
+Unicode: U+0000FFFD
+Width: 13
+Data:
+                          
+                          
+      ##################  
+    ##      ##            
+  ##        ##            
+  ##        ##            
+  ##        ##########    
+  ##        ##            
+  ##        ##            
+    ##      ##            
+      ##################  
+                          
+                          
+                          
+Code point: 141
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+  ##############  
+    ##            
+      ##          
+        ##        
+          ##      
+        ##        
+      ##          
+    ##            
+  ##############  
+                  
+                  
+                  
+Code point: 142
+Unicode: U+0000FFFD
+Width: 8
+Data:
+    ##      ##  
+      ##  ##    
+        ##      
+  ############  
+            ##  
+          ##    
+        ##      
+      ##        
+    ##          
+  ##            
+  ############  
+                
+                
+                
+Code point: 143
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+                  
+                  
+                  
+    ##    ####    
+  ##    ##    ##  
+  ##    ##    ##  
+  ##    ##    ##  
+  ##    ##    ##  
+    ##########    
+        ##        
+        ##        
+        ##        
+Code point: 144
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ############  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+                
+                
+                
+Code point: 145
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+    ##
+  ##  
+  ##  
+  ####
+      
+      
+      
+      
+      
+      
+      
+      
+      
+Code point: 146
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+####  
+  ##  
+  ##  
+##    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+Code point: 147
+Unicode: U+0000FFFD
+Width: 6
+Data:
+            
+    ##    ##
+  ##    ##  
+  ##    ##  
+  ####  ####
+            
+            
+            
+            
+            
+            
+            
+            
+            
+Code point: 148
+Unicode: U+0000FFFD
+Width: 6
+Data:
+            
+####  ####  
+  ##    ##  
+  ##    ##  
+##    ##    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+Code point: 149
+Unicode: U+0000FFFD
+Width: 5
+Data:
+          
+          
+          
+          
+          
+  ####    
+########  
+########  
+  ####    
+          
+          
+          
+          
+          
+Code point: 150
+Unicode: U+0000FFFD
+Width: 6
+Data:
+            
+            
+            
+            
+            
+            
+            
+  ########  
+            
+            
+            
+            
+            
+            
+Code point: 151
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+  ##############  
+                  
+                  
+                  
+                  
+                  
+                  
+Code point: 152
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+                
+  ##        ##  
+  ##        ##  
+  ##        ##  
+    ##    ##    
+    ##    ##    
+      ####      
+      ##        
+      ##        
+      ##        
+Code point: 153
+Unicode: U+0000FFFD
+Width: 6
+Data:
+            
+            
+  ########  
+    ##      
+  ##        
+  ##        
+    ######  
+  ##        
+  ##        
+  ##        
+    ######  
+          ##
+          ##
+      ####  
+Code point: 154
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+    ##      ##  
+      ##  ##    
+        ##      
+                
+    ########    
+  ##        ##  
+    ####        
+        ####    
+  ##        ##  
+    ########    
+                
+                
+                
+Code point: 155
+Unicode: U+0000FFFD
+Width: 5
+Data:
+          
+          
+          
+          
+  ##      
+    ##    
+      ##  
+    ##    
+  ##      
+          
+          
+          
+          
+          
+Code point: 156
+Unicode: U+0000FFFD
+Width: 11
+Data:
+                      
+                      
+                      
+                      
+                      
+    ##############    
+  ##      ##      ##  
+  ##      ##########  
+  ##      ##          
+  ##      ##      ##  
+    ##############    
+                      
+                      
+                      
+Code point: 157
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+    ##########
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ######    
+              
+              
+              
+Code point: 158
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+  ##      ##  
+    ##  ##    
+      ##      
+              
+  ##########  
+        ##    
+      ##      
+    ##        
+  ##          
+  ##########  
+              
+              
+              
+Code point: 159
+Unicode: U+0000FFFD
+Width: 9
+Data:
+      ##  ##      
+      ##  ##      
+  ##          ##  
+  ##          ##  
+    ##      ##    
+    ##      ##    
+      ##  ##      
+        ##        
+        ##        
+        ##        
+        ##        
+                  
+                  
+                  
+Code point: 160
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+Code point: 161
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+      
+      
+  ##  
+  ##  
+      
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+      
+      
+Code point: 162
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+        ##      
+        ##      
+    ########    
+  ##    ##  ##  
+  ##    ##      
+  ##  ##        
+  ##  ##    ##  
+    ########    
+      ##        
+      ##        
+                
+Code point: 163
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+      ######    
+    ##      ##  
+    ##          
+    ##          
+  ########      
+    ##          
+    ##          
+    ##          
+    ##      ##  
+####  ######    
+                
+                
+                
+Code point: 164
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+  ##        ##  
+    ########    
+    ##    ##    
+    ##    ##    
+    ########    
+  ##        ##  
+                
+                
+                
+                
+                
+Code point: 165
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+      ######      
+    ##      ##    
+  ##          ##  
+  ##          ##  
+  ##          ##  
+  ##          ##  
+    ##      ##    
+    ##      ##    
+  ####      ####  
+                  
+                  
+                  
+Code point: 166
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+                  
+                  
+                  
+                  
+    ##      ##    
+  ##          ##  
+  ##    ##    ##  
+  ##    ##    ##  
+  ##    ##    ##  
+    ####  ####    
+                  
+                  
+                  
+Code point: 167
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+    ########    
+  ##        ##  
+    ##          
+      ####      
+    ##    ##    
+  ##        ##  
+  ##        ##  
+    ##    ##    
+      ####      
+          ##    
+  ##        ##  
+    ########    
+                
+Code point: 168
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+      ##      
+    ##  ##    
+    ##  ##    
+  ##      ##  
+  ##      ##  
+  ##      ##  
+##          ##
+##          ##
+##          ##
+              
+              
+              
+Code point: 169
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+  ##  ####    
+  ####    ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+          ##  
+          ##  
+          ##  
+Code point: 170
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+    ######    
+          ##  
+    ########  
+  ##      ##  
+    ########  
+              
+  ##########  
+              
+              
+              
+              
+              
+              
+Code point: 171
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+      ##    ##  
+    ##    ##    
+  ##    ##      
+    ##    ##    
+      ##    ##  
+                
+                
+                
+                
+                
+Code point: 172
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+              
+  ##########  
+          ##  
+          ##  
+          ##  
+              
+              
+              
+              
+Code point: 173
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+              
+  ##########  
+              
+              
+              
+              
+              
+              
+              
+Code point: 174
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+      ##      
+    ##  ##    
+    ##  ##    
+  ##      ##  
+  ##      ##  
+  ##      ##  
+##          ##
+##          ##
+##############
+              
+              
+              
+Code point: 175
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+  ##########  
+    ##        
+      ##      
+    ######    
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ######    
+              
+              
+              
+Code point: 176
+Unicode: U+0000FFFD
+Width: 6
+Data:
+            
+    ####    
+  ##    ##  
+  ##    ##  
+    ####    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+Code point: 177
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+      ##      
+      ##      
+  ##########  
+      ##      
+      ##      
+              
+  ##########  
+              
+              
+              
+Code point: 178
+Unicode: U+0000FFFD
+Width: 5
+Data:
+          
+  ####    
+      ##  
+    ##    
+  ##      
+  ######  
+          
+          
+          
+          
+          
+          
+          
+          
+Code point: 179
+Unicode: U+0000FFFD
+Width: 5
+Data:
+          
+  ####    
+      ##  
+  ####    
+      ##  
+  ####    
+          
+          
+          
+          
+          
+          
+          
+          
+Code point: 180
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+    ########    
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ############  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+    ########    
+                
+                
+                
+Code point: 181
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+                
+  ##      ##    
+  ##      ##    
+  ##      ##    
+  ##      ##    
+  ##      ##    
+  ########  ####
+  ##            
+  ##            
+  ##            
+Code point: 182
+Unicode: U+0000FFFD
+Width: 10
+Data:
+                    
+                    
+    ##############  
+  ##    ##    ##    
+  ##    ##    ##    
+  ##    ##    ##    
+    ######    ##    
+        ##    ##    
+        ##    ##    
+        ##    ##    
+        ##    ##    
+                    
+                    
+                    
+Code point: 183
+Unicode: U+0000FFFD
+Width: 4
+Data:
+        
+        
+        
+        
+        
+        
+  ####  
+  ####  
+        
+        
+        
+        
+        
+        
+Code point: 184
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ####          
+      ##        
+      ##        
+      ####      
+    ##  ##      
+    ##    ##    
+    ##    ##    
+  ##        ##  
+  ##        ##  
+                
+                
+                
+Code point: 185
+Unicode: U+0000FFFD
+Width: 5
+Data:
+          
+    ##    
+  ####    
+    ##    
+    ##    
+  ######  
+          
+          
+          
+          
+          
+          
+          
+          
+Code point: 186
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+    ######    
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ######    
+              
+  ##########  
+              
+              
+              
+              
+              
+              
+Code point: 187
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+                
+  ##    ##      
+    ##    ##    
+      ##    ##  
+    ##    ##    
+  ##    ##      
+                
+                
+                
+                
+                
+Code point: 188
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+    ##          
+  ####          
+    ##      ##  
+    ##    ##    
+    ##  ##      
+      ##        
+    ##  ##  ##  
+  ##    ##  ##  
+        ######  
+            ##  
+            ##  
+                
+                
+Code point: 189
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+    ##          
+  ####          
+    ##      ##  
+    ##    ##    
+    ##  ##      
+      ##        
+    ##  ####    
+  ##        ##  
+          ##    
+        ##      
+        ######  
+                
+                
+Code point: 190
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+  ####          
+      ##        
+  ####      ##  
+      ##  ##    
+  ####  ##      
+      ##        
+    ##  ##  ##  
+  ##    ##  ##  
+        ######  
+            ##  
+            ##  
+                
+                
+Code point: 191
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+      ##        
+      ##        
+                
+      ##        
+    ##          
+  ##            
+  ##            
+  ##        ##  
+    ########    
+                
+                
+                
+Code point: 192
+Unicode: U+0000FFFD
+Width: 7
+Data:
+  ##          
+    ##        
+      ##      
+      ##      
+    ##  ##    
+  ##      ##  
+  ##      ##  
+##          ##
+##############
+##          ##
+##          ##
+              
+              
+              
+Code point: 193
+Unicode: U+0000FFFD
+Width: 7
+Data:
+          ##  
+        ##    
+      ##      
+      ##      
+    ##  ##    
+  ##      ##  
+  ##      ##  
+##          ##
+##############
+##          ##
+##          ##
+              
+              
+              
+Code point: 194
+Unicode: U+0000FFFD
+Width: 7
+Data:
+      ##      
+    ##  ##    
+  ##      ##  
+      ##      
+    ##  ##    
+  ##      ##  
+  ##      ##  
+##          ##
+##############
+##          ##
+##          ##
+              
+              
+              
+Code point: 195
+Unicode: U+0000FFFD
+Width: 7
+Data:
+    ####    ##
+  ##    ####  
+              
+      ##      
+    ##  ##    
+  ##      ##  
+  ##      ##  
+##          ##
+##############
+##          ##
+##          ##
+              
+              
+              
+Code point: 196
+Unicode: U+0000FFFD
+Width: 7
+Data:
+    ##  ##    
+    ##  ##    
+              
+      ##      
+    ##  ##    
+  ##      ##  
+  ##      ##  
+##          ##
+##############
+##          ##
+##          ##
+              
+              
+              
+Code point: 197
+Unicode: U+0000FFFD
+Width: 7
+Data:
+      ##      
+    ##  ##    
+      ##      
+      ##      
+    ##  ##    
+  ##      ##  
+  ##      ##  
+##          ##
+##############
+##          ##
+##          ##
+              
+              
+              
+Code point: 198
+Unicode: U+0000FFFD
+Width: 13
+Data:
+                          
+                          
+        ################  
+      ##    ##            
+      ##    ##            
+    ##      ##            
+    ##      ##########    
+  ############            
+  ##        ##            
+  ##        ##            
+  ##        ############  
+                          
+                          
+                          
+Code point: 199
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+      ######    
+    ##      ##  
+  ##            
+  ##            
+  ##            
+  ##            
+    ##      ##  
+      ######    
+        ##      
+          ##    
+      ####      
+                
+Code point: 200
+Unicode: U+0000FFFD
+Width: 8
+Data:
+    ##          
+      ##        
+        ##      
+                
+  ############  
+  ##            
+  ##            
+  ##########    
+  ##            
+  ##            
+  ############  
+                
+                
+                
+Code point: 201
+Unicode: U+0000FFFD
+Width: 8
+Data:
+          ##    
+        ##      
+      ##        
+                
+  ############  
+  ##            
+  ##            
+  ##########    
+  ##            
+  ##            
+  ############  
+                
+                
+                
+Code point: 202
+Unicode: U+0000FFFD
+Width: 8
+Data:
+        ##      
+      ##  ##    
+    ##      ##  
+                
+  ############  
+  ##            
+  ##            
+  ##########    
+  ##            
+  ##            
+  ############  
+                
+                
+                
+Code point: 203
+Unicode: U+0000FFFD
+Width: 8
+Data:
+    ##    ##    
+    ##    ##    
+                
+  ############  
+  ##            
+  ##            
+  ##########    
+  ##            
+  ##            
+  ##            
+  ############  
+                
+                
+                
+Code point: 204
+Unicode: U+0000FFFD
+Width: 7
+Data:
+  ##          
+    ##        
+      ##      
+              
+  ##########  
+      ##      
+      ##      
+      ##      
+      ##      
+      ##      
+  ##########  
+              
+              
+              
+Code point: 205
+Unicode: U+0000FFFD
+Width: 7
+Data:
+          ##  
+        ##    
+      ##      
+              
+  ##########  
+      ##      
+      ##      
+      ##      
+      ##      
+      ##      
+  ##########  
+              
+              
+              
+Code point: 206
+Unicode: U+0000FFFD
+Width: 7
+Data:
+      ##      
+    ##  ##    
+  ##      ##  
+              
+  ##########  
+      ##      
+      ##      
+      ##      
+      ##      
+      ##      
+  ##########  
+              
+              
+              
+Code point: 207
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+    ##  ##    
+    ##  ##    
+              
+  ##########  
+      ##      
+      ##      
+      ##      
+      ##      
+      ##      
+  ##########  
+              
+              
+              
+Code point: 208
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+  ########      
+  ##      ##    
+  ##        ##  
+  ##        ##  
+########    ##  
+  ##        ##  
+  ##        ##  
+  ##      ##    
+  ########      
+                
+                
+                
+Code point: 209
+Unicode: U+0000FFFD
+Width: 9
+Data:
+    ####    ##    
+  ##    ####      
+                  
+  ##          ##  
+  ####        ##  
+  ##  ##      ##  
+  ##    ##    ##  
+  ##    ##    ##  
+  ##      ##  ##  
+  ##        ####  
+  ##          ##  
+                  
+                  
+                  
+Code point: 210
+Unicode: U+0000FFFD
+Width: 9
+Data:
+    ##            
+      ##          
+        ##        
+      ######      
+    ##      ##    
+  ##          ##  
+  ##          ##  
+  ##          ##  
+  ##          ##  
+    ##      ##    
+      ######      
+                  
+                  
+                  
+Code point: 211
+Unicode: U+0000FFFD
+Width: 9
+Data:
+            ##    
+          ##      
+        ##        
+      ######      
+    ##      ##    
+  ##          ##  
+  ##          ##  
+  ##          ##  
+  ##          ##  
+    ##      ##    
+      ######      
+                  
+                  
+                  
+Code point: 212
+Unicode: U+0000FFFD
+Width: 9
+Data:
+        ##        
+      ##  ##      
+    ##      ##    
+      ######      
+    ##      ##    
+  ##          ##  
+  ##          ##  
+  ##          ##  
+  ##          ##  
+    ##      ##    
+      ######      
+                  
+                  
+                  
+Code point: 213
+Unicode: U+0000FFFD
+Width: 9
+Data:
+      ####    ##  
+    ##    ####    
+                  
+      ######      
+    ##      ##    
+  ##          ##  
+  ##          ##  
+  ##          ##  
+  ##          ##  
+    ##      ##    
+      ######      
+                  
+                  
+                  
+Code point: 214
+Unicode: U+0000FFFD
+Width: 9
+Data:
+      ##  ##      
+      ##  ##      
+                  
+      ######      
+    ##      ##    
+  ##          ##  
+  ##          ##  
+  ##          ##  
+  ##          ##  
+    ##      ##    
+      ######      
+                  
+                  
+                  
+Code point: 215
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+  ##      ##  
+    ##  ##    
+      ##      
+    ##  ##    
+  ##      ##  
+              
+              
+              
+              
+              
+Code point: 216
+Unicode: U+0000FFFD
+Width: 9
+Data:
+                  
+              ##  
+      ######  ##  
+    ##      ##    
+  ##      ##  ##  
+  ##      ##  ##  
+  ##    ##    ##  
+  ##  ##      ##  
+  ##  ##      ##  
+    ##      ##    
+  ##  ######      
+  ##              
+                  
+                  
+Code point: 217
+Unicode: U+0000FFFD
+Width: 8
+Data:
+    ##          
+      ##        
+  ##    ##  ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+    ##    ##    
+      ####      
+                
+                
+                
+Code point: 218
+Unicode: U+0000FFFD
+Width: 8
+Data:
+          ##    
+        ##      
+  ##  ##    ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+    ##    ##    
+      ####      
+                
+                
+                
+Code point: 219
+Unicode: U+0000FFFD
+Width: 8
+Data:
+      ####      
+    ##    ##    
+                
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+    ##    ##    
+      ####      
+                
+                
+                
+Code point: 220
+Unicode: U+0000FFFD
+Width: 8
+Data:
+    ##    ##    
+    ##    ##    
+                
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##        ##  
+    ##    ##    
+      ####      
+                
+                
+                
+Code point: 221
+Unicode: U+0000FFFD
+Width: 9
+Data:
+            ##    
+          ##      
+  ##    ##    ##  
+  ##          ##  
+    ##      ##    
+    ##      ##    
+      ##  ##      
+        ##        
+        ##        
+        ##        
+        ##        
+                  
+                  
+                  
+Code point: 222
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+  ##          
+  ##          
+  ########    
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ########    
+  ##          
+  ##          
+              
+              
+Code point: 223
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+    ########    
+  ##        ##  
+  ##        ##  
+  ##        ##  
+  ##    ####    
+  ##        ##  
+  ##        ##  
+  ##  ##    ##  
+  ##    ####    
+  ##            
+  ##            
+                
+Code point: 224
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+    ##        
+      ##      
+        ##    
+              
+    ######    
+          ##  
+    ########  
+  ##      ##  
+  ##      ##  
+    ########  
+              
+              
+              
+Code point: 225
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+        ##    
+      ##      
+    ##        
+              
+    ######    
+          ##  
+    ########  
+  ##      ##  
+  ##      ##  
+    ########  
+              
+              
+              
+Code point: 226
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+      ##      
+    ##  ##    
+  ##      ##  
+              
+    ######    
+          ##  
+    ########  
+  ##      ##  
+  ##      ##  
+    ########  
+              
+              
+              
+Code point: 227
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+    ####    ##
+  ##    ####  
+              
+    ######    
+          ##  
+    ########  
+  ##      ##  
+  ##      ##  
+    ########  
+              
+              
+              
+Code point: 228
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+    ##  ##    
+    ##  ##    
+              
+    ######    
+          ##  
+    ########  
+  ##      ##  
+  ##      ##  
+    ########  
+              
+              
+              
+Code point: 229
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+      ##      
+    ##  ##    
+      ##      
+              
+    ######    
+          ##  
+    ########  
+  ##      ##  
+  ##      ##  
+    ########  
+              
+              
+              
+Code point: 230
+Unicode: U+0000FFFD
+Width: 11
+Data:
+                      
+                      
+                      
+                      
+                      
+    ##############    
+          ##      ##  
+    ################  
+  ##      ##          
+  ##      ##      ##  
+    ######  ######    
+                      
+                      
+                      
+Code point: 231
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+              
+    ######    
+  ##      ##  
+  ##          
+  ##      ##  
+    ######    
+      ##      
+        ##    
+    ####      
+              
+Code point: 232
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+    ##        
+      ##      
+        ##    
+              
+    ######    
+  ##      ##  
+  ##########  
+  ##          
+  ##      ##  
+    ######    
+              
+              
+              
+Code point: 233
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+        ##    
+      ##      
+    ##        
+              
+    ######    
+  ##      ##  
+  ##########  
+  ##          
+  ##      ##  
+    ######    
+              
+              
+              
+Code point: 234
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+      ##      
+    ##  ##    
+  ##      ##  
+              
+    ######    
+  ##      ##  
+  ##########  
+  ##          
+  ##      ##  
+    ######    
+              
+              
+              
+Code point: 235
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+    ##  ##    
+    ##  ##    
+              
+    ######    
+  ##      ##  
+  ##########  
+  ##          
+  ##      ##  
+    ######    
+              
+              
+              
+Code point: 236
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+##    
+####  
+  ##  
+      
+####  
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+      
+      
+      
+Code point: 237
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+    ##
+  ####
+  ##  
+      
+####  
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+      
+      
+      
+Code point: 238
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+      
+  ##  
+##  ##
+      
+####  
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+      
+      
+      
+Code point: 239
+Unicode: U+0000FFFD
+Width: 3
+Data:
+      
+      
+##  ##
+##  ##
+      
+####  
+  ##  
+  ##  
+  ##  
+  ##  
+  ##  
+      
+      
+      
+Code point: 240
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+    ##  ##    
+      ##      
+    ##  ##    
+          ##  
+      ######  
+    ##    ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ######    
+              
+              
+              
+Code point: 241
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+    ####    ##
+  ##    ####  
+              
+  ##  ####    
+  ####    ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+              
+              
+              
+Code point: 242
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+    ##        
+      ##      
+        ##    
+              
+    ######    
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ######    
+              
+              
+              
+Code point: 243
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+        ##    
+      ##      
+    ##        
+              
+    ######    
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ######    
+              
+              
+              
+Code point: 244
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+      ##      
+    ##  ##    
+  ##      ##  
+              
+    ######    
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ######    
+              
+              
+              
+Code point: 245
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+    ####    ##
+  ##    ####  
+              
+    ######    
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ######    
+              
+              
+              
+Code point: 246
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+    ##  ##    
+    ##  ##    
+              
+    ######    
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ######    
+              
+              
+              
+Code point: 247
+Unicode: U+0000FFFD
+Width: 8
+Data:
+                
+                
+                
+      ####      
+      ####      
+                
+  ############  
+                
+      ####      
+      ####      
+                
+                
+                
+                
+Code point: 248
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+              
+              
+          ##  
+    ######    
+  ##    ####  
+  ##  ##  ##  
+  ##  ##  ##  
+  ####    ##  
+    ######    
+  ##          
+              
+              
+Code point: 249
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+    ##        
+      ##      
+        ##    
+              
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##    ####  
+    ####  ##  
+              
+              
+              
+Code point: 250
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+        ##    
+      ##      
+    ##        
+              
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##    ####  
+    ####  ##  
+              
+              
+              
+Code point: 251
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+      ##      
+    ##  ##    
+  ##      ##  
+              
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##    ####  
+    ####  ##  
+              
+              
+              
+Code point: 252
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+    ##  ##    
+    ##  ##    
+              
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ##    ####  
+    ####  ##  
+              
+              
+              
+Code point: 253
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+        ##    
+      ##      
+    ##        
+              
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ##  ##    
+    ##  ##    
+      ##      
+      ##      
+    ##        
+  ##          
+Code point: 254
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+  ##          
+  ##          
+  ########    
+  ##      ##  
+  ##      ##  
+  ##      ##  
+  ########    
+  ##          
+  ##          
+              
+              
+              
+Code point: 255
+Unicode: U+0000FFFD
+Width: 7
+Data:
+              
+              
+    ##  ##    
+    ##  ##    
+              
+  ##      ##  
+  ##      ##  
+  ##      ##  
+    ##  ##    
+    ##  ##    
+      ##      
+      ##      
+    ##        
+  ##          

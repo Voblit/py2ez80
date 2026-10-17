@@ -47,7 +47,7 @@ class Parser {
         if (match(TokenType.KwContinue)) return new ContinueNode();
         if (match(TokenType.KwPass)) return new PassNode();
         if (match(TokenType.KwRaise)) return new RaiseNode(parseExpression());
-        if (match(TokenType.KwReturn)) return new ReturnNode(peek().type == TokenType.Newline ? null : parseExpression());
+        if (match(TokenType.KwReturn)) return new ReturnNode((peek().type == TokenType.Newline || peek().type == TokenType.Dedent) ? null : parseExpression());
 
         if (peek().type == TokenType.Identifier) {
             size_t save = idx;

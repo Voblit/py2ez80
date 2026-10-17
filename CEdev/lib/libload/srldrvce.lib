@@ -1,0 +1,8 @@
+	library	SRLDRVCE, 0
+
+	export	srl_Open
+	export	srl_Close
+	export	srl_Read
+	export	srl_Write
+	export	srl_GetCDCStandardDescriptors
+	export	srl_UsbEventCallback

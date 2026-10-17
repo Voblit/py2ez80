@@ -1,0 +1,14 @@
+	library	LCDDRVCE, 0
+
+	export	lcd_Init
+	export	lcd_Cleanup
+	export	lcd_Wait
+	export	lcd_SendSizedCommandRaw
+	export	lcd_SendParamsRaw
+	export	lcd_SendCommand
+	export	lcd_SendCommand1
+	export	lcd_SendCommand2
+	export	lcd_SendSizedCommandBytes
+	export	lcd_SendSizedCommandWords
+	export	lcd_SetUniformGamma
+	export	lcd_SetDefaultGamma

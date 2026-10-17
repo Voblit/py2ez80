@@ -23,7 +23,7 @@ void main(string[] args) {
     bool multi = false;
     bool isWizard = false;
     string[] files;
-    string ver = "1.4";
+    string ver = "1.4.1";
 
     foreach (arg; args[1 .. $]) {
         if (arg == "--only-c") onlyC = true;

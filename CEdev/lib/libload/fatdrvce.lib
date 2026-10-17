@@ -1,0 +1,20 @@
+	library	FATDRVCE, 3
+
+	export	fat_Open
+	export	fat_Close
+	export	fat_OpenDir
+	export	fat_ReadDir
+	export	fat_CloseDir
+	export	fat_OpenFile
+	export	fat_CloseFile
+	export	fat_SetFileSize
+	export	fat_GetFileSize
+	export	fat_SetAttrib
+	export	fat_GetAttrib
+	export	fat_SetFileBlockOffset
+	export	fat_GetFileBlockOffset
+	export	fat_ReadFile
+	export	fat_WriteFile
+	export	fat_Create
+	export	fat_Delete
+	export	fat_GetVolumeLabel

@@ -17,7 +17,6 @@ class CCodegen {
     private string[] includes;
     private string modulePrefix = "";
 
-
     private bool useHetero = false;
     private bool useException = false;
     private bool useListAppend = false;
@@ -276,7 +275,7 @@ class CCodegen {
                     auto elems = listNode ? listNode.elems : tupleNode.elems;
                     
                     foreach (i, elem; elems) {
-                        mainAssignments ~= assign.name ~ "[" ~ to!string(i) ~ "] = " ~ compileNode(elem) ~ "; ";
+                        mainAssignments ~= assign.name ~ "[" ~ to!string(i) ~ "] = " ~ compileNode(elem) ~ ";";
                     }
                 }
             }
@@ -429,7 +428,7 @@ class CCodegen {
             if (hetero) {
                 globalDeclarations ~= "static PyValue " ~ arrayName ~ "[" ~ to!string(listNode.elems.length) ~ "];\n";
                 foreach (i, elem; listNode.elems) {
-                    mainAssignments ~= arrayName ~ "[" ~ to!string(i) ~ "] = " ~ compileNode(elem) ~ "; ";
+                    mainAssignments ~= arrayName ~ "[" ~ to!string(i) ~ "] = " ~ compileNode(elem) ~ ";";
                 }
                 return "(PyValue){.type = PY_LIST, .l = (void*)" ~ arrayName ~ ", .size = " ~ to!string(listNode.elems.length) ~ "}";
             } else {
@@ -449,7 +448,7 @@ class CCodegen {
                     globalDeclarations ~= "static int " ~ arrayName ~ "[" ~ to!string(listNode.elems.length) ~ "];\n";
                 }
                 foreach (i, elem; listNode.elems) {
-                    mainAssignments ~= arrayName ~ "[" ~ to!string(i) ~ "] = " ~ compileNode(elem) ~ "; ";
+                    mainAssignments ~= arrayName ~ "[" ~ to!string(i) ~ "] = " ~ compileNode(elem) ~ ";";
                 }
                 return arrayName;
             }
@@ -461,7 +460,7 @@ class CCodegen {
             if (hetero) {
                 globalDeclarations ~= "static PyValue " ~ arrayName ~ "[" ~ to!string(tupleNode.elems.length) ~ "];\n";
                 foreach (i, elem; tupleNode.elems) {
-                    mainAssignments ~= arrayName ~ "[" ~ to!string(i) ~ "] = " ~ compileNode(elem) ~ "; ";
+                    mainAssignments ~= arrayName ~ "[" ~ to!string(i) ~ "] = " ~ compileNode(elem) ~ ";";
                 }
                 return "(PyValue){.type = PY_TUPLE, .l = (void*)" ~ arrayName ~ ", .size = " ~ to!string(tupleNode.elems.length) ~ "}";
             } else {
@@ -481,7 +480,7 @@ class CCodegen {
                     globalDeclarations ~= "static int " ~ arrayName ~ "[" ~ to!string(tupleNode.elems.length) ~ "];\n";
                 }
                 foreach (i, elem; tupleNode.elems) {
-                    mainAssignments ~= arrayName ~ "[" ~ to!string(i) ~ "] = " ~ compileNode(elem) ~ "; ";
+                    mainAssignments ~= arrayName ~ "[" ~ to!string(i) ~ "] = " ~ compileNode(elem) ~ ";";
                 }
                 return arrayName;
             }
