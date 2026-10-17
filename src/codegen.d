@@ -24,6 +24,7 @@ class CCodegen {
     private bool useStrConcat = false;
     private bool useMath = false;
     private bool useRandom = false;
+    private bool useGraphics = false;
 
     this(string modulePrefix = "") {
         this.modulePrefix = modulePrefix;
@@ -118,6 +119,7 @@ class CCodegen {
             if (auto objVar = cast(VarNode)mCall.obj) {
                 if (objVar.name == "math") useMath = true;
                 if (objVar.name == "random") useRandom = true;
+                if (objVar.name == "graphics") useGraphics = true;
             }
             foreach (arg; mCall.args) analyzeNode(arg);
         }
@@ -228,6 +230,7 @@ class CCodegen {
         useStrConcat = false;
         useMath = false;
         useRandom = false;
+        useGraphics = false;
 
         analyzeAST(ast);
 
@@ -240,6 +243,7 @@ class CCodegen {
         textSection ~= "#include <keypadc.h>";
         if (useException) textSection ~= "#include <setjmp.h>";
         textSection ~= "#include <math.h>";
+        if (useGraphics) textSection ~= "#include <graphx.h>";
         textSection ~= "";
         textSection ~= "#ifndef RAND_MAX";
         textSection ~= "#define RAND_MAX 32767";
@@ -571,6 +575,30 @@ class CCodegen {
                 return "((float)rand() / (float)RAND_MAX)";
             }
             if (auto varObj = cast(VarNode)mCall.obj) {
+                if (varObj.name == "graphics") {
+                    string argsList = "";
+                    foreach (i, arg; mCall.args) {
+                        argsList ~= compileNode(arg) ~ (i + 1 < mCall.args.length ? ", " : "");
+                    }
+                    if (mCall.method == "init") return "gfx_Begin(); gfx_SetDrawBuffer()";
+                    if (mCall.method == "end") return "gfx_End()";
+                    if (mCall.method == "swap") return "gfx_SwapDraw()";
+                    if (mCall.method == "fill") return "gfx_FillScreen(" ~ argsList ~ ")";
+                    if (mCall.method == "color") return "gfx_SetColor(" ~ argsList ~ ")";
+                    if (mCall.method == "set_rgb") {
+                        if (mCall.args.length == 4) {
+                            string idx = compileNode(mCall.args[0]);
+                            string r = compileNode(mCall.args[1]);
+                            string g = compileNode(mCall.args[2]);
+                            string b = compileNode(mCall.args[3]);
+                            return "gfx_palette[" ~ idx ~ "] = gfx_RGBTo1555(" ~ r ~ ", " ~ g ~ ", " ~ b ~ ")";
+                        }
+                    }
+                    if (mCall.method == "rect") return "gfx_Rectangle(" ~ argsList ~ ")";
+                    if (mCall.method == "circle") return "gfx_Circle(" ~ argsList ~ ")";
+                    if (mCall.method == "line") return "gfx_Line(" ~ argsList ~ ")";
+                }
+
                 string argsList = "";
                 foreach (i, arg; mCall.args) {
                     argsList ~= compileNode(arg) ~ (i + 1 < mCall.args.length ? ", " : "");
@@ -643,6 +671,7 @@ class CCodegen {
         else if (auto imp = cast(ImportNode)node) {
             if (imp.modName == "random") return "#include <stdlib.h>";
             if (imp.modName == "math") return "#include <math.h>";
+            if (imp.modName == "graphics") return "#include <graphx.h>";
             return "#include \"" ~ imp.modName ~ ".h\"";
         }
         else if (auto raise = cast(RaiseNode)node) {
