@@ -202,6 +202,8 @@ class CCodegen {
             foreach (stmt; ifNode.elseB) analyzeNode(stmt);
         } else if (auto fnDef = cast(FunctionDefNode)node) {
             foreach (stmt; fnDef.body) analyzeNode(stmt);
+        } else if (auto retNode = cast(ReturnNode)node) {
+            if (retNode.expr !is null) analyzeNode(retNode.expr);
         } else if (auto tryExcept = cast(TryExceptNode)node) {
             foreach (stmt; tryExcept.tryBody) analyzeNode(stmt);
             foreach (stmt; tryExcept.exceptBody) analyzeNode(stmt);
@@ -225,7 +227,7 @@ class CCodegen {
         useInput = false;
         useStrConcat = false;
         useMath = false;
-        useRandom = true; // Enable standard helpers for safety
+        useRandom = false;
 
         analyzeAST(ast);
 
@@ -244,19 +246,21 @@ class CCodegen {
         textSection ~= "#endif";
         textSection ~= "";
 
-        // Runtime helpers for math, random, and appends to satisfy linker
-        textSection ~= "static double math_sqrt(double x) { return sqrt(x); }";
-        textSection ~= "static void random_seed(int seed) { srand(seed); }";
-        textSection ~= "static int random_randint(int a, int b) { return a + (rand() % (b - a + 1)); }";
-        textSection ~= "static void scores_append(int val) { (void)val; }";
+        if (useMath) {
+            textSection ~= "static double math_sqrt(double x) { return sqrt(x); }";
+        }
+        if (useRandom) {
+            textSection ~= "static void random_seed(int seed) { srand(seed); }";
+            textSection ~= "static int random_randint(int a, int b) { return a + (rand() % (b - a + 1)); }";
+        }
+        if (useListAppend) {
+            textSection ~= "static void scores_append(int val) { (void)val; }";
+            textSection ~= "static void py_list_append(void* list, int val) { (void)list; (void)val; }";
+        }
 
         if (useException) {
             textSection ~= "static jmp_buf py_exception_env;";
             textSection ~= "static void py_raise(int err) { (void)err; longjmp(py_exception_env, 1); }";
-        }
-
-        if (useListAppend) {
-            textSection ~= "static void py_list_append(void* list, int val) { (void)list; (void)val; }";
         }
 
         if (useInput) {
