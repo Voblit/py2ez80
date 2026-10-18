@@ -63,7 +63,7 @@ the current python features are supported:
 * [x] Custom functions, parameters, and recursion
 * [x] **Primitives:** `int`, `float`, `bool`, `str`
 * [x] **Lists:** Regular list that support operations on them like `.append()`
-* [x] **Tuples:** Uneditable arrayd
+* [x] **Tuples:** Uneditable arrays
 * [x] **Dictionaries & Sets** 
 * [x] **Classes** 
 * [x] `print()`: Prints text to the screen
@@ -72,6 +72,7 @@ the current python features are supported:
 * [x] `import [program name]`: this allows you to import any python program in the project folder. The inbuilt math and random imports are still there. Keep in mind that any imported program must still be compatible with this list, as it is also transpiled.
 * [x] Exceptions (`try`, `except`, `finally`, `raise`)
 * [x] Graphics Library: explained below.
+* [x] Variable conversions: Convert variables from one variable type to another using `int()`, `float()`, or `str()`
 ---
 ---
 ## 4. The `graphics` Library Reference
