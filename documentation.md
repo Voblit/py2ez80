@@ -9,10 +9,9 @@ Welcome to the **Py2eZ80** reference guide. This is a guide to help you get acli
 
 Because Py2eZ80 transpiles to C before compiling to ez80 machine code, there are some key differences.
 
-* **Static Type Inference:** Variables are statically typed during compilation based on their initial assignment (`int`, `float`, `const char*`, or static arrays). You cannot dynamically change a variable's type later.
+* **Static Type Inference:** Variables are statically typed during compilation based on their initial assignment (`int`, `float`, `const char*`, or static arrays). You cannot dynamically change a variable's type later unless you use `string()`, `float()`, or `int()`.
 * **Fixed-Size Lists & Arrays:** Lists and tuples must be initialized with fixed sizes. Dynamic resizing (`append`) has small amount of overhead on runtime, so use sparsely.
 * **No Dynamic Dictionaries/Sets:** `dict` and `set` constructs parse safely into stubs (`NULL`) for compatibility, but are not fully implemented as dynamic hash maps.
-* **Program Entry & Exit:** Execution starts at the top-level script statements (compiled into `main()`). You must explicitly handle screen updates and key polling.
 
 ---
 
@@ -53,7 +52,7 @@ def add(a, b):
 result = add(5, 3)
 
 ```
-## 3. Regular python support
+## 3. List of supported python features
 the current python features are supported: 
 * [x] Global and local variables
 * [x] math operations (`+=`, `-=`, `*=`, `/=`)
