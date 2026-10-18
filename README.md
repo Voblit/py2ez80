@@ -27,7 +27,7 @@
   <img src="https://img.shields.io/badge/License-MIT-green" />
 </p>
 
-[Overview](#overview) | [Why Py2eZ80](#why-py2ez80) |[Dependancies and Getting Started](#getting-started) | [Language Support](#language-support) | [Testing](#test) | [Building it Thyself](#building-from-source) | [Architecture](#architecture) | [License](#license)
+[Overview](#overview) | [Why Py2eZ80](#why-py2ez80) | [Dependancies and Getting Started](#getting-started) | [Language Support](#language-support) | [Testing](#test) | [Building it Thyself](#building-from-source) | [Architecture](#architecture) | [License](#license)
 
 </div>
 
