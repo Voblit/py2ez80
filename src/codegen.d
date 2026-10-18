@@ -277,8 +277,6 @@ class CCodegen {
             textSection ~= "    return buf;";
             textSection ~= "}";
         }
-
-        // Type conversion and string concatenation helpers
         textSection ~= "static char py_str_bufs[4][256];";
         textSection ~= "static int py_str_buf_idx = 0;";
         textSection ~= "static char* py_str_concat(const char* s1, const char* s2) {";
