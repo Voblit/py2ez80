@@ -616,6 +616,19 @@ class CCodegen {
                     if (mCall.method == "rect") return "gfx_Rectangle(" ~ argsList ~ ")";
                     if (mCall.method == "circle") return "gfx_Circle(" ~ argsList ~ ")";
                     if (mCall.method == "line") return "gfx_Line(" ~ argsList ~ ")";
+                    if (mCall.method == "text") {
+                        if (mCall.args.length == 3) {
+                            string txt = compileNode(mCall.args[0]);
+                            string x = compileNode(mCall.args[1]);
+                            string y = compileNode(mCall.args[2]);
+                            return "gfx_PrintStringXY(" ~ txt ~ ", " ~ x ~ ", " ~ y ~ ")";
+                        }
+                    }
+                    if (mCall.method == "text_color") {
+                        if (mCall.args.length == 1) {
+                            return "gfx_SetTextFGColor(" ~ compileNode(mCall.args[0]) ~ ")";
+                        }
+                    }
                 }
 
                 string argsList = "";
