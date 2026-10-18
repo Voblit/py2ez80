@@ -97,6 +97,6 @@ Importing `graphics` lets you create colorful graphics and whole games!
 ## 4. Built-in TI Functions
 
 * `os_ClrHome()`: Clears the text home screen.
-* `os_GetCSC()`: Polls the keypad for any keypress (returns non-zero if a key is pressed). Non-blocking.
+* `os_GetCSC()`: Polls the keypad for any keypress (returns a number for different keys, I haven't been able to record all of them so it will require your own testing). Non-blocking.
 
 ---
