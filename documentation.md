@@ -1,7 +1,7 @@
 
 # py2ez80 reference
 
-Welcome to the **Py2eZ80** reference guide. This is a guide to help you get aclimitized to the difference between py2ez80-compiled-python and normal pythonm
+This is a guide to help you get aclimitized to the difference between py2ez80-transpiled-python and normal python.
 
 ---
 
