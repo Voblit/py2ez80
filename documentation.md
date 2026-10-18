@@ -91,6 +91,7 @@ Importing `graphics` lets you create colorful graphics and whole games!
 | `graphics.circle(x, y, r)` | `gfx_Circle(x, y, r);` | Draws an unfilled circle centered at `(x, y)` with radius `r`. |
 | `graphics.line(x1, y1, x2, y2)` | `gfx_Line(x1, y1, x2, y2);` | Draws a straight line from `(x1, y1)` to `(x2, y2)`. |
 | `graphics.text(str, x, y)` | `gfx_PrintStringXY(str, x, y);` | Renders text string at coordinate (x, y). |
+| `graphics.text_color(color)` | `gfx_SetTextFGColor(color)` | Changes color of text. |
 
 ---
 
