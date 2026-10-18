@@ -53,9 +53,28 @@ def add(a, b):
 result = add(5, 3)
 
 ```
-
+## 3. Regular python support
+the current python features are supported: 
+* [x] Global and local variables
+* [x] math operations (`+=`, `-=`, `*=`, `/=`)
+* [x] Conditions (`if`, `elif`, `else`)
+* [x] Loops (`while` loops and `for` loops using `range()`)
+* [x] Loop control (`break`, `continue`, `pass`)
+* [x] Custom functions, parameters, and recursion
+* [x] **Primitives:** `int`, `float`, `bool`, `str`
+* [x] **Lists:** Regular list that support operations on them like `.append()`
+* [x] **Tuples:** Uneditable arrayd
+* [x] **Dictionaries & Sets** 
+* [x] **Classes** 
+* [x] `print()`: Prints text to the screen
+* [x] `input()`: Uses getkey
+* [x] `len()`: Check array length
+* [x] `import [program name]`: this allows you to import any python program in the project folder. The inbuilt math and random imports are still there. Keep in mind that any imported program must still be compatible with this list, as it is also transpiled.
+* [x] Exceptions (`try`, `except`, `finally`, `raise`)
+* [x] Graphics Library: explained below.
 ---
-## 3. The `graphics` Library Reference
+---
+## 4. The `graphics` Library Reference
 
 Importing `graphics` lets you create colorful graphics and whole games!
 
