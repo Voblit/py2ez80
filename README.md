@@ -120,7 +120,8 @@ the current python features are supported:
 * [x] `len()`: Check array length
 * [x] `import [program name]`: this allows you to import any python program in the project folder. The inbuilt math and random imports are still there. Keep in mind that any imported program must still be compatible with this list, as it is also transpiled.
 * [x] Exceptions (`try`, `except`, `finally`, `raise`)
-* [x] Graphics Library: explained further in `documentation.md`, this same checklist is provided there. 
+* [x] Graphics Library: explained further in `documentation.md`, this same checklist is provided there.
+* [x] Variable conversions: Convert variables from one variable type to another using `int()`, `float()`, or `str()`
 ---
 
 ## Test
