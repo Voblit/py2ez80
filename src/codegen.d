@@ -175,6 +175,8 @@ class CCodegen {
             } else if (auto callNode = cast(CallNode)assign.expr) {
                 if (callNode.name == "input" || callNode.name == "str") {
                     trackVar(assign.name, "const char*");
+                } else if (callNode.name == "float") {
+                    trackVar(assign.name, "float");
                 } else {
                     trackVar(assign.name, "int");
                 }
@@ -276,18 +278,26 @@ class CCodegen {
             textSection ~= "}";
         }
 
-        if (useStrConcat || useHetero) {
-            textSection ~= "static char py_str_bufs[4][256];";
-            textSection ~= "static int py_str_buf_idx = 0;";
-            textSection ~= "static char* py_str_concat(const char* s1, const char* s2) {";
-            textSection ~= "    py_str_buf_idx = (py_str_buf_idx + 1) % 4;";
-            textSection ~= "    char* buf = py_str_bufs[py_str_buf_idx];";
-            textSection ~= "    buf[0] = '\\0';";
-            textSection ~= "    strncat(buf, s1, 255);";
-            textSection ~= "    strncat(buf, s2, 255 - strlen(buf));";
-            textSection ~= "    return buf;";
-            textSection ~= "}";
-        }
+        // Type conversion and string concatenation helpers
+        textSection ~= "static char py_str_bufs[4][256];";
+        textSection ~= "static int py_str_buf_idx = 0;";
+        textSection ~= "static char* py_str_concat(const char* s1, const char* s2) {";
+        textSection ~= "    py_str_buf_idx = (py_str_buf_idx + 1) % 4;";
+        textSection ~= "    char* buf = py_str_bufs[py_str_buf_idx];";
+        textSection ~= "    buf[0] = '\\0';";
+        textSection ~= "    strncat(buf, s1, 255);";
+        textSection ~= "    strncat(buf, s2, 255 - strlen(buf));";
+        textSection ~= "    return buf;";
+        textSection ~= "}";
+        textSection ~= "static char py_num_str_buf[32];";
+        textSection ~= "static const char* py_str_from_int(int n) {";
+        textSection ~= "    sprintf(py_num_str_buf, \"%d\", n);";
+        textSection ~= "    return py_num_str_buf;";
+        textSection ~= "}";
+        textSection ~= "static const char* py_str_from_float(double f) {";
+        textSection ~= "    sprintf(py_num_str_buf, \"%f\", f);";
+        textSection ~= "    return py_num_str_buf;";
+        textSection ~= "}";
 
         foreach (node; ast) {
             if (auto assign = cast(AssignNode)node) {
@@ -526,6 +536,15 @@ class CCodegen {
             return compAssign.name ~ " " ~ compAssign.op ~ " " ~ compileNode(compAssign.expr) ~ ";";
         }
         else if (auto call = cast(CallNode)node) {
+            if (call.name == "str") {
+                return "py_str_from_int(" ~ compileNode(call.args[0]) ~ ")";
+            }
+            if (call.name == "int") {
+                return "(int)(" ~ compileNode(call.args[0]) ~ ")";
+            }
+            if (call.name == "float") {
+                return "(double)(" ~ compileNode(call.args[0]) ~ ")";
+            }
             if (call.name == "print") {
                 string result = "";
                 foreach (arg; call.args) {
