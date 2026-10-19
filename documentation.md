@@ -13,6 +13,7 @@ Because Py2eZ80 transpiles to C before compiling to ez80 machine code, there are
 * **Fixed-Size Lists & Arrays:** Lists and tuples must be initialized with fixed sizes. Dynamic resizing (`append`) has small amount of overhead on runtime, so use sparsely.
 * **No Dynamic Dictionaries/Sets:** `dict` and `set` constructs parse safely into stubs (`NULL`) for compatibility, but are not fully implemented as dynamic hash maps.
 
+A random quirk I also noticed is that it occasionally spits out an error for some nested empty lines and comments, so try to avoid them, and if the program starts screaming at you remove all of those blank lines and comments before making an issue on this repo.
 ---
 
 ## 2. Example syntax
