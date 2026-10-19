@@ -9,11 +9,8 @@ This is a guide to help you get aclimitized to the difference between py2ez80-tr
 
 Because Py2eZ80 transpiles to C before compiling to ez80 machine code, there are some key differences.
 
-* **Static Type Inference:** Variables are statically typed during compilation based on their initial assignment (`int`, `float`, `const char*`, or static arrays). You cannot dynamically change a variable's type later unless you use `string()`, `float()`, or `int()`.
-* **Fixed-Size Lists & Arrays:** Lists and tuples must be initialized with fixed sizes. Dynamic resizing (`append`) has small amount of overhead on runtime, so use sparsely.
-* **No Dynamic Dictionaries/Sets:** `dict` and `set` constructs parse safely into stubs (`NULL`) for compatibility, but are not fully implemented as dynamic hash maps.
+Variables are statically typed *but* can be converted to other types using `string()`, `float()`, or `int()`. Lists and tuples must be initialized with fixed sizes, and dynamic resizing via `append` has overhead at runtime, so use it sparingly instead of pretending you are in an actual python enviroment. `dict` and `set` constructs parse safely into stubs (`NULL`) so old programs don't explode, but they are not fully implemented as dynamic hash maps. A random quirk I also noticed is that it occasionally spits out an error for some nested empty lines and comments, so try to avoid them, and if the program starts screaming at you, remove all of those blank lines and comments before making an issue on this repo.
 
-A random quirk I also noticed is that it occasionally spits out an error for some nested empty lines and comments, so try to avoid them, and if the program starts screaming at you remove all of those blank lines and comments before making an issue on this repo.
 ---
 
 ## 2. Example syntax
