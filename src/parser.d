@@ -47,6 +47,10 @@ class Parser {
         if (match(TokenType.KwContinue)) return new ContinueNode();
         if (match(TokenType.KwPass)) return new PassNode();
         if (match(TokenType.KwRaise)) return new RaiseNode(parseExpression());
+        if (match(TokenType.KwGlobal)) {
+            string varName = consume().value;
+            return new GlobalNode(varName);
+        }
         if (match(TokenType.KwReturn)) return new ReturnNode((peek().type == TokenType.Newline || peek().type == TokenType.Dedent) ? null : parseExpression());
 
         if (peek().type == TokenType.Identifier) {
@@ -223,7 +227,7 @@ class Parser {
 
     private ASTNode parseFromImport() {
         string modName = consume().value;
-        if (peek().type == TokenType.Identifier && peek().value == "import") {
+        if (peek().type == TokenType.KwImport) {
             consume();
         } else {
             throw new Exception("Expected 'import' after module name in from-import");

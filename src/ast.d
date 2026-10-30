@@ -146,6 +146,9 @@ class MethodCallNode : ASTNode {
         this.obj = obj; this.method = method; this.args = args;
     }
     override string toC() {
+        if (method == "append") {
+            return "py_list_append(" ~ obj.toC() ~ ", (void*)" ~ args[0].toC() ~ ")";
+        }
         if (auto varObj = cast(VarNode)obj) {
             string argsList = "";
             foreach (i, a; args) {
@@ -153,7 +156,6 @@ class MethodCallNode : ASTNode {
             }
             return varObj.name ~ "_" ~ method ~ "(" ~ argsList ~ ")";
         }
-        if (method == "append") return "py_list_append(&" ~ obj.toC() ~ ", " ~ args[0].toC() ~ ")";
         string res = obj.toC() ~ "_" ~ method ~ "(";
         foreach(i, a; args) {
             res ~= a.toC() ~ (i < args.length - 1 ? ", " : "");
@@ -161,7 +163,6 @@ class MethodCallNode : ASTNode {
         return res ~ ")";
     }
 }
-
 class IfNode : ASTNode {
     ASTNode cond;
     ASTNode[] thenB, elseB;
@@ -242,6 +243,12 @@ class ReturnNode : ASTNode {
 class BreakNode : ASTNode { override string toC() { return "break;"; } }
 class ContinueNode : ASTNode { override string toC() { return "continue;"; } }
 class PassNode : ASTNode { override string toC() { return "/* pass */;"; } }
+
+class GlobalNode : ASTNode {
+    string varName;
+    this(string varName) { this.varName = varName; }
+    override string toC() { return "/* global " ~ varName ~ " */"; }
+}
 
 class ImportNode : ASTNode {
     string modName, aliasName;

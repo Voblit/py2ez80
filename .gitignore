@@ -3,4 +3,8 @@
 *.obj
 *.res
 *.8xp
+*.py
 CEdev/
+original_before_claude/
+examples/
+testgame/

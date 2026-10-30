@@ -12,7 +12,7 @@ enum TokenType {
     Colon, Indent, Dedent, Newline,
     KwIf, KwElif, KwElse, KwWhile, KwFor, KwIn, KwRange,
     KwDef, KwReturn, KwAnd, KwOr, KwNot, KwTrue, KwFalse,
-    KwBreak, KwContinue, KwPass, KwClass, KwTry, KwExcept, KwFinally, KwRaise, KwImport, KwFrom,
+    KwBreak, KwContinue, KwPass, KwClass, KwTry, KwExcept, KwFinally, KwRaise, KwImport, KwFrom, KwGlobal,
     LParen, RParen, LBracket, RBracket, LBrace, RBrace, Comma, Dot, EOF
 }
 
@@ -98,6 +98,7 @@ class Lexer {
                 else if (val == "raise") t = TokenType.KwRaise;
                 else if (val == "import") t = TokenType.KwImport;
                 else if (val == "from") t = TokenType.KwFrom;
+                else if (val == "global") t = TokenType.KwGlobal;
                 tokens ~= Token(t, val, line);
                 continue;
             }
@@ -109,6 +110,7 @@ class Lexer {
             }
             if (pos + 1 < src.length) {
                 string pair = src[pos .. pos+2];
+                if (pair == "//") { tokens ~= Token(TokenType.Slash, "/", line); pos += 2; continue; }
                 if (pair == "==") { tokens ~= Token(TokenType.EqualEqual, "==", line); pos += 2; continue; }
                 if (pair == "!=") { tokens ~= Token(TokenType.NotEqual, "!=", line); pos += 2; continue; }
                 if (pair == "<=") { tokens ~= Token(TokenType.LessEqual, "<=", line); pos += 2; continue; }
@@ -148,3 +150,4 @@ class Lexer {
         return tokens;
     }
 }
+
