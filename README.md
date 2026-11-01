@@ -11,7 +11,7 @@
   </a>
   <img src="https://img.shields.io/badge/Written%20In-D-BA595E?logo=d" />
   <img src="https://img.shields.io/badge/Source-Python_3-3776AB?logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Target-TI-84+CE-FF6F00" />
+  <img src="https://img.shields.io/badge/Target-TI--84%2BCE-FF6F00" />
   <a href="https://github.com/Voblit/py2ez80">
     <img src="https://img.shields.io/github/languages/code-size/Voblit/py2ez80" />
   </a>
