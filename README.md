@@ -11,7 +11,7 @@
   </a>
   <img src="https://img.shields.io/badge/Written%20In-D-BA595E?logo=d" />
   <img src="https://img.shields.io/badge/Source-Python_3-3776AB?logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Target-eZ80_CPU-FF6F00" />
+  <img src="https://img.shields.io/badge/Target-TI-84+CE-FF6F00" />
   <a href="https://github.com/Voblit/py2ez80">
     <img src="https://img.shields.io/github/languages/code-size/Voblit/py2ez80" />
   </a>
@@ -24,7 +24,6 @@
   <a href="https://github.com/Voblit/py2ez80/releases/latest">
     <img src="https://img.shields.io/github/v/release/Voblit/py2ez80?include_prereleases" />
   </a>
-  <img src="https://img.shields.io/badge/License-MIT-green" />
 </p>
 
 [Overview](#overview) | [Why Py2eZ80](#why-py2ez80) | [Dependancies and Getting Started](#getting-started) | [Language Support](#language-support) | [Testing](#test) | [Building it Thyself](#building-from-source) | [Architecture](#architecture) | [License](#license)
