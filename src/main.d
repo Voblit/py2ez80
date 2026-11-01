@@ -23,6 +23,8 @@ void main(string[] args) {
     bool multi = false;
     bool isWizard = false;
     string[] files;
+
+    //I always forget to update the version every release
     string ver = "1.5.1";
 
     foreach (arg; args[1 .. $]) {
@@ -170,6 +172,30 @@ void runPipeline(string inFile, bool onlyC) {
 
     std.file.write(cOutFile, generator.getSourceCode());
 
+    string gfxSrc = buildPath(sourceDir, "gfx");
+    string gfxDst = buildPath(srcDir, "gfx");
+    bool usesGfx = generator.usesGfxAssets;
+    string yamlName = exists(buildPath(gfxSrc, "convimg.yaml")) ? "convimg.yaml" : (exists(buildPath(gfxSrc, "convimg.yml")) ? "convimg.yml" : "");
+
+    if (exists(gfxDst)) rmdirRecurse(gfxDst);
+//look ma, convimg!
+    if (usesGfx) {
+        if (yamlName.length == 0) {
+            stderr.writeln(RED ~ "Error: graphics.load()/graphics.palette() need a convimg.yaml, but this file does not exist: " ~ buildPath(gfxSrc, "convimg.yaml") ~ RESET);
+            return;
+        }
+        mkdirRecurse(gfxDst);
+        foreach (entry; dirEntries(gfxSrc, SpanMode.depth)) {
+            if (entry.isFile) {
+                string relName = relativePath(entry.name, gfxSrc);
+                if (yamlName == "convimg.yml" && relName == "convimg.yml") relName = "convimg.yaml";
+                string target = buildPath(gfxDst, relName);
+                mkdirRecurse(dirName(target));
+                copy(entry.name, target);
+            }
+        }
+    }
+
     string makefileContent = 
 "NAME = " ~ appName ~ "\n" ~
 "DESCRIPTION = \"Py2eZ80 Generated App\"\n" ~
@@ -184,6 +210,21 @@ void runPipeline(string inFile, bool onlyC) {
     std.file.write(makefileFile, makefileContent);
 
     writeln(CYAN ~ "[2/4] Invoking CEdev toolchain for " ~ appName ~ "..." ~ RESET);
+
+    if (usesGfx) {
+        string convimgExe = buildPath(cedevDir, "bin", "convimg");
+        version(Windows) convimgExe ~= ".exe";
+        if (!exists(convimgExe)) {
+            stderr.writeln(RED ~ "Error: could not find convimg at " ~ convimgExe ~ RESET);
+            return;
+        }
+        writeln(CYAN ~ "[2/4] Converting sprites with convimg..." ~ RESET);
+        auto gfxPid = spawnProcess([convimgExe], stdin, stdout, stderr, null, Config.none, gfxDst);
+        if (wait(gfxPid) != 0) {
+            stderr.writeln(RED ~ "Error: convimg failed! Check your gfx/convimg.yaml." ~ RESET);
+            return;
+        }
+    }
 
     int exitCode;
 

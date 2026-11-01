@@ -3,7 +3,7 @@ module codegen;
 import ast;
 import std.string;
 import std.conv;
-import std.array;
+import std.array;import std.algorithm;
 
 class CCodegen {
     private string[] textSection;
@@ -31,6 +31,9 @@ class CCodegen {
     private bool finalPass = false;
     private int tmpCounter = 0;
     private long[string] constVals;
+
+    public bool usesGfxAssets = false;
+    private bool[string] gfxAssetNames;
 
     private bool useHetero = false;
     private bool useException = false;
@@ -117,6 +120,11 @@ class CCodegen {
         if (auto mCall = cast(MethodCallNode)node) {
             auto objVar = cast(VarNode)mCall.obj;
             if (objVar !is null && objVar.name == "random" && mCall.method == "random") return "float";
+            if (objVar !is null && objVar.name == "math" && mCall.method == "sqrt") return "float";
+            if (objVar !is null && objVar.name == "graphics") {
+                if (mCall.method == "sprite" || mCall.method == "get_sprite" || mCall.method == "flip_x" ||
+                    mCall.method == "flip_y" || mCall.method == "rotate" || mCall.method == "load") return "gfx_sprite_t*";
+            }
             if (objVar !is null && typeOfVar(objVar.name) == "PyList*" && mCall.method == "pop") return elemOf(objVar.name);
             return "int";
         }
@@ -244,6 +252,16 @@ class CCodegen {
             if (depth == 0 && i + 1 < c.length) return c;
         }
         return c[1 .. $ - 1];
+    }
+
+    private bool isCIdent(string v) {
+        if (v.length == 0) return false;
+        for (size_t i = 0; i < v.length; i++) {
+            bool letter = (v[i] >= 'a' && v[i] <= 'z') || (v[i] >= 'A' && v[i] <= 'Z') || v[i] == '_';
+            bool digit = v[i] >= '0' && v[i] <= '9';
+            if (!letter && !(digit && i > 0)) return false;
+        }
+        return true;
     }
 
     private bool hasTryStmt(ASTNode[] nodes) {
@@ -546,6 +564,10 @@ class CCodegen {
                 if (objVar.name == "math") useMath = true;
                 if (objVar.name == "random") useRandom = true;
                 if (objVar.name == "graphics") useGraphics = true;
+                if (objVar.name == "graphics" && (mCall.method == "load" || mCall.method == "palette")) usesGfxAssets = true;
+                if (objVar.name == "graphics" && mCall.method == "load" && mCall.args.length == 1) {
+                    if (auto assetArg = cast(StringNode)mCall.args[0]) gfxAssetNames[assetArg.val] = true;
+                }
                 if (mCall.method == "append" && mCall.args.length == 1) {
                     string key = varKey(objVar.name);
                     if (key !in listElemTypes) {
@@ -719,6 +741,8 @@ class CCodegen {
         useMath = false;
         useRandom = false;
         useGraphics = false;
+        usesGfxAssets = false;
+        gfxAssetNames.clear();
 
         analyzeAST(ast);
         textSection ~= "#pragma clang diagnostic ignored \"-Wunused-function\"";
@@ -734,6 +758,12 @@ class CCodegen {
         if (useException) textSection ~= "#include <setjmp.h>";
         textSection ~= "#include <math.h>";
         if (useGraphics) textSection ~= "#include <graphx.h>";
+        if (usesGfxAssets) {
+            textSection ~= "#include \"gfx/gfx.h\"";
+            auto assetNames = gfxAssetNames.keys;
+            sort(assetNames);
+            foreach (assetName; assetNames) textSection ~= "#undef " ~ assetName;
+        }
         textSection ~= "";
         textSection ~= "#ifndef RAND_MAX";
         textSection ~= "#define RAND_MAX 32767";
@@ -808,6 +838,44 @@ class CCodegen {
         textSection ~= "    sprintf(buf, \"%f\", f);";
         textSection ~= "    return buf;";
         textSection ~= "}";
+        if (useGraphics) {
+            textSection ~= "static gfx_sprite_t* py_sprite_ints(int w, int h, const int* d, int n) {";
+            textSection ~= "    int i;";
+            textSection ~= "    gfx_sprite_t* s = gfx_MallocSprite(w, h);";
+            textSection ~= "    if (s == NULL) return NULL;";
+            textSection ~= "    for (i = 0; i < w * h; i++) s->data[i] = (i < n) ? (uint8_t)d[i] : 0;";
+            textSection ~= "    return s;";
+            textSection ~= "}";
+            textSection ~= "static gfx_sprite_t* py_sprite_list(int w, int h, PyList* l) {";
+            textSection ~= "    int i;";
+            textSection ~= "    gfx_sprite_t* s = gfx_MallocSprite(w, h);";
+            textSection ~= "    if (s == NULL) return NULL;";
+            textSection ~= "    for (i = 0; i < w * h; i++) s->data[i] = (i < l->size) ? (uint8_t)(intptr_t)l->data[i] : 0;";
+            textSection ~= "    return s;";
+            textSection ~= "}";
+            textSection ~= "static void py_sprite_scaled(gfx_sprite_t* s, int x, int y, int sw, int sh, int t) {";
+            textSection ~= "    if (s == NULL || sw < 1 || sh < 1) return;";
+            textSection ~= "    if (x < 0 || y < 0 || x + s->width * sw > GFX_LCD_WIDTH || y + s->height * sh > GFX_LCD_HEIGHT) return;";
+            textSection ~= "    if (t) gfx_ScaledTransparentSprite_NoClip(s, x, y, sw, sh);";
+            textSection ~= "    else gfx_ScaledSprite_NoClip(s, x, y, sw, sh);";
+            textSection ~= "}";
+            textSection ~= "static gfx_sprite_t* py_sprite_flip(gfx_sprite_t* s, int mode) {";
+            textSection ~= "    gfx_sprite_t* o;";
+            textSection ~= "    if (s == NULL) return NULL;";
+            textSection ~= "    o = (mode == 2) ? gfx_MallocSprite(s->height, s->width) : gfx_MallocSprite(s->width, s->height);";
+            textSection ~= "    if (o == NULL) return NULL;";
+            textSection ~= "    if (mode == 0) gfx_FlipSpriteX(s, o);";
+            textSection ~= "    else if (mode == 1) gfx_FlipSpriteY(s, o);";
+            textSection ~= "    else gfx_RotateSpriteC(s, o);";
+            textSection ~= "    return o;";
+            textSection ~= "}";
+            textSection ~= "static gfx_sprite_t* py_sprite_grab(int x, int y, int w, int h) {";
+            textSection ~= "    gfx_sprite_t* s = gfx_MallocSprite(w, h);";
+            textSection ~= "    if (s != NULL) gfx_GetSprite(s, x, y);";
+            textSection ~= "    return s;";
+            textSection ~= "}";
+            textSection ~= "static void py_sprite_free(gfx_sprite_t* s) { if (s != NULL) free(s); }";
+        }
         textSection ~= "static char py_chars[256][2];";
         textSection ~= "static const char* py_str_char(const char* s, int i) {";
         textSection ~= "    unsigned char c = (unsigned char)s[i];";
@@ -1229,6 +1297,45 @@ class CCodegen {
                             return "gfx_SetTextFGColor(" ~ compileNode(mCall.args[0]) ~ ")";
                         }
                     }
+                    if (mCall.method == "load" || mCall.method == "palette") {
+                        auto assetName = mCall.args.length == 1 ? cast(StringNode)mCall.args[0] : null;
+                        if (assetName is null || !isCIdent(assetName.val)) {
+                            throw new Exception("graphics." ~ mCall.method ~ " needs the name from your convimg.yaml as a string, like graphics." ~ mCall.method ~ "(\"name\")");
+                        }
+                        if (mCall.method == "load") {
+                            gfxAssetNames[assetName.val] = true;
+                            return "((gfx_sprite_t*)" ~ assetName.val ~ "_data)";
+                        }
+                        return "gfx_SetPalette(" ~ assetName.val ~ ", sizeof_" ~ assetName.val ~ ", 0)";
+                    }
+                    if (mCall.method == "sprite") {
+                        if (mCall.args.length == 3) {
+                            auto dataVar = cast(VarNode)mCall.args[2];
+                            if (dataVar is null) {
+                                throw new Exception("graphics.sprite needs a list variable as its third argument");
+                            }
+                            string dataType = typeOfVar(dataVar.name);
+                            string sw = compileNode(mCall.args[0]);
+                            string sh = compileNode(mCall.args[1]);
+                            if (dataType == "PyList*") {
+                                return "py_sprite_list(" ~ sw ~ ", " ~ sh ~ ", " ~ dataVar.name ~ ")";
+                            }
+                            if (dataType == "int[]") {
+                                return "py_sprite_ints(" ~ sw ~ ", " ~ sh ~ ", " ~ dataVar.name ~ ", " ~ to!string(arraySizes[varKey(dataVar.name)]) ~ ")";
+                            }
+                            throw new Exception("graphics.sprite data '" ~ dataVar.name ~ "' must be a list of whole numbers");
+                        }
+                    }
+                    if (mCall.method == "draw") return "gfx_Sprite(" ~ argsList ~ ")";
+                    if (mCall.method == "draw_t") return "gfx_TransparentSprite(" ~ argsList ~ ")";
+                    if (mCall.method == "transparent") return "gfx_SetTransparentColor(" ~ argsList ~ ")";
+                    if (mCall.method == "scale") return "py_sprite_scaled(" ~ argsList ~ ", 0)";
+                    if (mCall.method == "scale_t") return "py_sprite_scaled(" ~ argsList ~ ", 1)";
+                    if (mCall.method == "flip_x") return "py_sprite_flip(" ~ argsList ~ ", 0)";
+                    if (mCall.method == "flip_y") return "py_sprite_flip(" ~ argsList ~ ", 1)";
+                    if (mCall.method == "rotate") return "py_sprite_flip(" ~ argsList ~ ", 2)";
+                    if (mCall.method == "get_sprite") return "py_sprite_grab(" ~ argsList ~ ")";
+                    if (mCall.method == "free") return "py_sprite_free(" ~ argsList ~ ")";
                 }
 
                 string argsList = "";
@@ -1370,3 +1477,4 @@ class CCodegen {
         return code;
     }
 }
+//p.s., if you see this, you owe me 10 bucks.

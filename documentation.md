@@ -183,6 +183,95 @@ Importing `graphics` lets you create colorful graphics and whole games!
 | `graphics.line(x1, y1, x2, y2)` | `gfx_Line(x1, y1, x2, y2);` | Draws a straight line from `(x1, y1)` to `(x2, y2)`. |
 | `graphics.text(str, x, y)` | `gfx_PrintStringXY(str, x, y);` | Renders text string at coordinate (x, y). Accepts string expressions too, like `graphics.text("SCORE " + str(score), 10, 10)`. |
 | `graphics.text_color(color)` | `gfx_SetTextFGColor(color)` | Changes color of text. |
+| `graphics.sprite(w, h, data)` | `gfx_MallocSprite(w, h)` + copy | Makes a sprite from a list of palette indices (`w * h` numbers). Gives back the sprite. |
+| `graphics.draw(s, x, y)` | `gfx_Sprite(s, x, y);` | Draws a sprite at `(x, y)`. |
+| `graphics.draw_t(s, x, y)` | `gfx_TransparentSprite(s, x, y);` | Draws a sprite, skipping every pixel that uses the transparent color. |
+| `graphics.transparent(color)` | `gfx_SetTransparentColor(color);` | Sets which palette index counts as see-through for `draw_t` and `scale_t`. |
+| `graphics.scale(s, x, y, sw, sh)` | `gfx_ScaledSprite_NoClip(...)` | Draws a sprite made `sw` times wider and `sh` times taller. |
+| `graphics.scale_t(s, x, y, sw, sh)` | `gfx_ScaledTransparentSprite_NoClip(...)` | Same as `scale`, but with transparency. |
+| `graphics.flip_x(s)` | `gfx_FlipSpriteX(s, out)` | Gives back a new sprite flipped left to right. |
+| `graphics.flip_y(s)` | `gfx_FlipSpriteY(s, out)` | Gives back a new sprite flipped top to bottom. |
+| `graphics.rotate(s)` | `gfx_RotateSpriteC(s, out)` | Gives back a new sprite turned 90 degrees clockwise. |
+| `graphics.get_sprite(x, y, w, h)` | `gfx_GetSprite(s, x, y)` | Copies a `w` by `h` piece of the screen into a new sprite. |
+| `graphics.free(s)` | `free(s);` | Gives a sprite's memory back. Only for sprites made with `sprite`, `get_sprite`, `flip_x`, `flip_y` or `rotate`, never for ones from `load`. |
+| `graphics.load("name")` | `((gfx_sprite_t*)name)` | Gets a sprite made by `convimg` (see below) by the name it has in your `gfx` folder. |
+| `graphics.palette("name")` | `gfx_SetPalette(name, sizeof_name, 0);` | Switches to a palette made by `convimg`. |
+
+### Sprites
+
+A sprite is a small picture made of palette colors. You write it as a plain list of palette indices (the same numbers you give to `graphics.set_rgb` and `graphics.color`), going left to right, top to bottom.
+
+```python
+import graphics
+BALL = [0, 0, 3, 3, 3, 3, 0, 0, 0, 3, 2, 4, 4, 4, 3, 0, 3, 4, 4, 4, 4, 4, 4, 3, 3, 4, 4, 5, 5, 4, 4, 3, 3, 4, 4, 5, 5, 4, 4, 3, 3, 4, 4, 4, 4, 4, 4, 3, 0, 3, 4, 4, 4, 4, 3, 0, 0, 0, 3, 3, 3, 3, 0, 0]
+graphics.init()
+graphics.set_rgb(3, 200, 60, 60)
+graphics.transparent(0)
+ball = graphics.sprite(8, 8, BALL)
+graphics.draw_t(ball, 20, 60)
+graphics.swap()
+
+```
+
+* The data has to be a list variable, like `BALL` above. Writing the list straight inside `graphics.sprite(...)` is not supported.
+* A sprite can be up to 255 by 255. If the list is shorter than `w * h`, the rest of the sprite is filled with color `0`.
+* Call `graphics.transparent(0)` (or whatever index you want see-through) before using `draw_t` or `scale_t`.
+* `graphics.draw` and `graphics.draw_t` are clipped, so it is safe to draw partly off the screen. `graphics.scale` and `graphics.scale_t` are not clipped, so they skip drawing completely when the scaled sprite would not fit on the screen.
+* Sprites take up memory that stays used until you call `graphics.free(s)`. Make them once at the start, not every frame in a loop, and free ones you are done with.
+* Sprites can be passed into and returned from your own functions like any other value.
+
+### Sprites from images (convimg)
+
+If you would rather draw your sprites as PNG files, py2ez80 can use the toolchain's `convimg` tool for you.
+
+1. Make a folder called `gfx` next to your `.py` file.
+2. Put your PNG files in it, together with a `convimg.yaml` that says how to convert them. This one makes a sprite called `ball` out of `ball.png`:
+
+```yaml
+palettes:
+  - name: global_palette
+    fixed-entries:
+      - color: {index: 0, r: 255, g: 0, b: 128}
+      - color: {index: 1, r: 255, g: 255, b: 255}
+    images: automatic
+
+converts:
+  - name: sprites
+    palette: global_palette
+    transparent-color-index: 0
+    images:
+      - ball.png
+
+outputs:
+  - type: c
+    include-file: gfx.h
+    palettes:
+      - global_palette
+    converts:
+      - sprites
+
+```
+
+3. Use them in your program. A sprite is named after its image file, so `ball.png` becomes `"ball"`.
+
+```python
+import graphics
+graphics.init()
+graphics.palette("global_palette")
+graphics.transparent(0)
+graphics.fill(1)
+ball = graphics.load("ball")
+graphics.draw_t(ball, 40, 60)
+graphics.swap()
+
+```
+
+* When your program uses `graphics.load` or `graphics.palette`, py2ez80 copies the `gfx` folder into the build and runs `convimg` for you before compiling. Programs that don't use them ignore the folder completely.
+* The names you pass in have to match your `convimg.yaml` exactly. `graphics.palette` takes the palette name and `graphics.load` takes the image name, both as plain strings (not variables).
+* A loaded sprite works with every sprite call above (`draw`, `draw_t`, `scale`, `flip_x` and so on).
+* Never call `graphics.free` on a loaded sprite. It lives inside your program, not in the free memory.
+* `graphics.palette` replaces the whole palette, so colors you set earlier with `graphics.set_rgb` may change. Do it right after `graphics.init()`.
+* Only the plain C output of `convimg` is supported. AppVar and compressed outputs, and tilemaps, are not.
 
 ---
 
