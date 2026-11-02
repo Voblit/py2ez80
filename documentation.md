@@ -282,3 +282,9 @@ graphics.swap()
 * Any other function name that is not defined in your program and is not built in is sent to the C compiler as a direct call, with your arguments passed as they are. That means other CEdev functions work too as long as they take and return whole numbers, for example `os_GetCSC()`.
 
 ---
+
+## Extra Misc. Notes
+
+* If it ever screams: `make: *** No rule to make target `src\gfx\gfx.h', needed by `obj/src/main.c.bc'.  Stop.`, then run a command (varies depending on OS, of course,) to delete `CEdev\build_project\obj`.
+
+---
